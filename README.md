@@ -124,6 +124,11 @@ The Go module proxy serves tagged versions, so consumers need no access beyond
 public module downloads. Never move or delete a published tag; release a new
 version instead.
 
+## Contributing and security
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities privately as
+described in [SECURITY.md](SECURITY.md), not in public issues.
+
 ## License
 
 [MIT](LICENSE)
