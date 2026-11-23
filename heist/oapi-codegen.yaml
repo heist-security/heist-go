@@ -1,0 +1,6 @@
+# Generates openapi.gen.go from the committed snapshot; run `make generate`.
+package: heist
+generate:
+  models: true
+  client: true
+output: openapi.gen.go
