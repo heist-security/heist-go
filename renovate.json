@@ -1,0 +1,40 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":dependencyDashboard", "helpers:pinGitHubActionDigests"],
+  "minimumReleaseAge": "7 days",
+  "enabledManagers": ["gomod", "github-actions"],
+  "internalChecksFilter": "strict",
+  "postUpdateOptions": ["gomodTidy"],
+  "timezone": "Europe/Oslo",
+  "schedule": ["every weekday"],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 0,
+  "packageRules": [
+    {
+      "description": "The go directive sets the minimum Go version for SDK consumers; raise it deliberately, not through dependency updates.",
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["golang"],
+      "enabled": false
+    },
+    {
+      "description": "Bypass the cooldown for Go toolchain patches, which carry standard library security fixes that CI and release builds need promptly.",
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["toolchain"],
+      "matchUpdateTypes": ["patch"],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "Generator updates can change heist/openapi.gen.go. Renovate cannot run make generate, so these PRs need regenerated code pushed before they pass.",
+      "groupName": "oapi-codegen",
+      "matchPackageNames": ["github.com/oapi-codegen/**"]
+    },
+    {
+      "groupName": "github-actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["dependencies", "major"]
+    }
+  ]
+}

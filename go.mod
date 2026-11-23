@@ -2,6 +2,8 @@ module github.com/heist-security/heist-go
 
 go 1.26.0
 
+toolchain go1.27.4
+
 require github.com/oapi-codegen/runtime v1.9.1
 
 require (

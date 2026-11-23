@@ -111,8 +111,21 @@ Releases are Git tags on `main` using semantic versioning (`vMAJOR.MINOR.PATCH`)
 The tag versions the SDK and CLI together. While the SDK API is still settling,
 releases use `v0.x.y`, and minor versions may break compatibility.
 
-1. Confirm CI is green on the commit to release.
-2. Tag and push it: `git tag v0.1.0 && git push origin v0.1.0`.
+Don't push release tags by hand. To release, run the **Release** workflow
+(`.github/workflows/release.yml`) on `main` with the version, for example
+`gh workflow run release.yml --ref main -f version=v0.1.0`. It:
+
+1. Runs every check and builds CLI binaries for Linux, macOS and Windows
+   (amd64 and arm64) without build caches.
+2. Waits for a second maintainer to approve the `release` environment.
+3. Records signed build provenance for each binary, then creates the tag and a
+   GitHub release with the binaries and `SHA256SUMS`.
+
+Verify a downloaded binary with:
+
+```sh
+gh attestation verify heist_v0.1.0_linux_amd64 --repo heist-security/heist-go
+```
 
 Consumers pin a release in `go.mod`:
 
@@ -121,8 +134,8 @@ go get github.com/heist-security/heist-go@v0.1.0
 ```
 
 The Go module proxy serves tagged versions, so consumers need no access beyond
-public module downloads. Never move or delete a published tag; release a new
-version instead.
+public module downloads. Published tags and releases are immutable; fix
+mistakes with a new version.
 
 ## Contributing and security
 
