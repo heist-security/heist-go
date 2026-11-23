@@ -1,6 +1,6 @@
-.PHONY: check check-sdk check-cli check-generated generate build deps
+.PHONY: check check-sdk check-cli check-generated generate build deps vulncheck
 
-# Run every check CI runs.
+# Run every offline check CI runs. CI also runs vulncheck.
 check: check-generated check-sdk check-cli
 
 # Download the SDK, CLI and code generator modules. This is the only step that
@@ -25,6 +25,11 @@ check-cli: build
 check-generated: generate
 	git diff --exit-code -- heist go.mod go.sum tools
 	test -z "$$(git ls-files --others --exclude-standard -- heist)"
+
+# Report known vulnerabilities in reachable code. Queries vuln.go.dev, so it
+# needs network access and is not part of the offline check target.
+vulncheck:
+	go tool -modfile=tools/go.mod govulncheck ./...
 
 generate:
 	go generate ./...

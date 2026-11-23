@@ -1,0 +1,114 @@
+name: Release
+
+# Creates a vX.Y.Z tag and GitHub release for the SDK and CLI from main.
+#
+# 1. build: runs every check and builds CLI binaries without caches.
+# 2. approve: waits for a reviewer in the protected "release" environment.
+#    Its success is the deployment that the v* tag ruleset requires before a
+#    tag can be created.
+# 3. publish: attests the binaries' build provenance, then creates the tag and
+#    the release, which becomes immutable once published.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, for example v0.1.0"
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      VERSION: ${{ inputs.version }}
+    steps:
+      - name: Validate version
+        run: |
+          if [[ ! "$VERSION" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "::error::version must look like v1.2.3, got '$VERSION'"
+            exit 1
+          fi
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          # Release builds never restore caches, to prevent cache poisoning.
+          cache: false
+
+      - name: Check
+        run: |
+          make deps
+          GOPROXY=off make check
+
+      - name: Build CLI binaries
+        run: |
+          mkdir -p release
+          for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64; do
+            goos="${target%/*}"
+            goarch="${target#*/}"
+            ext=""
+            [ "$goos" = windows ] && ext=".exe"
+            GOOS="$goos" GOARCH="$goarch" CGO_ENABLED=0 GOPROXY=off \
+              go build -trimpath -ldflags "-s -w -X main.version=$VERSION" \
+              -o "release/heist_${VERSION}_${goos}_${goarch}${ext}" ./cmd/heist
+          done
+          (cd release && sha256sum heist_* > SHA256SUMS)
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release
+          path: release/
+          if-no-files-found: error
+
+  approve:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: release
+    permissions: {}
+    env:
+      VERSION: ${{ inputs.version }}
+    steps:
+      - run: echo "Release $VERSION approved"
+
+  publish:
+    needs: [build, approve]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    env:
+      VERSION: ${{ inputs.version }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release
+          path: release
+
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: release/heist_*
+
+      - name: Create release
+        # Upload assets to a draft, then publish it: published immutable
+        # releases reject further changes. Publishing creates the tag.
+        run: |
+          gh release create "$VERSION" --draft \
+            --target "$GITHUB_SHA" --title "$VERSION" --generate-notes \
+            release/*
+          gh release edit "$VERSION" --draft=false

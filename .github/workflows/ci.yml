@@ -3,20 +3,22 @@ name: CI
 on:
   push:
     branches: [main]
-    tags: ["v*"]
   pull_request:
 
-permissions:
-  contents: read
+permissions: {}
 
-# Each job downloads public modules, then runs its checks with GOPROXY=off to
-# prove builds work offline from the committed OpenAPI snapshot.
+# Each check job downloads public modules, then runs with GOPROXY=off to prove
+# builds work offline from the committed OpenAPI snapshot.
 jobs:
   sdk:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-go@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
       - run: make deps
@@ -26,9 +28,13 @@ jobs:
 
   cli:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-go@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
       - run: make deps
@@ -38,12 +44,31 @@ jobs:
 
   generated:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-go@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
       - run: make deps
       - run: make check-generated
         env:
           GOPROXY: "off"
+
+  vulncheck:
+    # Queries the public Go vulnerability database, so it runs with network
+    # access and can fail on a newly published advisory without a code change.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+      - run: make vulncheck
