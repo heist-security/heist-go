@@ -23,9 +23,9 @@ policy does not promise a bounty or response-time SLA.
 
 ## Trust boundaries
 
-- OAuth app access tokens grant workspace access. The SDK sends them only as a
-  bearer token to the configured server URL. It does not log, persist or
-  include them in errors. Point `Config.ServerURL` only at a Heist API you
+- OAuth app access tokens grant workspace access. The SDK attaches them as a
+  bearer token to requests sent through `Config.HTTPClient` to the configured
+  server URL. It does not log, persist or include them in errors. Point `Config.ServerURL` only at a Heist API you
   trust, and keep TLS verification enabled in any custom `HTTPClient`.
 - The Heist service enforces authentication, workspace membership, roles and
   feature restrictions. The SDK and CLI do not grant or limit access; hiding a

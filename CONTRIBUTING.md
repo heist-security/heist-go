@@ -13,11 +13,7 @@ Before a pull request:
 
     make check
 
-`make check` runs the same checks as CI: `make check-sdk` (gofmt, vet and tests
-for the `heist` package and snapshot tooling), `make check-cli` (builds
-`dist/heist`, then gofmt, vet and tests for the CLI) and `make check-generated`
-(fails if `heist/openapi.gen.go` differs from what the committed snapshot
-generates).
+`make check` runs the same checks as CI; see the `Makefile` for each target.
 
 Keep changes focused and tests on current behavior. Tests use `httptest`
 servers and must not call the live Heist API. Add regression coverage for
@@ -41,9 +37,7 @@ releases are `v0.x`.
 
 `api/openapi.json` is a byte-for-byte copy of a published, immutable contract.
 Never edit it or `heist/openapi.gen.go` by hand. To target a newer published
-version, follow the README: run `go run ./internal/cmd/update-openapi <version>`,
-update `APIVersion` in `heist/client.go`, run `make generate` and `make check`,
-and commit the snapshot, lock file and generated code together.
+version, follow [OpenAPI snapshot](README.md#openapi-snapshot) in the README.
 
 Contract changes themselves, such as new endpoints or fields, are made in the
 Heist service and published before this repository can use them.
