@@ -46,6 +46,10 @@ for finding, err := range client.AllFindings(ctx, heist.ListFindingsParams{}) {
 	}
 	fmt.Println(finding.Id, finding.Severity, finding.Title)
 }
+
+critical, err := client.CountFindings(ctx, heist.ListFindingsParams{
+	Severity: &[]heist.ListFindingsParamsSeverity{heist.ListFindingsParamsSeverityCRITICAL},
+})
 ```
 
 `heist.New` returns the generated `*heist.ClientWithResponses`. Every API
@@ -85,7 +89,24 @@ heist api '/findings?severity=high'
 heist api --input domain.json /domains   # POST unless -X is given
 ```
 
-Run `heist api -h` for every flag and environment variable.
+`heist findings` lists, shows, and counts findings with the same credentials:
+
+```sh
+heist findings list --severity high,critical --search login
+heist findings list --fail-on high   # exit 3 if an open finding is HIGH or above
+heist findings get <id>
+heist findings counts
+```
+
+`list` follows pagination and prints every matching finding unless `--limit`
+is given. `--fail-on <severity>` exits with status 3 when any finding matching
+the filters is at or above that severity. It only counts open (`PUBLISHED`)
+findings unless `--status` is given. Errors exit with 1 and usage errors with 2.
+`counts` shows the API's status counts and open findings by severity. Pass
+`--json` to any findings command for JSON output.
+
+Run `heist api -h` or `heist findings <command> -h` for every flag and
+environment variable.
 
 ## Development
 

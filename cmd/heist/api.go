@@ -23,11 +23,7 @@ Flags:
   -X, --method method   HTTP method (default GET, or POST with --input)
       --input file      Send the file as a JSON request body; use - for stdin
 
-Environment:
-  HEIST_CLIENT_ID, HEIST_CLIENT_SECRET   OAuth app credentials (required)
-  HEIST_SERVER_URL                       API server URL (default ` + heist.DefaultServerURL + `)
-  HEIST_TOKEN_URL                        OAuth token URL (default ` + heist.DefaultTokenURL + `)
-`
+` + envUsage
 
 func runAPI(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	fs := flag.NewFlagSet("api", flag.ContinueOnError)
@@ -54,26 +50,13 @@ func runAPI(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 		}
 	}
 	if err := apiRequest(context.Background(), strings.ToUpper(*method), fs.Arg(0), *input, stdin, stdout); err != nil {
-		// SDK errors already start with "heist: ".
-		fmt.Fprintf(stderr, "heist api: %s\n", strings.TrimPrefix(err.Error(), "heist: "))
-		return 1
+		return printError(stderr, "api", err)
 	}
 	return 0
 }
 
 func apiRequest(ctx context.Context, method, path, input string, stdin io.Reader, stdout io.Writer) error {
-	tokens := &heist.ClientCredentials{
-		ClientID:     os.Getenv("HEIST_CLIENT_ID"),
-		ClientSecret: os.Getenv("HEIST_CLIENT_SECRET"),
-		TokenURL:     os.Getenv("HEIST_TOKEN_URL"),
-	}
-	if tokens.ClientID == "" || tokens.ClientSecret == "" {
-		return errors.New("HEIST_CLIENT_ID and HEIST_CLIENT_SECRET must be set")
-	}
-	client, err := heist.New(tokens, heist.Config{
-		ServerURL: os.Getenv("HEIST_SERVER_URL"),
-		UserAgent: "heist-cli/" + cliVersion(),
-	})
+	client, err := newClient()
 	if err != nil {
 		return err
 	}

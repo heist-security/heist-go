@@ -181,6 +181,29 @@ func TestAllFindingsReturnsAPIErrors(t *testing.T) {
 	t.Fatal("iterator yielded nothing")
 }
 
+func TestCountFindingsReadsTotal(t *testing.T) {
+	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		if q.Get("size") != "1" || q.Has("page") || fmt.Sprint(q["severity"]) != "[HIGH CRITICAL]" || q.Get("status") != "PUBLISHED" {
+			t.Errorf("query = %s", r.URL.RawQuery)
+		}
+		writeJSON(w, http.StatusOK, `{"page":1,"size":1,"total":7,"items":[]}`)
+	})
+	page, size := 3, 50
+	n, err := client.CountFindings(context.Background(), ListFindingsParams{
+		Page:     &page,
+		Size:     &size,
+		Severity: &[]ListFindingsParamsSeverity{ListFindingsParamsSeverityHIGH, ListFindingsParamsSeverityCRITICAL},
+		Status:   &[]ListFindingsParamsStatus{ListFindingsParamsStatusPUBLISHED},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if n != 7 {
+		t.Errorf("count = %d, want 7", n)
+	}
+}
+
 func TestPaginateStopsOnError(t *testing.T) {
 	calls := 0
 	fetch := func(ctx context.Context, page int) ([]int, int, error) {
