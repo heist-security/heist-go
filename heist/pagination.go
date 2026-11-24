@@ -49,6 +49,22 @@ func (c *ClientWithResponses) AllFindings(ctx context.Context, params ListFindin
 	})
 }
 
+// CountFindings returns the number of findings matching params, ignoring
+// params.Page and params.Size. It requests a single one-item page and reads
+// the reported total.
+func (c *ClientWithResponses) CountFindings(ctx context.Context, params ListFindingsParams) (int, error) {
+	size := 1
+	params.Page, params.Size = nil, &size
+	res, err := c.ListFindingsWithResponse(ctx, &params)
+	if err != nil {
+		return 0, err
+	}
+	if res.JSON200 == nil {
+		return 0, unexpectedResponse(res.HTTPResponse)
+	}
+	return res.JSON200.Total, nil
+}
+
 // AllApplications yields every application matching params, ignoring params.Page.
 func (c *ClientWithResponses) AllApplications(ctx context.Context, params ListApplicationsParams) iter.Seq2[Application, error] {
 	return Paginate(ctx, func(ctx context.Context, page int) ([]Application, int, error) {
