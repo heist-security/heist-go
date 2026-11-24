@@ -190,3 +190,41 @@ func TestClientCredentialsRequiresIDAndSecret(t *testing.T) {
 		}
 	}
 }
+
+func TestClientCredentialsWaitingCallerHonorsContext(t *testing.T) {
+	release := make(chan struct{})
+	started := make(chan struct{})
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		close(started)
+		<-release
+		writeJSON(w, http.StatusOK, `{"access_token":"token-1","expires_in":3600}`)
+	}))
+	t.Cleanup(server.Close)
+	creds := &ClientCredentials{
+		ClientID:     "test-id",
+		ClientSecret: "test-secret",
+		TokenURL:     server.URL,
+		HTTPClient:   server.Client(),
+	}
+
+	// The first caller holds the exchange open until release is closed.
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		mustToken(t, creds)
+	}()
+	<-started
+	timer := time.AfterFunc(2*time.Second, func() { close(release) })
+	t.Cleanup(func() {
+		if timer.Stop() {
+			close(release)
+		}
+		<-done
+	})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
+	if token, err := creds.Token(ctx); err != context.DeadlineExceeded {
+		t.Errorf("waiting Token = %q, %v; want %v", token, err, context.DeadlineExceeded)
+	}
+}

@@ -35,17 +35,25 @@ type ClientCredentials struct {
 	// HTTPClient sends token requests. http.DefaultClient is used when nil.
 	HTTPClient *http.Client
 
-	mu     sync.Mutex
-	token  string
-	expiry time.Time
-	now    func() time.Time // for tests; time.Now when nil
+	// lock is a 1-slot semaphore guarding token and expiry. Unlike a mutex,
+	// callers waiting behind an exchange can give up when ctx is done.
+	initLock sync.Once
+	lock     chan struct{}
+	token    string
+	expiry   time.Time
+	now      func() time.Time // for tests; time.Now when nil
 }
 
 // Token returns the cached access token, exchanging the client credentials for
 // a new one when there is none or it is about to expire.
 func (c *ClientCredentials) Token(ctx context.Context) (string, error) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+	c.initLock.Do(func() { c.lock = make(chan struct{}, 1) })
+	select {
+	case c.lock <- struct{}{}:
+	case <-ctx.Done():
+		return "", ctx.Err()
+	}
+	defer func() { <-c.lock }()
 	now := time.Now
 	if c.now != nil {
 		now = c.now
