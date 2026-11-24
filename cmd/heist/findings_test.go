@@ -243,7 +243,7 @@ func TestFindingsGet(t *testing.T) {
 
 	code, stdout, _ = runCLI(t, "findings", "get", "--json", findingID)
 	var detail map[string]any
-	if code != 0 || json.Unmarshal([]byte(stdout), &detail) != nil || detail["title"] != "Stored XSS" {
+	if code != 0 || json.Unmarshal([]byte(stdout), &detail) != nil || detail["title"] != "Stored XSS" || detail["newField"] != "added later" {
 		t.Errorf("exit %d, stdout %q", code, stdout)
 	}
 }
@@ -268,7 +268,7 @@ func TestFindingsCounts(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		switch r.URL.Path {
 		case "/external/findings/counts":
-			io.WriteString(w, `{"all":9,"open":5,"closed":2,"accepted":1,"compensatingControl":1}`)
+			io.WriteString(w, `{"all":9,"open":5,"closed":2,"accepted":1,"compensatingControl":1,"newBucket":3}`)
 		case "/external/findings":
 			q := r.URL.Query()
 			severityQueries = append(severityQueries, q.Get("severity")+" "+strings.Join(q["status"], ","))
@@ -313,7 +313,7 @@ INFORMATIONAL         0
 	if code != 0 || json.Unmarshal([]byte(stdout), &got) != nil {
 		t.Fatalf("exit %d, stdout %q", code, stdout)
 	}
-	if got.Status["open"] != 5 || got.Severity["HIGH"] != 2 || fmt.Sprint(got.SeverityStatuses) != "[FIXED ACCEPTED]" {
+	if got.Status["open"] != 5 || got.Status["newBucket"] != 3 || got.Severity["HIGH"] != 2 || fmt.Sprint(got.SeverityStatuses) != "[FIXED ACCEPTED]" {
 		t.Errorf("counts = %+v", got)
 	}
 	if severityQueries[0] != "INFORMATIONAL FIXED,ACCEPTED" {

@@ -74,7 +74,7 @@ Show a finding's full detail, including its report and linked application,
 repository, and route.
 
 Flags:
-      --json   Print the finding as JSON, with every API field
+      --json   Print the API's JSON response
 
 ` + envUsage
 
@@ -292,7 +292,7 @@ func runFindingsGet(args []string, stdout, stderr io.Writer) int {
 		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
 	}
 	if *asJSON {
-		err = writeJSON(stdout, res.JSON200)
+		err = writeJSON(stdout, json.RawMessage(res.Body))
 	} else {
 		err = writeFindingDetail(stdout, res.JSON200)
 	}
@@ -378,8 +378,8 @@ func writeFindingDetail(w io.Writer, f *heist.FindingDetail) error {
 
 // findingCounts is the JSON output of `heist findings counts`.
 type findingCounts struct {
-	// Status is the API's /findings/counts response.
-	Status any `json:"status"`
+	// Status is the API's /findings/counts response, as received.
+	Status json.RawMessage `json:"status"`
 	// Severity counts findings with SeverityStatuses by severity.
 	Severity         map[heist.ListFindingsParamsSeverity]int `json:"severity"`
 	SeverityStatuses []heist.ListFindingsParamsStatus         `json:"severityStatuses"`
@@ -415,7 +415,7 @@ func runFindingsCounts(args []string, stdout, stderr io.Writer) int {
 		params.Status = &openStatuses
 	}
 	counts := findingCounts{
-		Status:           res.JSON200,
+		Status:           res.Body,
 		Severity:         map[heist.ListFindingsParamsSeverity]int{},
 		SeverityStatuses: *params.Status,
 	}
