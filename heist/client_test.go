@@ -13,9 +13,14 @@ import (
 
 func newTestClient(t *testing.T, handler http.HandlerFunc) *ClientWithResponses {
 	t.Helper()
+	return newTestClientWithTokens(t, StaticToken("test-token"), handler)
+}
+
+func newTestClientWithTokens(t *testing.T, tokens TokenSource, handler http.HandlerFunc) *ClientWithResponses {
+	t.Helper()
 	server := httptest.NewServer(handler)
 	t.Cleanup(server.Close)
-	client, err := New(StaticToken("test-token"), Config{
+	client, err := New(tokens, Config{
 		ServerURL:  server.URL + "/external",
 		HTTPClient: server.Client(),
 		UserAgent:  "heist-test/1.0",

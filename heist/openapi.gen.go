@@ -1226,6 +1226,168 @@ func (e UnsnoozeInboxItem200JSONResponseBodyOk) Valid() bool {
 	}
 }
 
+// Defines values for GetReportExport200JSONResponseBodyReportsReportType.
+const (
+	GetReportExport200JSONResponseBodyReportsReportTypeAttestationLetter GetReportExport200JSONResponseBodyReportsReportType = "attestation_letter"
+	GetReportExport200JSONResponseBodyReportsReportTypeCustomerFacing    GetReportExport200JSONResponseBodyReportsReportType = "customer_facing"
+	GetReportExport200JSONResponseBodyReportsReportTypeInternal          GetReportExport200JSONResponseBodyReportsReportType = "internal"
+)
+
+// Valid indicates whether the value is a known member of the GetReportExport200JSONResponseBodyReportsReportType enum.
+func (e GetReportExport200JSONResponseBodyReportsReportType) Valid() bool {
+	switch e {
+	case GetReportExport200JSONResponseBodyReportsReportTypeAttestationLetter:
+		return true
+	case GetReportExport200JSONResponseBodyReportsReportTypeCustomerFacing:
+		return true
+	case GetReportExport200JSONResponseBodyReportsReportTypeInternal:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetReportExport200JSONResponseBodyReportsStatus.
+const (
+	GetReportExport200JSONResponseBodyReportsStatusDraft     GetReportExport200JSONResponseBodyReportsStatus = "draft"
+	GetReportExport200JSONResponseBodyReportsStatusFinalized GetReportExport200JSONResponseBodyReportsStatus = "finalized"
+)
+
+// Valid indicates whether the value is a known member of the GetReportExport200JSONResponseBodyReportsStatus enum.
+func (e GetReportExport200JSONResponseBodyReportsStatus) Valid() bool {
+	switch e {
+	case GetReportExport200JSONResponseBodyReportsStatusDraft:
+		return true
+	case GetReportExport200JSONResponseBodyReportsStatusFinalized:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetReportExport200JSONResponseBodyStatus.
+const (
+	GetReportExport200JSONResponseBodyStatusCANCELLED      GetReportExport200JSONResponseBodyStatus = "CANCELLED"
+	GetReportExport200JSONResponseBodyStatusCOMPLETED      GetReportExport200JSONResponseBodyStatus = "COMPLETED"
+	GetReportExport200JSONResponseBodyStatusCONTINUEDASNEW GetReportExport200JSONResponseBodyStatus = "CONTINUED_AS_NEW"
+	GetReportExport200JSONResponseBodyStatusFAILED         GetReportExport200JSONResponseBodyStatus = "FAILED"
+	GetReportExport200JSONResponseBodyStatusNOTFOUND       GetReportExport200JSONResponseBodyStatus = "NOT_FOUND"
+	GetReportExport200JSONResponseBodyStatusPAUSED         GetReportExport200JSONResponseBodyStatus = "PAUSED"
+	GetReportExport200JSONResponseBodyStatusRUNNING        GetReportExport200JSONResponseBodyStatus = "RUNNING"
+	GetReportExport200JSONResponseBodyStatusTERMINATED     GetReportExport200JSONResponseBodyStatus = "TERMINATED"
+	GetReportExport200JSONResponseBodyStatusTIMEDOUT       GetReportExport200JSONResponseBodyStatus = "TIMED_OUT"
+	GetReportExport200JSONResponseBodyStatusUNKNOWN        GetReportExport200JSONResponseBodyStatus = "UNKNOWN"
+	GetReportExport200JSONResponseBodyStatusUNSPECIFIED    GetReportExport200JSONResponseBodyStatus = "UNSPECIFIED"
+)
+
+// Valid indicates whether the value is a known member of the GetReportExport200JSONResponseBodyStatus enum.
+func (e GetReportExport200JSONResponseBodyStatus) Valid() bool {
+	switch e {
+	case GetReportExport200JSONResponseBodyStatusCANCELLED:
+		return true
+	case GetReportExport200JSONResponseBodyStatusCOMPLETED:
+		return true
+	case GetReportExport200JSONResponseBodyStatusCONTINUEDASNEW:
+		return true
+	case GetReportExport200JSONResponseBodyStatusFAILED:
+		return true
+	case GetReportExport200JSONResponseBodyStatusNOTFOUND:
+		return true
+	case GetReportExport200JSONResponseBodyStatusPAUSED:
+		return true
+	case GetReportExport200JSONResponseBodyStatusRUNNING:
+		return true
+	case GetReportExport200JSONResponseBodyStatusTERMINATED:
+		return true
+	case GetReportExport200JSONResponseBodyStatusTIMEDOUT:
+		return true
+	case GetReportExport200JSONResponseBodyStatusUNKNOWN:
+		return true
+	case GetReportExport200JSONResponseBodyStatusUNSPECIFIED:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListReports200JSONResponseBodyReportType.
+const (
+	ListReports200JSONResponseBodyReportTypeAttestationLetter ListReports200JSONResponseBodyReportType = "attestation_letter"
+	ListReports200JSONResponseBodyReportTypeCustomerFacing    ListReports200JSONResponseBodyReportType = "customer_facing"
+	ListReports200JSONResponseBodyReportTypeInternal          ListReports200JSONResponseBodyReportType = "internal"
+)
+
+// Valid indicates whether the value is a known member of the ListReports200JSONResponseBodyReportType enum.
+func (e ListReports200JSONResponseBodyReportType) Valid() bool {
+	switch e {
+	case ListReports200JSONResponseBodyReportTypeAttestationLetter:
+		return true
+	case ListReports200JSONResponseBodyReportTypeCustomerFacing:
+		return true
+	case ListReports200JSONResponseBodyReportTypeInternal:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListReports200JSONResponseBodyStatus.
+const (
+	ListReports200JSONResponseBodyStatusDraft     ListReports200JSONResponseBodyStatus = "draft"
+	ListReports200JSONResponseBodyStatusFinalized ListReports200JSONResponseBodyStatus = "finalized"
+)
+
+// Valid indicates whether the value is a known member of the ListReports200JSONResponseBodyStatus enum.
+func (e ListReports200JSONResponseBodyStatus) Valid() bool {
+	switch e {
+	case ListReports200JSONResponseBodyStatusDraft:
+		return true
+	case ListReports200JSONResponseBodyStatusFinalized:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetReport200JSONResponseBodyReportType.
+const (
+	GetReport200JSONResponseBodyReportTypeAttestationLetter GetReport200JSONResponseBodyReportType = "attestation_letter"
+	GetReport200JSONResponseBodyReportTypeCustomerFacing    GetReport200JSONResponseBodyReportType = "customer_facing"
+	GetReport200JSONResponseBodyReportTypeInternal          GetReport200JSONResponseBodyReportType = "internal"
+)
+
+// Valid indicates whether the value is a known member of the GetReport200JSONResponseBodyReportType enum.
+func (e GetReport200JSONResponseBodyReportType) Valid() bool {
+	switch e {
+	case GetReport200JSONResponseBodyReportTypeAttestationLetter:
+		return true
+	case GetReport200JSONResponseBodyReportTypeCustomerFacing:
+		return true
+	case GetReport200JSONResponseBodyReportTypeInternal:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetReport200JSONResponseBodyStatus.
+const (
+	GetReport200JSONResponseBodyStatusDraft     GetReport200JSONResponseBodyStatus = "draft"
+	GetReport200JSONResponseBodyStatusFinalized GetReport200JSONResponseBodyStatus = "finalized"
+)
+
+// Valid indicates whether the value is a known member of the GetReport200JSONResponseBodyStatus enum.
+func (e GetReport200JSONResponseBodyStatus) Valid() bool {
+	switch e {
+	case GetReport200JSONResponseBodyStatusDraft:
+		return true
+	case GetReport200JSONResponseBodyStatusFinalized:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CreateScopeRuleJSONBodyAction.
 const (
 	CreateScopeRuleJSONBodyActionALLOW CreateScopeRuleJSONBodyAction = "ALLOW"
@@ -1980,9 +2142,40 @@ type SnoozeInboxItem200JSONResponseBodyOk bool
 // UnsnoozeInboxItem200JSONResponseBodyOk defines model for UnsnoozeInboxItem200JSONResponseBody.Ok.
 type UnsnoozeInboxItem200JSONResponseBodyOk bool
 
+// GetReportExport200JSONResponseBodyReportsReportType defines model for GetReportExport200JSONResponseBody.Reports.ReportType.
+type GetReportExport200JSONResponseBodyReportsReportType string
+
+// GetReportExport200JSONResponseBodyReportsStatus defines model for GetReportExport200JSONResponseBody.Reports.Status.
+type GetReportExport200JSONResponseBodyReportsStatus string
+
+// GetReportExport200JSONResponseBodyStatus defines model for GetReportExport200JSONResponseBody.Status.
+type GetReportExport200JSONResponseBodyStatus string
+
+// ListReportsParams defines parameters for ListReports.
+type ListReportsParams struct {
+	ExportId *openapi_types.UUID `form:"exportId,omitempty" json:"exportId,omitempty"`
+}
+
+// ListReports200JSONResponseBodyReportType defines model for ListReports200JSONResponseBody.ReportType.
+type ListReports200JSONResponseBodyReportType string
+
+// ListReports200JSONResponseBodyStatus defines model for ListReports200JSONResponseBody.Status.
+type ListReports200JSONResponseBodyStatus string
+
 // GenerateReportJSONBody defines body for GenerateReport for application/json ContentType.
 type GenerateReportJSONBody struct {
 	ApplicationIds *[]openapi_types.UUID `json:"applicationIds,omitempty"`
+}
+
+// GetReport200JSONResponseBodyReportType defines model for GetReport200JSONResponseBody.ReportType.
+type GetReport200JSONResponseBodyReportType string
+
+// GetReport200JSONResponseBodyStatus defines model for GetReport200JSONResponseBody.Status.
+type GetReport200JSONResponseBodyStatus string
+
+// DownloadReportParams defines parameters for DownloadReport.
+type DownloadReportParams struct {
+	VersionId *openapi_types.UUID `form:"versionId,omitempty" json:"versionId,omitempty"`
 }
 
 // CreateScopeRuleJSONBody defines body for CreateScopeRule for application/json ContentType.
@@ -2592,17 +2785,37 @@ type ClientInterface interface {
 	// Start a whitebox pentest of active code review repositories, including when its frequency is On demand. Requires Editor or Admin. Returns 409 if already running. Testing budgets apply.
 	TriggerWhiteboxPentest(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetReportExport performs a GET /report-exports/{id} (the `GetReportExport` operationId) request.
+	//
+	// Observe an export using its exportId and list its reports. COMPLETED means the workflow finished writing all PDFs. NOT_FOUND means no retained workflow exists; persisted reports remain available after workflow history expires. Failed workflows can have partial reports and are never reported as successful. Canceled customers retain read access.
+	GetReportExport(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListReports performs a GET /reports (the `ListReports` operationId) request.
+	//
+	// List existing workspace reports, optionally selecting an exportId returned by generate_report. Report reads require a report-enabled plan; canceled customers retain access to their existing reports.
+	ListReports(ctx context.Context, params *ListReportsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GenerateReportWithBody performs a POST /reports (the `GenerateReport` operationId) request,
 	// with any type of body and a specified content type.
 	//
-	// Generate report exports asynchronously. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include.
+	// Generate new full, summary, and attestation PDF reports asynchronously, retaining previous exports. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include. Poll get_report_export with the returned exportId for completion and report IDs.
 	GenerateReportWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GenerateReport performs a POST /reports (the `GenerateReport` operationId) request.
 	// Takes a body of the `application/json` content type.
 	//
-	// Generate report exports asynchronously. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include.
+	// Generate new full, summary, and attestation PDF reports asynchronously, retaining previous exports. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include. Poll get_report_export with the returned exportId for completion and report IDs.
 	GenerateReport(ctx context.Context, body GenerateReportJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetReport performs a GET /reports/{id} (the `GetReport` operationId) request.
+	//
+	// Read a workspace report and all retained PDF versions, newest first. Canceled customers retain read access.
+	GetReport(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DownloadReport performs a GET /reports/{id}/download (the `DownloadReport` operationId) request.
+	//
+	// Get a one-hour signed PDF download URL for a report version without a browser. Omit versionId for the latest version. Canceled customers retain download access.
+	DownloadReport(ctx context.Context, id openapi_types.UUID, params *DownloadReportParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListScopeRules performs a GET /scope/rules (the `ListScopeRules` operationId) request.
 	//
@@ -3357,10 +3570,40 @@ func (c *Client) TriggerWhiteboxPentest(ctx context.Context, reqEditors ...Reque
 	return c.Client.Do(req)
 }
 
+// GetReportExport performs a GET /report-exports/{id} (the `GetReportExport` operationId) request.
+//
+// Observe an export using its exportId and list its reports. COMPLETED means the workflow finished writing all PDFs. NOT_FOUND means no retained workflow exists; persisted reports remain available after workflow history expires. Failed workflows can have partial reports and are never reported as successful. Canceled customers retain read access.
+func (c *Client) GetReportExport(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetReportExportRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListReports performs a GET /reports (the `ListReports` operationId) request.
+//
+// List existing workspace reports, optionally selecting an exportId returned by generate_report. Report reads require a report-enabled plan; canceled customers retain access to their existing reports.
+func (c *Client) ListReports(ctx context.Context, params *ListReportsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListReportsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GenerateReportWithBody performs a POST /reports (the `GenerateReport` operationId) request,
 // with any type of body and a specified content type.
 //
-// Generate report exports asynchronously. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include.
+// Generate new full, summary, and attestation PDF reports asynchronously, retaining previous exports. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include. Poll get_report_export with the returned exportId for completion and report IDs.
 func (c *Client) GenerateReportWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGenerateReportRequestWithBody(c.Server, contentType, body)
 	if err != nil {
@@ -3376,9 +3619,39 @@ func (c *Client) GenerateReportWithBody(ctx context.Context, contentType string,
 // GenerateReport performs a POST /reports (the `GenerateReport` operationId) request.
 // Takes a body of the `application/json` content type.
 //
-// Generate report exports asynchronously. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include.
+// Generate new full, summary, and attestation PDF reports asynchronously, retaining previous exports. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include. Poll get_report_export with the returned exportId for completion and report IDs.
 func (c *Client) GenerateReport(ctx context.Context, body GenerateReportJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGenerateReportRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetReport performs a GET /reports/{id} (the `GetReport` operationId) request.
+//
+// Read a workspace report and all retained PDF versions, newest first. Canceled customers retain read access.
+func (c *Client) GetReport(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetReportRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DownloadReport performs a GET /reports/{id}/download (the `DownloadReport` operationId) request.
+//
+// Get a one-hour signed PDF download URL for a report version without a browser. Omit versionId for the latest version. Canceled customers retain download access.
+func (c *Client) DownloadReport(ctx context.Context, id openapi_types.UUID, params *DownloadReportParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDownloadReportRequest(c.Server, id, params)
 	if err != nil {
 		return nil, err
 	}
@@ -4975,6 +5248,94 @@ func NewTriggerWhiteboxPentestRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
+// NewGetReportExportRequest constructs an http.Request for the GetReportExport method
+func NewGetReportExportRequest(server string, id openapi_types.UUID) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "id", id, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: "uuid"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/report-exports/" + pathParam0
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListReportsRequest constructs an http.Request for the ListReports method
+func NewListReportsRequest(server string, params *ListReportsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/reports"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.ExportId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "exportId", *params.ExportId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "uuid"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGenerateReportRequest calls the generic GenerateReport builder with application/json body
 func NewGenerateReportRequest(server string, body GenerateReportJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -5011,6 +5372,101 @@ func NewGenerateReportRequestWithBody(server string, contentType string, body io
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetReportRequest constructs an http.Request for the GetReport method
+func NewGetReportRequest(server string, id openapi_types.UUID) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "id", id, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: "uuid"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/reports/" + pathParam0
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewDownloadReportRequest constructs an http.Request for the DownloadReport method
+func NewDownloadReportRequest(server string, id openapi_types.UUID, params *DownloadReportParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "id", id, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: "uuid"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/reports/" + pathParam0 + "/download"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.VersionId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "versionId", *params.VersionId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "uuid"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -5523,10 +5979,24 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	TriggerWhiteboxPentestWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*TriggerWhiteboxPentestResponse, error)
 
+	// GetReportExportWithResponse performs a GET /report-exports/{id} (the `GetReportExport` operationId) request.
+	//
+	// Observe an export using its exportId and list its reports. COMPLETED means the workflow finished writing all PDFs. NOT_FOUND means no retained workflow exists; persisted reports remain available after workflow history expires. Failed workflows can have partial reports and are never reported as successful. Canceled customers retain read access.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetReportExportWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetReportExportResponse, error)
+
+	// ListReportsWithResponse performs a GET /reports (the `ListReports` operationId) request.
+	//
+	// List existing workspace reports, optionally selecting an exportId returned by generate_report. Report reads require a report-enabled plan; canceled customers retain access to their existing reports.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListReportsWithResponse(ctx context.Context, params *ListReportsParams, reqEditors ...RequestEditorFn) (*ListReportsResponse, error)
+
 	// GenerateReportWithBodyWithResponse performs a POST /reports (the `GenerateReport` operationId) request,
 	// with any type of body and a specified content type.
 	//
-	// Generate report exports asynchronously. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include.
+	// Generate new full, summary, and attestation PDF reports asynchronously, retaining previous exports. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include. Poll get_report_export with the returned exportId for completion and report IDs.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GenerateReportWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*GenerateReportResponse, error)
@@ -5534,8 +6004,22 @@ type ClientWithResponsesInterface interface {
 	// GenerateReportWithResponse performs a POST /reports (the `GenerateReport` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Generate report exports asynchronously. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include.
+	// Generate new full, summary, and attestation PDF reports asynchronously, retaining previous exports. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include. Poll get_report_export with the returned exportId for completion and report IDs.
 	GenerateReportWithResponse(ctx context.Context, body GenerateReportJSONRequestBody, reqEditors ...RequestEditorFn) (*GenerateReportResponse, error)
+
+	// GetReportWithResponse performs a GET /reports/{id} (the `GetReport` operationId) request.
+	//
+	// Read a workspace report and all retained PDF versions, newest first. Canceled customers retain read access.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetReportWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetReportResponse, error)
+
+	// DownloadReportWithResponse performs a GET /reports/{id}/download (the `DownloadReport` operationId) request.
+	//
+	// Get a one-hour signed PDF download URL for a report version without a browser. Omit versionId for the latest version. Canceled customers retain download access.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DownloadReportWithResponse(ctx context.Context, id openapi_types.UUID, params *DownloadReportParams, reqEditors ...RequestEditorFn) (*DownloadReportResponse, error)
 
 	// ListScopeRulesWithResponse performs a GET /scope/rules (the `ListScopeRules` operationId) request.
 	//
@@ -8586,12 +9070,223 @@ func (r TriggerWhiteboxPentestResponse) ContentType() string {
 	return ""
 }
 
+type GetReportExportResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *struct {
+		ClosedAt *string `json:"closedAt"`
+		ExportId string  `json:"exportId"`
+		Failure  *string `json:"failure"`
+		Reports  []struct {
+			CreatedAt           string                                              `json:"createdAt"`
+			ExportFolderId      string                                              `json:"exportFolderId"`
+			Id                  string                                              `json:"id"`
+			LastVersionAt       *string                                             `json:"lastVersionAt"`
+			ReportType          GetReportExport200JSONResponseBodyReportsReportType `json:"reportType"`
+			ScopeApplicationId  *string                                             `json:"scopeApplicationId"`
+			ScopeApplicationIds *[]string                                           `json:"scopeApplicationIds"`
+			Status              GetReportExport200JSONResponseBodyReportsStatus     `json:"status"`
+			Title               string                                              `json:"title"`
+		} `json:"reports"`
+		RunId      *string                                  `json:"runId"`
+		StartedAt  *string                                  `json:"startedAt"`
+		Status     GetReportExport200JSONResponseBodyStatus `json:"status"`
+		WorkflowId string                                   `json:"workflowId"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetReportExportResponse) GetJSON200() *struct {
+	ClosedAt *string `json:"closedAt"`
+	ExportId string  `json:"exportId"`
+	Failure  *string `json:"failure"`
+	Reports  []struct {
+		CreatedAt           string                                              `json:"createdAt"`
+		ExportFolderId      string                                              `json:"exportFolderId"`
+		Id                  string                                              `json:"id"`
+		LastVersionAt       *string                                             `json:"lastVersionAt"`
+		ReportType          GetReportExport200JSONResponseBodyReportsReportType `json:"reportType"`
+		ScopeApplicationId  *string                                             `json:"scopeApplicationId"`
+		ScopeApplicationIds *[]string                                           `json:"scopeApplicationIds"`
+		Status              GetReportExport200JSONResponseBodyReportsStatus     `json:"status"`
+		Title               string                                              `json:"title"`
+	} `json:"reports"`
+	RunId      *string                                  `json:"runId"`
+	StartedAt  *string                                  `json:"startedAt"`
+	Status     GetReportExport200JSONResponseBodyStatus `json:"status"`
+	WorkflowId string                                   `json:"workflowId"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetReportExportResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetReportExportResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetReportExportResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetReportExportResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetReportExportResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetReportExportResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetReportExportResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetReportExportResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetReportExportResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListReportsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]struct {
+		CreatedAt           string                                   `json:"createdAt"`
+		ExportFolderId      string                                   `json:"exportFolderId"`
+		Id                  string                                   `json:"id"`
+		LastVersionAt       *string                                  `json:"lastVersionAt"`
+		ReportType          ListReports200JSONResponseBodyReportType `json:"reportType"`
+		ScopeApplicationId  *string                                  `json:"scopeApplicationId"`
+		ScopeApplicationIds *[]string                                `json:"scopeApplicationIds"`
+		Status              ListReports200JSONResponseBodyStatus     `json:"status"`
+		Title               string                                   `json:"title"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListReportsResponse) GetJSON200() *[]struct {
+	CreatedAt           string                                   `json:"createdAt"`
+	ExportFolderId      string                                   `json:"exportFolderId"`
+	Id                  string                                   `json:"id"`
+	LastVersionAt       *string                                  `json:"lastVersionAt"`
+	ReportType          ListReports200JSONResponseBodyReportType `json:"reportType"`
+	ScopeApplicationId  *string                                  `json:"scopeApplicationId"`
+	ScopeApplicationIds *[]string                                `json:"scopeApplicationIds"`
+	Status              ListReports200JSONResponseBodyStatus     `json:"status"`
+	Title               string                                   `json:"title"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ListReportsResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r ListReportsResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r ListReportsResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListReportsResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListReportsResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListReportsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListReportsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListReportsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListReportsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GenerateReportResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON202 the response for an HTTP 202 `application/json` response
 	JSON202 *struct {
-		WorkflowId string `json:"workflowId"`
+		ExportId   openapi_types.UUID `json:"exportId"`
+		WorkflowId string             `json:"workflowId"`
 	}
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
@@ -8607,7 +9302,8 @@ type GenerateReportResponse struct {
 
 // GetJSON202 returns the response for an HTTP 202 `application/json` response
 func (r GenerateReportResponse) GetJSON202() *struct {
-	WorkflowId string `json:"workflowId"`
+	ExportId   openapi_types.UUID `json:"exportId"`
+	WorkflowId string             `json:"workflowId"`
 } {
 	return r.JSON202
 }
@@ -8660,6 +9356,196 @@ func (r GenerateReportResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GenerateReportResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetReportResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *struct {
+		CreatedAt           string                                 `json:"createdAt"`
+		ExportFolderId      string                                 `json:"exportFolderId"`
+		Id                  string                                 `json:"id"`
+		ReportType          GetReport200JSONResponseBodyReportType `json:"reportType"`
+		ScopeApplicationId  *string                                `json:"scopeApplicationId"`
+		ScopeApplicationIds *[]string                              `json:"scopeApplicationIds"`
+		Status              GetReport200JSONResponseBodyStatus     `json:"status"`
+		Title               string                                 `json:"title"`
+		Versions            []struct {
+			CreatedAt string `json:"createdAt"`
+			Id        string `json:"id"`
+			ReportId  string `json:"reportId"`
+		} `json:"versions"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetReportResponse) GetJSON200() *struct {
+	CreatedAt           string                                 `json:"createdAt"`
+	ExportFolderId      string                                 `json:"exportFolderId"`
+	Id                  string                                 `json:"id"`
+	ReportType          GetReport200JSONResponseBodyReportType `json:"reportType"`
+	ScopeApplicationId  *string                                `json:"scopeApplicationId"`
+	ScopeApplicationIds *[]string                              `json:"scopeApplicationIds"`
+	Status              GetReport200JSONResponseBodyStatus     `json:"status"`
+	Title               string                                 `json:"title"`
+	Versions            []struct {
+		CreatedAt string `json:"createdAt"`
+		Id        string `json:"id"`
+		ReportId  string `json:"reportId"`
+	} `json:"versions"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetReportResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetReportResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetReportResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetReportResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetReportResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetReportResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetReportResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetReportResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetReportResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DownloadReportResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *struct {
+		ExpiresAt string `json:"expiresAt"`
+		ReportId  string `json:"reportId"`
+		Url       string `json:"url"`
+		VersionId string `json:"versionId"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r DownloadReportResponse) GetJSON200() *struct {
+	ExpiresAt string `json:"expiresAt"`
+	ReportId  string `json:"reportId"`
+	Url       string `json:"url"`
+	VersionId string `json:"versionId"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r DownloadReportResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r DownloadReportResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r DownloadReportResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DownloadReportResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DownloadReportResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DownloadReportResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DownloadReportResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DownloadReportResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DownloadReportResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -9585,10 +10471,36 @@ func (c *ClientWithResponses) TriggerWhiteboxPentestWithResponse(ctx context.Con
 	return ParseTriggerWhiteboxPentestResponse(rsp)
 }
 
+// GetReportExportWithResponse performs a GET /report-exports/{id} (the `GetReportExport` operationId) request.
+//
+// Observe an export using its exportId and list its reports. COMPLETED means the workflow finished writing all PDFs. NOT_FOUND means no retained workflow exists; persisted reports remain available after workflow history expires. Failed workflows can have partial reports and are never reported as successful. Canceled customers retain read access.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetReportExportWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetReportExportResponse, error) {
+	rsp, err := c.GetReportExport(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetReportExportResponse(rsp)
+}
+
+// ListReportsWithResponse performs a GET /reports (the `ListReports` operationId) request.
+//
+// List existing workspace reports, optionally selecting an exportId returned by generate_report. Report reads require a report-enabled plan; canceled customers retain access to their existing reports.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListReportsWithResponse(ctx context.Context, params *ListReportsParams, reqEditors ...RequestEditorFn) (*ListReportsResponse, error) {
+	rsp, err := c.ListReports(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListReportsResponse(rsp)
+}
+
 // GenerateReportWithBodyWithResponse performs a POST /reports (the `GenerateReport` operationId) request,
 // with any type of body and a specified content type.
 //
-// Generate report exports asynchronously. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include.
+// Generate new full, summary, and attestation PDF reports asynchronously, retaining previous exports. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include. Poll get_report_export with the returned exportId for completion and report IDs.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GenerateReportWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*GenerateReportResponse, error) {
@@ -9602,13 +10514,39 @@ func (c *ClientWithResponses) GenerateReportWithBodyWithResponse(ctx context.Con
 // GenerateReportWithResponse performs a POST /reports (the `GenerateReport` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Generate report exports asynchronously. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include.
+// Generate new full, summary, and attestation PDF reports asynchronously, retaining previous exports. Requires Admin and a plan with report generation. Omit applicationIds for all in-scope applications, or select exactly which applications to include. Poll get_report_export with the returned exportId for completion and report IDs.
 func (c *ClientWithResponses) GenerateReportWithResponse(ctx context.Context, body GenerateReportJSONRequestBody, reqEditors ...RequestEditorFn) (*GenerateReportResponse, error) {
 	rsp, err := c.GenerateReport(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
 	return ParseGenerateReportResponse(rsp)
+}
+
+// GetReportWithResponse performs a GET /reports/{id} (the `GetReport` operationId) request.
+//
+// Read a workspace report and all retained PDF versions, newest first. Canceled customers retain read access.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetReportWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetReportResponse, error) {
+	rsp, err := c.GetReport(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetReportResponse(rsp)
+}
+
+// DownloadReportWithResponse performs a GET /reports/{id}/download (the `DownloadReport` operationId) request.
+//
+// Get a one-hour signed PDF download URL for a report version without a browser. Omit versionId for the latest version. Canceled customers retain download access.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DownloadReportWithResponse(ctx context.Context, id openapi_types.UUID, params *DownloadReportParams, reqEditors ...RequestEditorFn) (*DownloadReportResponse, error) {
+	rsp, err := c.DownloadReport(ctx, id, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDownloadReportResponse(rsp)
 }
 
 // ListScopeRulesWithResponse performs a GET /scope/rules (the `ListScopeRules` operationId) request.
@@ -12030,6 +12968,157 @@ func ParseTriggerWhiteboxPentestResponse(rsp *http.Response) (*TriggerWhiteboxPe
 	return response, nil
 }
 
+// ParseGetReportExportResponse parses an HTTP response from a GetReportExportWithResponse call
+func ParseGetReportExportResponse(rsp *http.Response) (*GetReportExportResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetReportExportResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			ClosedAt *string `json:"closedAt"`
+			ExportId string  `json:"exportId"`
+			Failure  *string `json:"failure"`
+			Reports  []struct {
+				CreatedAt           string                                              `json:"createdAt"`
+				ExportFolderId      string                                              `json:"exportFolderId"`
+				Id                  string                                              `json:"id"`
+				LastVersionAt       *string                                             `json:"lastVersionAt"`
+				ReportType          GetReportExport200JSONResponseBodyReportsReportType `json:"reportType"`
+				ScopeApplicationId  *string                                             `json:"scopeApplicationId"`
+				ScopeApplicationIds *[]string                                           `json:"scopeApplicationIds"`
+				Status              GetReportExport200JSONResponseBodyReportsStatus     `json:"status"`
+				Title               string                                              `json:"title"`
+			} `json:"reports"`
+			RunId      *string                                  `json:"runId"`
+			StartedAt  *string                                  `json:"startedAt"`
+			Status     GetReportExport200JSONResponseBodyStatus `json:"status"`
+			WorkflowId string                                   `json:"workflowId"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListReportsResponse parses an HTTP response from a ListReportsWithResponse call
+func ParseListReportsResponse(rsp *http.Response) (*ListReportsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListReportsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []struct {
+			CreatedAt           string                                   `json:"createdAt"`
+			ExportFolderId      string                                   `json:"exportFolderId"`
+			Id                  string                                   `json:"id"`
+			LastVersionAt       *string                                  `json:"lastVersionAt"`
+			ReportType          ListReports200JSONResponseBodyReportType `json:"reportType"`
+			ScopeApplicationId  *string                                  `json:"scopeApplicationId"`
+			ScopeApplicationIds *[]string                                `json:"scopeApplicationIds"`
+			Status              ListReports200JSONResponseBodyStatus     `json:"status"`
+			Title               string                                   `json:"title"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGenerateReportResponse parses an HTTP response from a GenerateReportWithResponse call
 func ParseGenerateReportResponse(rsp *http.Response) (*GenerateReportResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -12046,12 +13135,154 @@ func ParseGenerateReportResponse(rsp *http.Response) (*GenerateReportResponse, e
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 202:
 		var dest struct {
-			WorkflowId string `json:"workflowId"`
+			ExportId   openapi_types.UUID `json:"exportId"`
+			WorkflowId string             `json:"workflowId"`
 		}
 		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON202 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetReportResponse parses an HTTP response from a GetReportWithResponse call
+func ParseGetReportResponse(rsp *http.Response) (*GetReportResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetReportResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			CreatedAt           string                                 `json:"createdAt"`
+			ExportFolderId      string                                 `json:"exportFolderId"`
+			Id                  string                                 `json:"id"`
+			ReportType          GetReport200JSONResponseBodyReportType `json:"reportType"`
+			ScopeApplicationId  *string                                `json:"scopeApplicationId"`
+			ScopeApplicationIds *[]string                              `json:"scopeApplicationIds"`
+			Status              GetReport200JSONResponseBodyStatus     `json:"status"`
+			Title               string                                 `json:"title"`
+			Versions            []struct {
+				CreatedAt string `json:"createdAt"`
+				Id        string `json:"id"`
+				ReportId  string `json:"reportId"`
+			} `json:"versions"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDownloadReportResponse parses an HTTP response from a DownloadReportWithResponse call
+func ParseDownloadReportResponse(rsp *http.Response) (*DownloadReportResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DownloadReportResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			ExpiresAt string `json:"expiresAt"`
+			ReportId  string `json:"reportId"`
+			Url       string `json:"url"`
+			VersionId string `json:"versionId"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
 		var dest Error

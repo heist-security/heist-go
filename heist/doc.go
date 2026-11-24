@@ -5,7 +5,11 @@
 // APIVersion. The handwritten files add authentication, error handling, and
 // pagination.
 //
-//	client, err := heist.New(heist.StaticToken(os.Getenv("HEIST_ACCESS_TOKEN")), heist.Config{})
+//	tokens := &heist.ClientCredentials{
+//		ClientID:     os.Getenv("HEIST_CLIENT_ID"),
+//		ClientSecret: os.Getenv("HEIST_CLIENT_SECRET"),
+//	}
+//	client, err := heist.New(tokens, heist.Config{})
 //	if err != nil { ... }
 //	res, err := client.FindingCountsWithResponse(ctx)
 //	if err != nil { ... }
@@ -14,6 +18,10 @@
 // Clients from New return every non-2xx response as an *APIError carrying the
 // HTTP status and the API's error code and message. Use StatusCode or
 // IsNotFound to inspect it.
+//
+// ClientCredentials authenticates with an OAuth app's client ID and secret and
+// refreshes access tokens before they expire. StaticToken uses an existing
+// access token.
 package heist
 
 //go:generate go tool -modfile=../tools/go.mod oapi-codegen -config oapi-codegen.yaml ../api/openapi.json

@@ -17,10 +17,15 @@ The SDK and CLI share one Go module and one set of version tags.
 go get github.com/heist-security/heist-go@latest
 ```
 
-Create an OAuth app in **Settings → OAuth apps** in Heist and use its access token:
+Create an OAuth app in **Settings → OAuth apps** in Heist and authenticate with
+its client ID and secret:
 
 ```go
-client, err := heist.New(heist.StaticToken(os.Getenv("HEIST_ACCESS_TOKEN")), heist.Config{
+tokens := &heist.ClientCredentials{
+	ClientID:     os.Getenv("HEIST_CLIENT_ID"),
+	ClientSecret: os.Getenv("HEIST_CLIENT_SECRET"),
+}
+client, err := heist.New(tokens, heist.Config{
 	UserAgent: "my-tool/1.0",
 })
 if err != nil {
@@ -49,8 +54,14 @@ named types such as `heist.Finding` and `heist.Credential`. Every non-2xx
 response is returned as `*heist.APIError` with the HTTP status and the API's
 error code and message, so a nil error means the success field (`JSON200`,
 `JSON201` or `JSON202`) is set. `heist.StatusCode(err)` and
-`heist.IsNotFound(err)` inspect errors. Implement `heist.TokenSource` to
-refresh tokens.
+`heist.IsNotFound(err)` inspect errors.
+
+`heist.ClientCredentials` exchanges the client ID and secret for an access token
+at `heist.DefaultTokenURL` with the OAuth 2.0 `client_credentials` grant, using
+`golang.org/x/oauth2`. It caches the token and requests a new one shortly before
+it expires. Set its `TokenURL` to use a different token endpoint. To use an
+access token you already have, pass `heist.StaticToken(token)` instead, or
+implement `heist.TokenSource` to supply tokens another way.
 
 Responses decode leniently: fields and enum values added by later API releases
 are accepted, so a pinned SDK keeps working against a newer service.
