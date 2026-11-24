@@ -2,132 +2,75 @@ package heist
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
-	"net/url"
-	"strings"
 	"sync"
 	"time"
+
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/clientcredentials"
 )
 
 // DefaultTokenURL is the production Heist OAuth token endpoint.
 const DefaultTokenURL = "https://identity.heist.security/oauth2/token"
 
-// tokenRefreshMargin is how long before expiry a cached token is replaced, so
-// a token does not expire while a request is in flight.
-const tokenRefreshMargin = time.Minute
+// defaultTokenClient sends token requests when ClientCredentials.HTTPClient is
+// nil. Token requests don't use the caller's context, so the timeout stops a
+// stalled token endpoint from blocking every request indefinitely.
+var defaultTokenClient = &http.Client{Timeout: 30 * time.Second}
 
 // ClientCredentials is a TokenSource that exchanges a Heist OAuth app's client
 // ID and secret for access tokens using the OAuth 2.0 client_credentials
-// grant. It caches each token and requests a new one shortly before the cached
-// token expires.
+// grant, via golang.org/x/oauth2. It caches each token and requests a new one
+// shortly before the cached token expires. A token without an expiry is reused
+// indefinitely.
 //
-// Use a pointer and don't copy it after first use. It is safe for concurrent
-// use; concurrent callers share one exchange.
+// Token requests don't use the context passed to Token, so they aren't
+// cancelled with it; the HTTP client's timeout bounds them instead. Concurrent
+// callers wait for a single exchange.
+//
+// Use a pointer and don't copy it or change its fields after first use. It is
+// safe for concurrent use.
 type ClientCredentials struct {
 	ClientID     string
 	ClientSecret string
 	// TokenURL overrides DefaultTokenURL, for example to target a test server.
 	TokenURL string
-	// HTTPClient sends token requests. http.DefaultClient is used when nil.
+	// HTTPClient sends token requests. When nil, a client with a 30-second
+	// timeout is used.
 	HTTPClient *http.Client
 
-	// lock is a 1-slot semaphore guarding token and expiry. Unlike a mutex,
-	// callers waiting behind an exchange can give up when ctx is done.
-	initLock sync.Once
-	lock     chan struct{}
-	token    string
-	expiry   time.Time
-	now      func() time.Time // for tests; time.Now when nil
+	init   sync.Once
+	source oauth2.TokenSource
 }
 
 // Token returns the cached access token, exchanging the client credentials for
 // a new one when there is none or it is about to expire.
-func (c *ClientCredentials) Token(ctx context.Context) (string, error) {
-	c.initLock.Do(func() { c.lock = make(chan struct{}, 1) })
-	select {
-	case c.lock <- struct{}{}:
-	case <-ctx.Done():
-		return "", ctx.Err()
-	}
-	defer func() { <-c.lock }()
-	now := time.Now
-	if c.now != nil {
-		now = c.now
-	}
-	if c.token != "" && now().Before(c.expiry.Add(-tokenRefreshMargin)) {
-		return c.token, nil
-	}
-	token, expiresIn, err := c.exchange(ctx)
-	if err != nil {
-		return "", err
-	}
-	// A token without an expiry is not cached, so every call exchanges again.
-	c.token, c.expiry = "", time.Time{}
-	if expiresIn > 0 {
-		c.token = token
-		c.expiry = now().Add(time.Duration(expiresIn) * time.Second)
-	}
-	return token, nil
-}
-
-func (c *ClientCredentials) exchange(ctx context.Context) (token string, expiresIn int64, err error) {
+func (c *ClientCredentials) Token(context.Context) (string, error) {
 	if c.ClientID == "" || c.ClientSecret == "" {
-		return "", 0, errors.New("heist: client ID and client secret are required")
+		return "", errors.New("heist: client ID and client secret are required")
 	}
-	tokenURL := c.TokenURL
-	if tokenURL == "" {
-		tokenURL = DefaultTokenURL
-	}
-	client := c.HTTPClient
-	if client == nil {
-		client = http.DefaultClient
-	}
-	form := url.Values{"grant_type": {"client_credentials"}}
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, tokenURL, strings.NewReader(form.Encode()))
-	if err != nil {
-		return "", 0, fmt.Errorf("heist: token request: %w", err)
-	}
-	// client_secret_basic: RFC 6749 section 2.3.1 form-encodes both values
-	// before Basic encoding.
-	req.SetBasicAuth(url.QueryEscape(c.ClientID), url.QueryEscape(c.ClientSecret))
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Accept", "application/json")
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", 0, fmt.Errorf("heist: token request: %w", err)
-	}
-	defer resp.Body.Close()
-	body, err := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
-	if err != nil {
-		return "", 0, fmt.Errorf("heist: token request: %w", err)
-	}
-
-	var parsed struct {
-		AccessToken      string `json:"access_token"`
-		ExpiresIn        int64  `json:"expires_in"`
-		Error            string `json:"error"`
-		ErrorDescription string `json:"error_description"`
-	}
-	decodeErr := json.Unmarshal(body, &parsed)
-	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		// The body is the RFC 6749 error response, which never contains the
-		// request's client secret.
-		if decodeErr == nil && parsed.Error != "" {
-			return "", 0, fmt.Errorf("heist: token endpoint: HTTP %d: %s: %s",
-				resp.StatusCode, parsed.Error, parsed.ErrorDescription)
+	c.init.Do(func() {
+		tokenURL := c.TokenURL
+		if tokenURL == "" {
+			tokenURL = DefaultTokenURL
 		}
-		return "", 0, fmt.Errorf("heist: token endpoint: HTTP %d %s",
-			resp.StatusCode, http.StatusText(resp.StatusCode))
+		client := c.HTTPClient
+		if client == nil {
+			client = defaultTokenClient
+		}
+		cfg := &clientcredentials.Config{
+			ClientID:     c.ClientID,
+			ClientSecret: c.ClientSecret,
+			TokenURL:     tokenURL,
+			AuthStyle:    oauth2.AuthStyleInHeader,
+		}
+		c.source = cfg.TokenSource(context.WithValue(context.Background(), oauth2.HTTPClient, client))
+	})
+	token, err := c.source.Token()
+	if err != nil {
+		return "", fmt.Errorf("heist: token endpoint: %w", err)
 	}
-	if decodeErr != nil {
-		return "", 0, fmt.Errorf("heist: token endpoint: decoding response: %w", decodeErr)
-	}
-	if parsed.AccessToken == "" {
-		return "", 0, errors.New("heist: token endpoint: response has no access_token")
-	}
-	return parsed.AccessToken, parsed.ExpiresIn, nil
+	return token.AccessToken, nil
 }

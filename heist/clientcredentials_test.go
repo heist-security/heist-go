@@ -8,7 +8,6 @@ import (
 	"strings"
 	"sync"
 	"testing"
-	"time"
 )
 
 // tokenServer is a local stand-in for the OAuth token endpoint. It issues
@@ -79,23 +78,23 @@ func mustToken(t *testing.T, ts TokenSource) string {
 func TestClientCredentialsCachesAndRefreshes(t *testing.T) {
 	server := newTokenServer(t, 3600)
 	creds := server.credentials()
-	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
-	creds.now = func() time.Time { return now }
+	for range 2 {
+		if got := mustToken(t, creds); got != "token-1" {
+			t.Errorf("token = %q, want cached token-1", got)
+		}
+	}
+	if got := server.count(); got != 1 {
+		t.Errorf("token requests = %d, want 1", got)
+	}
 
-	if got := mustToken(t, creds); got != "token-1" {
-		t.Fatalf("first token = %q", got)
-	}
-	now = now.Add(58 * time.Minute)
-	if got := mustToken(t, creds); got != "token-1" {
-		t.Errorf("token before refresh margin = %q, want cached token-1", got)
-	}
-	// Within a minute of expiry the token is replaced.
-	now = now.Add(time.Minute + time.Second)
-	if got := mustToken(t, creds); got != "token-2" {
-		t.Errorf("token near expiry = %q, want token-2", got)
-	}
-	if got := server.count(); got != 2 {
-		t.Errorf("token requests = %d, want 2", got)
+	// A token that expires within x/oauth2's 10-second margin is replaced on
+	// every call.
+	server = newTokenServer(t, 5)
+	creds = server.credentials()
+	for _, want := range []string{"token-1", "token-2"} {
+		if got := mustToken(t, creds); got != want {
+			t.Errorf("token near expiry = %q, want %s", got, want)
+		}
 	}
 }
 
@@ -141,19 +140,19 @@ func TestClientCredentialsErrors(t *testing.T) {
 			name:    "oauth error",
 			status:  http.StatusUnauthorized,
 			body:    `{"error":"invalid_client","error_description":"Client authentication failed"}`,
-			wantErr: "heist: token endpoint: HTTP 401: invalid_client: Client authentication failed",
+			wantErr: `heist: token endpoint: oauth2: "invalid_client" "Client authentication failed"`,
 		},
 		{
 			name:    "non-json error",
 			status:  http.StatusBadGateway,
 			body:    `<html>Bad gateway</html>`,
-			wantErr: "heist: token endpoint: HTTP 502 Bad Gateway",
+			wantErr: "heist: token endpoint: oauth2: cannot fetch token: 502 Bad Gateway\nResponse: <html>Bad gateway</html>",
 		},
 		{
 			name:    "missing access token",
 			status:  http.StatusOK,
 			body:    `{"token_type":"bearer","expires_in":3600}`,
-			wantErr: "heist: token endpoint: response has no access_token",
+			wantErr: "heist: token endpoint: oauth2: server response missing access_token",
 		},
 	}
 	for _, tt := range tests {
@@ -188,43 +187,5 @@ func TestClientCredentialsRequiresIDAndSecret(t *testing.T) {
 		if err == nil || !strings.Contains(err.Error(), "client ID and client secret are required") {
 			t.Errorf("Token(%q) error = %v", creds.ClientID, err)
 		}
-	}
-}
-
-func TestClientCredentialsWaitingCallerHonorsContext(t *testing.T) {
-	release := make(chan struct{})
-	started := make(chan struct{})
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		close(started)
-		<-release
-		writeJSON(w, http.StatusOK, `{"access_token":"token-1","expires_in":3600}`)
-	}))
-	t.Cleanup(server.Close)
-	creds := &ClientCredentials{
-		ClientID:     "test-id",
-		ClientSecret: "test-secret",
-		TokenURL:     server.URL,
-		HTTPClient:   server.Client(),
-	}
-
-	// The first caller holds the exchange open until release is closed.
-	done := make(chan struct{})
-	go func() {
-		defer close(done)
-		mustToken(t, creds)
-	}()
-	<-started
-	timer := time.AfterFunc(2*time.Second, func() { close(release) })
-	t.Cleanup(func() {
-		if timer.Stop() {
-			close(release)
-		}
-		<-done
-	})
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
-	defer cancel()
-	if token, err := creds.Token(ctx); err != context.DeadlineExceeded {
-		t.Errorf("waiting Token = %q, %v; want %v", token, err, context.DeadlineExceeded)
 	}
 }

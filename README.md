@@ -57,8 +57,9 @@ error code and message, so a nil error means the success field (`JSON200`,
 `heist.IsNotFound(err)` inspect errors.
 
 `heist.ClientCredentials` exchanges the client ID and secret for an access token
-at `heist.DefaultTokenURL` with the OAuth 2.0 `client_credentials` grant. It
-caches the token and requests a new one a minute before it expires. Set its
+at `heist.DefaultTokenURL` with the OAuth 2.0 `client_credentials` grant, using
+`golang.org/x/oauth2`. It caches the token and requests a new one shortly before
+it expires. Set its
 `TokenURL` to use a different token endpoint. To use an access token you already
 have, pass `heist.StaticToken(token)` instead, or implement `heist.TokenSource`
 to supply tokens another way.
