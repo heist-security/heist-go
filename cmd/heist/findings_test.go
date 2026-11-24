@@ -75,6 +75,7 @@ func finding(id, severity, status string) map[string]any {
 		"id": id, "title": "Finding " + id, "description": "", "type": "xss", "category": "web",
 		"severity": severity, "validationStatus": status, "createdAt": "2026-11-01T00:00:00Z",
 		"applicationId": nil, "routeId": nil, "issueMetadata": nil, "sourceKind": "pentest",
+		"newField": "added later",
 	}
 }
 
@@ -121,6 +122,9 @@ func TestFindingsListFollowsPagesAndLimit(t *testing.T) {
 	var all []map[string]any
 	if err := json.Unmarshal([]byte(stdout), &all); err != nil || len(all) != 150 {
 		t.Fatalf("decoded %d findings, err %v", len(all), err)
+	}
+	if all[149]["newField"] != "added later" {
+		t.Errorf("finding = %v, want newField from the API", all[149])
 	}
 	if len(s.queries) != 2 {
 		t.Errorf("requested %d pages, want 2", len(s.queries))

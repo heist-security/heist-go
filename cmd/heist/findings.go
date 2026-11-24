@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"iter"
 	"slices"
 	"strings"
 	"text/tabwriter"
@@ -182,8 +183,8 @@ func runFindingsList(args []string, stdout, stderr io.Writer) int {
 		return printError(stderr, name, err)
 	}
 	ctx := context.Background()
-	findings := []heist.Finding{}
-	for finding, err := range client.AllFindings(ctx, params) {
+	findings := []json.RawMessage{}
+	for finding, err := range allRawFindings(ctx, client, params) {
 		if err != nil {
 			return printError(stderr, name, err)
 		}
@@ -195,7 +196,13 @@ func runFindingsList(args []string, stdout, stderr io.Writer) int {
 	if *asJSON {
 		err = writeJSON(stdout, findings)
 	} else {
-		err = writeFindingsTable(stdout, findings)
+		typed := make([]heist.Finding, len(findings))
+		for i, raw := range findings {
+			if err := json.Unmarshal(raw, &typed[i]); err != nil {
+				return printError(stderr, name, err)
+			}
+		}
+		err = writeFindingsTable(stdout, typed)
 	}
 	if err != nil {
 		return printError(stderr, name, err)
@@ -213,6 +220,29 @@ func runFindingsList(args []string, stdout, stderr io.Writer) int {
 		return exitFailOn
 	}
 	return 0
+}
+
+// allRawFindings yields every finding matching params as the API's JSON, so
+// --json output keeps fields added by later API releases. It ignores
+// params.Page.
+func allRawFindings(ctx context.Context, client *heist.ClientWithResponses, params heist.ListFindingsParams) iter.Seq2[json.RawMessage, error] {
+	return heist.Paginate(ctx, func(ctx context.Context, page int) ([]json.RawMessage, int, error) {
+		params.Page = &page
+		res, err := client.ListFindingsWithResponse(ctx, &params)
+		if err != nil {
+			return nil, 0, err
+		}
+		if res.JSON200 == nil {
+			return nil, 0, fmt.Errorf("unexpected %s response", res.Status())
+		}
+		var body struct {
+			Items []json.RawMessage `json:"items"`
+		}
+		if err := json.Unmarshal(res.Body, &body); err != nil {
+			return nil, 0, err
+		}
+		return body.Items, res.JSON200.Total, nil
+	})
 }
 
 // countAtOrAbove counts findings matching params whose severity is at or

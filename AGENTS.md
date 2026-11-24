@@ -21,6 +21,9 @@ A terminal UI is planned, so keep commands easy to reuse from another front end:
   an `io.Writer`, for example `writeFindingDetail` in `cmd/heist/findings.go`.
 - Commands must run from flags and arguments alone. Never prompt; scripts and
   CI rely on their output and exit codes.
+- `--json` prints the API's JSON as received, not re-encoded generated types,
+  which would drop fields added by later API releases. Decode into SDK types
+  only for table output.
 - Keep logic in `cmd/heist/` until a second front end needs it, then move it to
   the SDK rather than duplicating it.
 
