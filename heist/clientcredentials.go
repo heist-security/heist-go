@@ -26,9 +26,11 @@ var defaultTokenClient = &http.Client{Timeout: 30 * time.Second}
 // shortly before the cached token expires. A token without an expiry is reused
 // indefinitely.
 //
-// Token requests don't use the context passed to Token, so they aren't
-// cancelled with it; the HTTP client's timeout bounds them instead. Concurrent
-// callers wait for a single exchange.
+// Token requests don't use the context passed to Token, so cancelling it
+// doesn't stop a caller from waiting; the HTTP client's timeout bounds each
+// token request instead. Concurrent callers wait for a single exchange. When it
+// fails, each waiting caller makes its own attempt in turn, so a caller can
+// wait for several timeouts while the token endpoint is unavailable.
 //
 // Use a pointer and don't copy it or change its fields after first use. It is
 // safe for concurrent use.

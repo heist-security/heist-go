@@ -59,10 +59,9 @@ error code and message, so a nil error means the success field (`JSON200`,
 `heist.ClientCredentials` exchanges the client ID and secret for an access token
 at `heist.DefaultTokenURL` with the OAuth 2.0 `client_credentials` grant, using
 `golang.org/x/oauth2`. It caches the token and requests a new one shortly before
-it expires. Set its
-`TokenURL` to use a different token endpoint. To use an access token you already
-have, pass `heist.StaticToken(token)` instead, or implement `heist.TokenSource`
-to supply tokens another way.
+it expires. Set its `TokenURL` to use a different token endpoint. To use an
+access token you already have, pass `heist.StaticToken(token)` instead, or
+implement `heist.TokenSource` to supply tokens another way.
 
 Responses decode leniently: fields and enum values added by later API releases
 are accepted, so a pinned SDK keeps working against a newer service.
