@@ -20,7 +20,7 @@ to stdout. The path is relative to the API server URL, for example
 /findings?severity=high.
 
 Flags:
-  -X, --method method   HTTP method (default GET)
+  -X, --method method   HTTP method (default GET, or POST with --input)
       --input file      Send the file as a JSON request body; use - for stdin
 
 Environment:
@@ -32,8 +32,8 @@ Environment:
 func runAPI(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	fs := flag.NewFlagSet("api", flag.ContinueOnError)
 	fs.SetOutput(io.Discard)
-	method := fs.String("X", http.MethodGet, "")
-	fs.StringVar(method, "method", http.MethodGet, "")
+	method := fs.String("X", "", "")
+	fs.StringVar(method, "method", "", "")
 	input := fs.String("input", "", "")
 	if err := fs.Parse(args); err != nil {
 		if errors.Is(err, flag.ErrHelp) {
@@ -47,8 +47,15 @@ func runAPI(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stderr, "heist api: expected one path argument\n\n%s", apiUsage)
 		return 2
 	}
+	if *method == "" {
+		*method = http.MethodGet
+		if *input != "" {
+			*method = http.MethodPost
+		}
+	}
 	if err := apiRequest(context.Background(), strings.ToUpper(*method), fs.Arg(0), *input, stdin, stdout); err != nil {
-		fmt.Fprintf(stderr, "heist api: %v\n", err)
+		// SDK errors already start with "heist: ".
+		fmt.Fprintf(stderr, "heist api: %s\n", strings.TrimPrefix(err.Error(), "heist: "))
 		return 1
 	}
 	return 0

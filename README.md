@@ -82,7 +82,7 @@ response body to stdout. It reads the OAuth app credentials from
 
 ```sh
 heist api '/findings?severity=high'
-heist api -X POST --input domain.json /domains
+heist api --input domain.json /domains   # POST unless -X is given
 ```
 
 Run `heist api -h` for every flag and environment variable.

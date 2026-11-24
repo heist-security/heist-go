@@ -64,6 +64,18 @@ func TestAPIPostStdin(t *testing.T) {
 	}
 }
 
+func TestAPIInputDefaultsToPost(t *testing.T) {
+	apiServer(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Errorf("method = %s, want POST", r.Method)
+		}
+	})
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"api", "--input", "-", "/domains"}, strings.NewReader(`{}`), &stdout, &stderr); code != 0 {
+		t.Fatalf("exit %d, stderr %q", code, stderr.String())
+	}
+}
+
 func TestAPIError(t *testing.T) {
 	apiServer(t, func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
@@ -73,7 +85,7 @@ func TestAPIError(t *testing.T) {
 	if code := run([]string{"api", "/findings/x"}, nil, &stdout, &stderr); code != 1 {
 		t.Errorf("exit %d, want 1", code)
 	}
-	if !strings.Contains(stderr.String(), "HTTP 404: not_found: Finding not found") {
+	if stderr.String() != "heist api: HTTP 404: not_found: Finding not found\n" {
 		t.Errorf("stderr = %q", stderr.String())
 	}
 }
