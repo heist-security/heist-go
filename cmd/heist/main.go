@@ -15,15 +15,17 @@ import (
 var version = ""
 
 func main() {
-	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr))
+	os.Exit(run(os.Args[1:], os.Stdin, os.Stdout, os.Stderr))
 }
 
-func run(args []string, stdout, stderr io.Writer) int {
+func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
 		usage(stderr)
 		return 2
 	}
 	switch args[0] {
+	case "api":
+		return runAPI(args[1:], stdin, stdout, stderr)
 	case "version":
 		fmt.Fprintf(stdout, "heist %s (API contract %s)\n", cliVersion(), heist.APIVersion)
 		return 0
@@ -41,6 +43,7 @@ func usage(w io.Writer) {
 	fmt.Fprint(w, `Usage: heist <command>
 
 Commands:
+  api        Make an authenticated API request and print the response
   version    Print the CLI version and targeted API contract version
   help       Show this help
 `)

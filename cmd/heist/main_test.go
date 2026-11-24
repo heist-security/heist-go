@@ -10,7 +10,7 @@ import (
 
 func TestVersion(t *testing.T) {
 	var stdout, stderr bytes.Buffer
-	if code := run([]string{"version"}, &stdout, &stderr); code != 0 {
+	if code := run([]string{"version"}, nil, &stdout, &stderr); code != 0 {
 		t.Fatalf("exit %d, stderr %q", code, stderr.String())
 	}
 	if !strings.Contains(stdout.String(), "API contract "+heist.APIVersion) {
@@ -20,7 +20,7 @@ func TestVersion(t *testing.T) {
 
 func TestUnknownCommand(t *testing.T) {
 	var stdout, stderr bytes.Buffer
-	if code := run([]string{"nope"}, &stdout, &stderr); code != 2 {
+	if code := run([]string{"nope"}, nil, &stdout, &stderr); code != 2 {
 		t.Errorf("exit %d, want 2", code)
 	}
 	if !strings.Contains(stderr.String(), `unknown command "nope"`) {

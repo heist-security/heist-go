@@ -76,6 +76,17 @@ go install github.com/heist-security/heist-go/cmd/heist@latest
 heist version
 ```
 
+`heist api` sends an authenticated request to any API path and writes the
+response body to stdout. It reads the OAuth app credentials from
+`HEIST_CLIENT_ID` and `HEIST_CLIENT_SECRET`:
+
+```sh
+heist api '/findings?severity=high'
+heist api -X POST --input domain.json /domains
+```
+
+Run `heist api -h` for every flag and environment variable.
+
 ## Development
 
 Requires Go (version in `go.mod`) and `make`. No Heist credentials, private
