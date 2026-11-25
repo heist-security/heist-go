@@ -30,6 +30,8 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 		return runAPI(args[1:], stdin, stdout, stderr)
 	case "findings":
 		return runFindings(args[1:], stdout, stderr)
+	case "reports":
+		return runReports(args[1:], stdout, stderr)
 	case "version":
 		fmt.Fprintf(stdout, "heist %s (API contract %s)\n", cliVersion(), heist.APIVersion)
 		return 0
@@ -49,6 +51,7 @@ func usage(w io.Writer) {
 Commands:
   api        Make an authenticated API request and print the response
   findings   List, show and count findings, and gate CI on severity
+  reports    List, generate and download reports, and manage report scopes
   version    Print the CLI version and targeted API contract version
   help       Show this help
 `)
