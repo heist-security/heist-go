@@ -105,8 +105,28 @@ findings unless `--status` is given. Errors exit with 1 and usage errors with 2.
 `counts` shows the API's status counts and open findings by severity. Pass
 `--json` to any findings command for JSON output.
 
-Run `heist api -h` or `heist findings <command> -h` for every flag and
-environment variable.
+`heist reports` lists, generates, and downloads PDF reports, and manages report
+scopes:
+
+```sh
+heist reports list
+heist reports get <id>                      # the report and its PDF versions
+heist reports generate --application <id>   # prints the export ID
+heist reports export-status <export-id>     # exit 3 if the export failed
+heist reports download <id> -o report.pdf   # default <id>.pdf; -o - for stdout
+heist reports scopes create --name Prod --application <id>,<id>
+```
+
+`generate` includes all in-scope applications unless `--application` is
+given, and returns as soon as generation starts. Run `export-status` until the
+status is `COMPLETED`. It exits with status 3 when the export ended without
+completing (`FAILED`, `CANCELLED`, `TERMINATED`, or `TIMED_OUT`); errors exit
+with 1 and usage errors with 2. Generating reports and changing scopes require
+the Admin role and a plan with reports. Pass `--json` to any command that
+prints data for the API's JSON response.
+
+Run `heist api -h`, `heist findings <command> -h`, or
+`heist reports <command> -h` for every flag and environment variable.
 
 ## Development
 
