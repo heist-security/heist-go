@@ -209,7 +209,9 @@ func runReportScopes(args []string, stdout, stderr io.Writer) int {
 	}
 }
 
-// uuidsFlag collects comma-separated or repeated UUIDs.
+// uuidsFlag collects comma-separated or repeated UUIDs. Empty values are
+// rejected so that an empty shell variable can't widen `generate` to every
+// application.
 type uuidsFlag []openapi_types.UUID
 
 func (u *uuidsFlag) String() string {
@@ -222,8 +224,9 @@ func (u *uuidsFlag) String() string {
 
 func (u *uuidsFlag) Set(value string) error {
 	for v := range strings.SplitSeq(value, ",") {
-		if v = strings.TrimSpace(v); v == "" {
-			continue
+		v = strings.TrimSpace(v)
+		if v == "" {
+			return errors.New("empty ID")
 		}
 		id, err := parseUUID(v)
 		if err != nil {

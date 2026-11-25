@@ -307,6 +307,8 @@ func TestReportsUsageErrors(t *testing.T) {
 		{[]string{"reports", "get"}, "heist reports get: expected one report ID"},
 		{[]string{"reports", "get", "x"}, `heist reports get: invalid ID "x"`},
 		{[]string{"reports", "generate", "--application", "x"}, `invalid ID "x"`},
+		{[]string{"reports", "generate", "--application", ""}, "empty ID"},
+		{[]string{"reports", "generate", "--application", appID + ", "}, "empty ID"},
 		{[]string{"reports", "export-status"}, "heist reports export-status: expected one export ID"},
 		{[]string{"reports", "download", "--version", "x", reportID}, `heist reports download: --version: invalid ID "x"`},
 		{[]string{"reports", "scopes", "nope"}, `heist reports scopes: unknown command "nope"`},
