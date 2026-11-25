@@ -662,6 +662,21 @@ func (e InboxItem4Kind) Valid() bool {
 	}
 }
 
+// Defines values for InboxItem5Kind.
+const (
+	GithubAccess InboxItem5Kind = "github-access"
+)
+
+// Valid indicates whether the value is a known member of the InboxItem5Kind enum.
+func (e InboxItem5Kind) Valid() bool {
+	switch e {
+	case GithubAccess:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for InboxTicketBlockerCategory.
 const (
 	InboxTicketBlockerCategoryApplicationMissingOrOutOfScope InboxTicketBlockerCategory = "application_missing_or_out_of_scope"
@@ -1196,6 +1211,66 @@ func (e RetestFinding202JSONResponseBodyOk) Valid() bool {
 	}
 }
 
+// Defines values for GetFindingStatusHistory200JSONResponseBodyFromStatus.
+const (
+	GetFindingStatusHistory200JSONResponseBodyFromStatusACCEPTED               GetFindingStatusHistory200JSONResponseBodyFromStatus = "ACCEPTED"
+	GetFindingStatusHistory200JSONResponseBodyFromStatusCOMPENSATINGCONTROL    GetFindingStatusHistory200JSONResponseBodyFromStatus = "COMPENSATING_CONTROL"
+	GetFindingStatusHistory200JSONResponseBodyFromStatusFALSEPOSITIVECANDIDATE GetFindingStatusHistory200JSONResponseBodyFromStatus = "FALSE_POSITIVE_CANDIDATE"
+	GetFindingStatusHistory200JSONResponseBodyFromStatusFIXED                  GetFindingStatusHistory200JSONResponseBodyFromStatus = "FIXED"
+	GetFindingStatusHistory200JSONResponseBodyFromStatusPENDINGREVIEW          GetFindingStatusHistory200JSONResponseBodyFromStatus = "PENDING_REVIEW"
+	GetFindingStatusHistory200JSONResponseBodyFromStatusPUBLISHED              GetFindingStatusHistory200JSONResponseBodyFromStatus = "PUBLISHED"
+)
+
+// Valid indicates whether the value is a known member of the GetFindingStatusHistory200JSONResponseBodyFromStatus enum.
+func (e GetFindingStatusHistory200JSONResponseBodyFromStatus) Valid() bool {
+	switch e {
+	case GetFindingStatusHistory200JSONResponseBodyFromStatusACCEPTED:
+		return true
+	case GetFindingStatusHistory200JSONResponseBodyFromStatusCOMPENSATINGCONTROL:
+		return true
+	case GetFindingStatusHistory200JSONResponseBodyFromStatusFALSEPOSITIVECANDIDATE:
+		return true
+	case GetFindingStatusHistory200JSONResponseBodyFromStatusFIXED:
+		return true
+	case GetFindingStatusHistory200JSONResponseBodyFromStatusPENDINGREVIEW:
+		return true
+	case GetFindingStatusHistory200JSONResponseBodyFromStatusPUBLISHED:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetFindingStatusHistory200JSONResponseBodyToStatus.
+const (
+	GetFindingStatusHistory200JSONResponseBodyToStatusACCEPTED               GetFindingStatusHistory200JSONResponseBodyToStatus = "ACCEPTED"
+	GetFindingStatusHistory200JSONResponseBodyToStatusCOMPENSATINGCONTROL    GetFindingStatusHistory200JSONResponseBodyToStatus = "COMPENSATING_CONTROL"
+	GetFindingStatusHistory200JSONResponseBodyToStatusFALSEPOSITIVECANDIDATE GetFindingStatusHistory200JSONResponseBodyToStatus = "FALSE_POSITIVE_CANDIDATE"
+	GetFindingStatusHistory200JSONResponseBodyToStatusFIXED                  GetFindingStatusHistory200JSONResponseBodyToStatus = "FIXED"
+	GetFindingStatusHistory200JSONResponseBodyToStatusPENDINGREVIEW          GetFindingStatusHistory200JSONResponseBodyToStatus = "PENDING_REVIEW"
+	GetFindingStatusHistory200JSONResponseBodyToStatusPUBLISHED              GetFindingStatusHistory200JSONResponseBodyToStatus = "PUBLISHED"
+)
+
+// Valid indicates whether the value is a known member of the GetFindingStatusHistory200JSONResponseBodyToStatus enum.
+func (e GetFindingStatusHistory200JSONResponseBodyToStatus) Valid() bool {
+	switch e {
+	case GetFindingStatusHistory200JSONResponseBodyToStatusACCEPTED:
+		return true
+	case GetFindingStatusHistory200JSONResponseBodyToStatusCOMPENSATINGCONTROL:
+		return true
+	case GetFindingStatusHistory200JSONResponseBodyToStatusFALSEPOSITIVECANDIDATE:
+		return true
+	case GetFindingStatusHistory200JSONResponseBodyToStatusFIXED:
+		return true
+	case GetFindingStatusHistory200JSONResponseBodyToStatusPENDINGREVIEW:
+		return true
+	case GetFindingStatusHistory200JSONResponseBodyToStatusPUBLISHED:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for SnoozeInboxItem200JSONResponseBodyOk.
 const (
 	SnoozeInboxItem200JSONResponseBodyOkTrue SnoozeInboxItem200JSONResponseBodyOk = true
@@ -1304,6 +1379,21 @@ func (e GetReportExport200JSONResponseBodyStatus) Valid() bool {
 	case GetReportExport200JSONResponseBodyStatusUNKNOWN:
 		return true
 	case GetReportExport200JSONResponseBodyStatusUNSPECIFIED:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for DeleteReportScope200JSONResponseBodyOk.
+const (
+	DeleteReportScope200JSONResponseBodyOkTrue DeleteReportScope200JSONResponseBodyOk = true
+)
+
+// Valid indicates whether the value is a known member of the DeleteReportScope200JSONResponseBodyOk enum.
+func (e DeleteReportScope200JSONResponseBodyOk) Valid() bool {
+	switch e {
+	case DeleteReportScope200JSONResponseBodyOkTrue:
 		return true
 	default:
 		return false
@@ -1877,6 +1967,24 @@ type InboxItem4 struct {
 // InboxItem4Kind defines model for InboxItem.4.Kind.
 type InboxItem4Kind string
 
+// InboxItem5 defines model for InboxItem.5.
+type InboxItem5 struct {
+	At           string         `json:"at"`
+	Id           string         `json:"id"`
+	Kind         InboxItem5Kind `json:"kind"`
+	MemberIds    []string       `json:"memberIds"`
+	ReadKey      string         `json:"readKey"`
+	Repositories []struct {
+		AccessFailed bool   `json:"accessFailed"`
+		Id           string `json:"id"`
+		Name         string `json:"name"`
+		Owner        string `json:"owner"`
+	} `json:"repositories"`
+}
+
+// InboxItem5Kind defines model for InboxItem.5.Kind.
+type InboxItem5Kind string
+
 // InboxTicket defines model for InboxTicket.
 type InboxTicket struct {
 	AgentName       *string                     `json:"agentName"`
@@ -1904,6 +2012,14 @@ type InboxTicketResponseMode string
 
 // InboxTicketStatus defines model for InboxTicket.Status.
 type InboxTicketStatus string
+
+// ReportScope defines model for ReportScope.
+type ReportScope struct {
+	ApplicationIds []string `json:"applicationIds"`
+	CreatedAt      string   `json:"createdAt"`
+	Id             string   `json:"id"`
+	Name           string   `json:"name"`
+}
 
 // RetestRequest defines model for RetestRequest.
 type RetestRequest struct {
@@ -2124,11 +2240,22 @@ type ApplyCompensatingControlJSONBody struct {
 	Reason string `json:"reason"`
 }
 
+// ReportFalsePositiveJSONBody defines body for ReportFalsePositive for application/json ContentType.
+type ReportFalsePositiveJSONBody struct {
+	Comment string `json:"comment"`
+}
+
 // GetFindingRetest200JSONResponseBodyStatus defines model for GetFindingRetest200JSONResponseBody.Status.
 type GetFindingRetest200JSONResponseBodyStatus string
 
 // RetestFinding202JSONResponseBodyOk defines model for RetestFinding202JSONResponseBody.Ok.
 type RetestFinding202JSONResponseBodyOk bool
+
+// GetFindingStatusHistory200JSONResponseBodyFromStatus defines model for GetFindingStatusHistory200JSONResponseBody.FromStatus.
+type GetFindingStatusHistory200JSONResponseBodyFromStatus string
+
+// GetFindingStatusHistory200JSONResponseBodyToStatus defines model for GetFindingStatusHistory200JSONResponseBody.ToStatus.
+type GetFindingStatusHistory200JSONResponseBodyToStatus string
 
 // SnoozeInboxItemJSONBody defines body for SnoozeInboxItem for application/json ContentType.
 type SnoozeInboxItemJSONBody struct {
@@ -2150,6 +2277,21 @@ type GetReportExport200JSONResponseBodyReportsStatus string
 
 // GetReportExport200JSONResponseBodyStatus defines model for GetReportExport200JSONResponseBody.Status.
 type GetReportExport200JSONResponseBodyStatus string
+
+// CreateReportScopeJSONBody defines body for CreateReportScope for application/json ContentType.
+type CreateReportScopeJSONBody struct {
+	ApplicationIds []openapi_types.UUID `json:"applicationIds"`
+	Name           string               `json:"name"`
+}
+
+// DeleteReportScope200JSONResponseBodyOk defines model for DeleteReportScope200JSONResponseBody.Ok.
+type DeleteReportScope200JSONResponseBodyOk bool
+
+// UpdateReportScopeJSONBody defines body for UpdateReportScope for application/json ContentType.
+type UpdateReportScopeJSONBody struct {
+	ApplicationIds []openapi_types.UUID `json:"applicationIds"`
+	Name           string               `json:"name"`
+}
 
 // ListReportsParams defines parameters for ListReports.
 type ListReportsParams struct {
@@ -2219,8 +2361,17 @@ type AcceptFindingRiskJSONRequestBody AcceptFindingRiskJSONBody
 // ApplyCompensatingControlJSONRequestBody defines body for ApplyCompensatingControl for application/json ContentType.
 type ApplyCompensatingControlJSONRequestBody ApplyCompensatingControlJSONBody
 
+// ReportFalsePositiveJSONRequestBody defines body for ReportFalsePositive for application/json ContentType.
+type ReportFalsePositiveJSONRequestBody ReportFalsePositiveJSONBody
+
 // SnoozeInboxItemJSONRequestBody defines body for SnoozeInboxItem for application/json ContentType.
 type SnoozeInboxItemJSONRequestBody SnoozeInboxItemJSONBody
+
+// CreateReportScopeJSONRequestBody defines body for CreateReportScope for application/json ContentType.
+type CreateReportScopeJSONRequestBody CreateReportScopeJSONBody
+
+// UpdateReportScopeJSONRequestBody defines body for UpdateReportScope for application/json ContentType.
+type UpdateReportScopeJSONRequestBody UpdateReportScopeJSONBody
 
 // GenerateReportJSONRequestBody defines body for GenerateReport for application/json ContentType.
 type GenerateReportJSONRequestBody GenerateReportJSONBody
@@ -2348,6 +2499,32 @@ func (t *InboxItem) FromInboxItem4(v InboxItem4) error {
 
 // MergeInboxItem4 performs a merge with any union data inside the InboxItem, using the provided InboxItem4
 func (t *InboxItem) MergeInboxItem4(v InboxItem4) error {
+	b, err := runtime.JSONMarshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsInboxItem5 returns the union data inside the InboxItem as a InboxItem5
+func (t InboxItem) AsInboxItem5() (InboxItem5, error) {
+	var body InboxItem5
+	err := runtime.JSONUnmarshal(t.union, &body)
+	return body, err
+}
+
+// FromInboxItem5 overwrites any union data inside the InboxItem as the provided InboxItem5
+func (t *InboxItem) FromInboxItem5(v InboxItem5) error {
+	b, err := runtime.JSONMarshal(v)
+	t.union = b
+	return err
+}
+
+// MergeInboxItem5 performs a merge with any union data inside the InboxItem, using the provided InboxItem5
+func (t *InboxItem) MergeInboxItem5(v InboxItem5) error {
 	b, err := runtime.JSONMarshal(v)
 	if err != nil {
 		return err
@@ -2733,6 +2910,18 @@ type ClientInterface interface {
 	// Record a compensating control with a justification. Requires Editor or Admin.
 	ApplyCompensatingControl(ctx context.Context, id openapi_types.UUID, body ApplyCompensatingControlJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ReportFalsePositiveWithBody performs a POST /findings/{id}/false-positive (the `ReportFalsePositive` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Report a finding as a false positive with a comment. Heist reviews the report before closing the finding. Requires Editor or Admin.
+	ReportFalsePositiveWithBody(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ReportFalsePositive performs a POST /findings/{id}/false-positive (the `ReportFalsePositive` operationId) request.
+	// Takes a body of the `application/json` content type.
+	//
+	// Report a finding as a false positive with a comment. Heist reviews the report before closing the finding. Requires Editor or Admin.
+	ReportFalsePositive(ctx context.Context, id openapi_types.UUID, body ReportFalsePositiveJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetFindingRetest performs a GET /findings/{id}/retest (the `GetFindingRetest` operationId) request.
 	//
 	// Observe the latest retained retest execution and current finding detail. NOT_STARTED means no retained execution exists (never started or aged out), not successful completion. Terminal failures are explicit and do not imply a successful finding result.
@@ -2743,9 +2932,14 @@ type ClientInterface interface {
 	// Start an asynchronous retest. Requires Editor or Admin. Returns 409 if a retest is already running.
 	RetestFinding(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetFindingStatusHistory performs a GET /findings/{id}/status-history (the `GetFindingStatusHistory` operationId) request.
+	//
+	// List a finding's status changes, oldest first. Transitions through statuses hidden from finding detail are omitted.
+	GetFindingStatusHistory(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListInboxItems performs a GET /inbox (the `ListInboxItems` operationId) request.
 	//
-	// Read the active workspace inbox in priority order, using the same visibility, grouping, and snooze rules as the UI. Items include findings, minor-findings bundles, applications awaiting review, domain verification requests, and agent tickets. Reading does not mark items as read.
+	// Read the active workspace inbox in priority order, using the same visibility, grouping, and snooze rules as the UI. Items include findings, minor-findings bundles, applications awaiting review, domain verification requests, agent tickets, and GitHub repositories that need GitHub reconnected. Reading does not mark items as read.
 	ListInboxItems(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// InboxCount performs a GET /inbox/count (the `InboxCount` operationId) request.
@@ -2789,6 +2983,40 @@ type ClientInterface interface {
 	//
 	// Observe an export using its exportId and list its reports. COMPLETED means the workflow finished writing all PDFs. NOT_FOUND means no retained workflow exists; persisted reports remain available after workflow history expires. Failed workflows can have partial reports and are never reported as successful. Canceled customers retain read access.
 	GetReportExport(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListReportScopes performs a GET /report-scopes (the `ListReportScopes` operationId) request.
+	//
+	// List named report scopes. When a workspace has report scopes, reports generated automatically after a pentest are produced once per scope.
+	ListReportScopes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateReportScopeWithBody performs a POST /report-scopes (the `CreateReportScope` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Create a named report scope from in-scope applications of this workspace.
+	CreateReportScopeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateReportScope performs a POST /report-scopes (the `CreateReportScope` operationId) request.
+	// Takes a body of the `application/json` content type.
+	//
+	// Create a named report scope from in-scope applications of this workspace.
+	CreateReportScope(ctx context.Context, body CreateReportScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteReportScope performs a DELETE /report-scopes/{id} (the `DeleteReportScope` operationId) request.
+	//
+	// Delete a report scope. Existing reports generated for it are kept.
+	DeleteReportScope(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateReportScopeWithBody performs a POST /report-scopes/{id} (the `UpdateReportScope` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Replace a report scope's name and applications. Existing reports keep the scope name they were generated with.
+	UpdateReportScopeWithBody(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateReportScope performs a POST /report-scopes/{id} (the `UpdateReportScope` operationId) request.
+	// Takes a body of the `application/json` content type.
+	//
+	// Replace a report scope's name and applications. Existing reports keep the scope name they were generated with.
+	UpdateReportScope(ctx context.Context, id openapi_types.UUID, body UpdateReportScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListReports performs a GET /reports (the `ListReports` operationId) request.
 	//
@@ -3418,6 +3646,38 @@ func (c *Client) ApplyCompensatingControl(ctx context.Context, id openapi_types.
 	return c.Client.Do(req)
 }
 
+// ReportFalsePositiveWithBody performs a POST /findings/{id}/false-positive (the `ReportFalsePositive` operationId) request,
+// with any type of body and a specified content type.
+//
+// Report a finding as a false positive with a comment. Heist reviews the report before closing the finding. Requires Editor or Admin.
+func (c *Client) ReportFalsePositiveWithBody(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewReportFalsePositiveRequestWithBody(c.Server, id, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ReportFalsePositive performs a POST /findings/{id}/false-positive (the `ReportFalsePositive` operationId) request.
+// Takes a body of the `application/json` content type.
+//
+// Report a finding as a false positive with a comment. Heist reviews the report before closing the finding. Requires Editor or Admin.
+func (c *Client) ReportFalsePositive(ctx context.Context, id openapi_types.UUID, body ReportFalsePositiveJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewReportFalsePositiveRequest(c.Server, id, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GetFindingRetest performs a GET /findings/{id}/retest (the `GetFindingRetest` operationId) request.
 //
 // Observe the latest retained retest execution and current finding detail. NOT_STARTED means no retained execution exists (never started or aged out), not successful completion. Terminal failures are explicit and do not imply a successful finding result.
@@ -3448,9 +3708,24 @@ func (c *Client) RetestFinding(ctx context.Context, id openapi_types.UUID, reqEd
 	return c.Client.Do(req)
 }
 
+// GetFindingStatusHistory performs a GET /findings/{id}/status-history (the `GetFindingStatusHistory` operationId) request.
+//
+// List a finding's status changes, oldest first. Transitions through statuses hidden from finding detail are omitted.
+func (c *Client) GetFindingStatusHistory(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetFindingStatusHistoryRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // ListInboxItems performs a GET /inbox (the `ListInboxItems` operationId) request.
 //
-// Read the active workspace inbox in priority order, using the same visibility, grouping, and snooze rules as the UI. Items include findings, minor-findings bundles, applications awaiting review, domain verification requests, and agent tickets. Reading does not mark items as read.
+// Read the active workspace inbox in priority order, using the same visibility, grouping, and snooze rules as the UI. Items include findings, minor-findings bundles, applications awaiting review, domain verification requests, agent tickets, and GitHub repositories that need GitHub reconnected. Reading does not mark items as read.
 func (c *Client) ListInboxItems(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListInboxItemsRequest(c.Server)
 	if err != nil {
@@ -3575,6 +3850,100 @@ func (c *Client) TriggerWhiteboxPentest(ctx context.Context, reqEditors ...Reque
 // Observe an export using its exportId and list its reports. COMPLETED means the workflow finished writing all PDFs. NOT_FOUND means no retained workflow exists; persisted reports remain available after workflow history expires. Failed workflows can have partial reports and are never reported as successful. Canceled customers retain read access.
 func (c *Client) GetReportExport(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetReportExportRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListReportScopes performs a GET /report-scopes (the `ListReportScopes` operationId) request.
+//
+// List named report scopes. When a workspace has report scopes, reports generated automatically after a pentest are produced once per scope.
+func (c *Client) ListReportScopes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListReportScopesRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateReportScopeWithBody performs a POST /report-scopes (the `CreateReportScope` operationId) request,
+// with any type of body and a specified content type.
+//
+// Create a named report scope from in-scope applications of this workspace.
+func (c *Client) CreateReportScopeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateReportScopeRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateReportScope performs a POST /report-scopes (the `CreateReportScope` operationId) request.
+// Takes a body of the `application/json` content type.
+//
+// Create a named report scope from in-scope applications of this workspace.
+func (c *Client) CreateReportScope(ctx context.Context, body CreateReportScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateReportScopeRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteReportScope performs a DELETE /report-scopes/{id} (the `DeleteReportScope` operationId) request.
+//
+// Delete a report scope. Existing reports generated for it are kept.
+func (c *Client) DeleteReportScope(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteReportScopeRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateReportScopeWithBody performs a POST /report-scopes/{id} (the `UpdateReportScope` operationId) request,
+// with any type of body and a specified content type.
+//
+// Replace a report scope's name and applications. Existing reports keep the scope name they were generated with.
+func (c *Client) UpdateReportScopeWithBody(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateReportScopeRequestWithBody(c.Server, id, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateReportScope performs a POST /report-scopes/{id} (the `UpdateReportScope` operationId) request.
+// Takes a body of the `application/json` content type.
+//
+// Replace a report scope's name and applications. Existing reports keep the scope name they were generated with.
+func (c *Client) UpdateReportScope(ctx context.Context, id openapi_types.UUID, body UpdateReportScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateReportScopeRequest(c.Server, id, body)
 	if err != nil {
 		return nil, err
 	}
@@ -4964,6 +5333,53 @@ func NewApplyCompensatingControlRequestWithBody(server string, id openapi_types.
 	return req, nil
 }
 
+// NewReportFalsePositiveRequest calls the generic ReportFalsePositive builder with application/json body
+func NewReportFalsePositiveRequest(server string, id openapi_types.UUID, body ReportFalsePositiveJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := runtime.JSONMarshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewReportFalsePositiveRequestWithBody(server, id, "application/json", bodyReader)
+}
+
+// NewReportFalsePositiveRequestWithBody constructs an http.Request for the ReportFalsePositive method, with any body, and a specified content type
+func NewReportFalsePositiveRequestWithBody(server string, id openapi_types.UUID, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "id", id, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: "uuid"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/findings/" + pathParam0 + "/false-positive"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewGetFindingRetestRequest constructs an http.Request for the GetFindingRetest method
 func NewGetFindingRetestRequest(server string, id openapi_types.UUID) (*http.Request, error) {
 	var err error
@@ -5025,6 +5441,40 @@ func NewRetestFindingRequest(server string, id openapi_types.UUID) (*http.Reques
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetFindingStatusHistoryRequest constructs an http.Request for the GetFindingStatusHistory method
+func NewGetFindingStatusHistoryRequest(server string, id openapi_types.UUID) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "id", id, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: "uuid"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/findings/" + pathParam0 + "/status-history"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -5278,6 +5728,154 @@ func NewGetReportExportRequest(server string, id openapi_types.UUID) (*http.Requ
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewListReportScopesRequest constructs an http.Request for the ListReportScopes method
+func NewListReportScopesRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/report-scopes"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateReportScopeRequest calls the generic CreateReportScope builder with application/json body
+func NewCreateReportScopeRequest(server string, body CreateReportScopeJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := runtime.JSONMarshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateReportScopeRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateReportScopeRequestWithBody constructs an http.Request for the CreateReportScope method, with any body, and a specified content type
+func NewCreateReportScopeRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/report-scopes"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteReportScopeRequest constructs an http.Request for the DeleteReportScope method
+func NewDeleteReportScopeRequest(server string, id openapi_types.UUID) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "id", id, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: "uuid"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/report-scopes/" + pathParam0
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateReportScopeRequest calls the generic UpdateReportScope builder with application/json body
+func NewUpdateReportScopeRequest(server string, id openapi_types.UUID, body UpdateReportScopeJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := runtime.JSONMarshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateReportScopeRequestWithBody(server, id, "application/json", bodyReader)
+}
+
+// NewUpdateReportScopeRequestWithBody constructs an http.Request for the UpdateReportScope method, with any body, and a specified content type
+func NewUpdateReportScopeRequestWithBody(server string, id openapi_types.UUID, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "id", id, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: "uuid"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/report-scopes/" + pathParam0
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -5909,6 +6507,20 @@ type ClientWithResponsesInterface interface {
 	// Record a compensating control with a justification. Requires Editor or Admin.
 	ApplyCompensatingControlWithResponse(ctx context.Context, id openapi_types.UUID, body ApplyCompensatingControlJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplyCompensatingControlResponse, error)
 
+	// ReportFalsePositiveWithBodyWithResponse performs a POST /findings/{id}/false-positive (the `ReportFalsePositive` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Report a finding as a false positive with a comment. Heist reviews the report before closing the finding. Requires Editor or Admin.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ReportFalsePositiveWithBodyWithResponse(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ReportFalsePositiveResponse, error)
+
+	// ReportFalsePositiveWithResponse performs a POST /findings/{id}/false-positive (the `ReportFalsePositive` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Report a finding as a false positive with a comment. Heist reviews the report before closing the finding. Requires Editor or Admin.
+	ReportFalsePositiveWithResponse(ctx context.Context, id openapi_types.UUID, body ReportFalsePositiveJSONRequestBody, reqEditors ...RequestEditorFn) (*ReportFalsePositiveResponse, error)
+
 	// GetFindingRetestWithResponse performs a GET /findings/{id}/retest (the `GetFindingRetest` operationId) request.
 	//
 	// Observe the latest retained retest execution and current finding detail. NOT_STARTED means no retained execution exists (never started or aged out), not successful completion. Terminal failures are explicit and do not imply a successful finding result.
@@ -5923,9 +6535,16 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	RetestFindingWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*RetestFindingResponse, error)
 
+	// GetFindingStatusHistoryWithResponse performs a GET /findings/{id}/status-history (the `GetFindingStatusHistory` operationId) request.
+	//
+	// List a finding's status changes, oldest first. Transitions through statuses hidden from finding detail are omitted.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetFindingStatusHistoryWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetFindingStatusHistoryResponse, error)
+
 	// ListInboxItemsWithResponse performs a GET /inbox (the `ListInboxItems` operationId) request.
 	//
-	// Read the active workspace inbox in priority order, using the same visibility, grouping, and snooze rules as the UI. Items include findings, minor-findings bundles, applications awaiting review, domain verification requests, and agent tickets. Reading does not mark items as read.
+	// Read the active workspace inbox in priority order, using the same visibility, grouping, and snooze rules as the UI. Items include findings, minor-findings bundles, applications awaiting review, domain verification requests, agent tickets, and GitHub repositories that need GitHub reconnected. Reading does not mark items as read.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListInboxItemsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListInboxItemsResponse, error)
@@ -5985,6 +6604,48 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetReportExportWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetReportExportResponse, error)
+
+	// ListReportScopesWithResponse performs a GET /report-scopes (the `ListReportScopes` operationId) request.
+	//
+	// List named report scopes. When a workspace has report scopes, reports generated automatically after a pentest are produced once per scope.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListReportScopesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListReportScopesResponse, error)
+
+	// CreateReportScopeWithBodyWithResponse performs a POST /report-scopes (the `CreateReportScope` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Create a named report scope from in-scope applications of this workspace.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreateReportScopeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateReportScopeResponse, error)
+
+	// CreateReportScopeWithResponse performs a POST /report-scopes (the `CreateReportScope` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Create a named report scope from in-scope applications of this workspace.
+	CreateReportScopeWithResponse(ctx context.Context, body CreateReportScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateReportScopeResponse, error)
+
+	// DeleteReportScopeWithResponse performs a DELETE /report-scopes/{id} (the `DeleteReportScope` operationId) request.
+	//
+	// Delete a report scope. Existing reports generated for it are kept.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteReportScopeWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteReportScopeResponse, error)
+
+	// UpdateReportScopeWithBodyWithResponse performs a POST /report-scopes/{id} (the `UpdateReportScope` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Replace a report scope's name and applications. Existing reports keep the scope name they were generated with.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	UpdateReportScopeWithBodyWithResponse(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateReportScopeResponse, error)
+
+	// UpdateReportScopeWithResponse performs a POST /report-scopes/{id} (the `UpdateReportScope` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Replace a report scope's name and applications. Existing reports keep the scope name they were generated with.
+	UpdateReportScopeWithResponse(ctx context.Context, id openapi_types.UUID, body UpdateReportScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateReportScopeResponse, error)
 
 	// ListReportsWithResponse performs a GET /reports (the `ListReports` operationId) request.
 	//
@@ -8353,6 +9014,82 @@ func (r ApplyCompensatingControlResponse) ContentType() string {
 	return ""
 }
 
+type ReportFalsePositiveResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *FindingDetail
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ReportFalsePositiveResponse) GetJSON200() *FindingDetail {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ReportFalsePositiveResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r ReportFalsePositiveResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r ReportFalsePositiveResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ReportFalsePositiveResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ReportFalsePositiveResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ReportFalsePositiveResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ReportFalsePositiveResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ReportFalsePositiveResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ReportFalsePositiveResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetFindingRetestResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -8526,6 +9263,94 @@ func (r RetestFindingResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r RetestFindingResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetFindingStatusHistoryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]struct {
+		ChangedAt       string                                               `json:"changedAt"`
+		ChangedByUserId *string                                              `json:"changedByUserId"`
+		FromStatus      GetFindingStatusHistory200JSONResponseBodyFromStatus `json:"fromStatus"`
+		Id              string                                               `json:"id"`
+		ToStatus        GetFindingStatusHistory200JSONResponseBodyToStatus   `json:"toStatus"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetFindingStatusHistoryResponse) GetJSON200() *[]struct {
+	ChangedAt       string                                               `json:"changedAt"`
+	ChangedByUserId *string                                              `json:"changedByUserId"`
+	FromStatus      GetFindingStatusHistory200JSONResponseBodyFromStatus `json:"fromStatus"`
+	Id              string                                               `json:"id"`
+	ToStatus        GetFindingStatusHistory200JSONResponseBodyToStatus   `json:"toStatus"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetFindingStatusHistoryResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetFindingStatusHistoryResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetFindingStatusHistoryResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetFindingStatusHistoryResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetFindingStatusHistoryResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetFindingStatusHistoryResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetFindingStatusHistoryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetFindingStatusHistoryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetFindingStatusHistoryResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -9086,8 +9911,11 @@ type GetReportExportResponse struct {
 			ReportType          GetReportExport200JSONResponseBodyReportsReportType `json:"reportType"`
 			ScopeApplicationId  *string                                             `json:"scopeApplicationId"`
 			ScopeApplicationIds *[]string                                           `json:"scopeApplicationIds"`
-			Status              GetReportExport200JSONResponseBodyReportsStatus     `json:"status"`
-			Title               string                                              `json:"title"`
+
+			// ScopeName Name of the report scope this export was generated for.
+			ScopeName *string                                         `json:"scopeName"`
+			Status    GetReportExport200JSONResponseBodyReportsStatus `json:"status"`
+			Title     string                                          `json:"title"`
 		} `json:"reports"`
 		RunId      *string                                  `json:"runId"`
 		StartedAt  *string                                  `json:"startedAt"`
@@ -9119,8 +9947,11 @@ func (r GetReportExportResponse) GetJSON200() *struct {
 		ReportType          GetReportExport200JSONResponseBodyReportsReportType `json:"reportType"`
 		ScopeApplicationId  *string                                             `json:"scopeApplicationId"`
 		ScopeApplicationIds *[]string                                           `json:"scopeApplicationIds"`
-		Status              GetReportExport200JSONResponseBodyReportsStatus     `json:"status"`
-		Title               string                                              `json:"title"`
+
+		// ScopeName Name of the report scope this export was generated for.
+		ScopeName *string                                         `json:"scopeName"`
+		Status    GetReportExport200JSONResponseBodyReportsStatus `json:"status"`
+		Title     string                                          `json:"title"`
 	} `json:"reports"`
 	RunId      *string                                  `json:"runId"`
 	StartedAt  *string                                  `json:"startedAt"`
@@ -9184,6 +10015,314 @@ func (r GetReportExportResponse) ContentType() string {
 	return ""
 }
 
+type ListReportScopesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]ReportScope
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListReportScopesResponse) GetJSON200() *[]ReportScope {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ListReportScopesResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r ListReportScopesResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r ListReportScopesResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListReportScopesResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListReportScopesResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListReportScopesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListReportScopesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListReportScopesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListReportScopesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreateReportScopeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *ReportScope
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreateReportScopeResponse) GetJSON201() *ReportScope {
+	return r.JSON201
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r CreateReportScopeResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r CreateReportScopeResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r CreateReportScopeResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateReportScopeResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreateReportScopeResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateReportScopeResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateReportScopeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateReportScopeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateReportScopeResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteReportScopeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *struct {
+		Ok DeleteReportScope200JSONResponseBodyOk `json:"ok"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r DeleteReportScopeResponse) GetJSON200() *struct {
+	Ok DeleteReportScope200JSONResponseBodyOk `json:"ok"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r DeleteReportScopeResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r DeleteReportScopeResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r DeleteReportScopeResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteReportScopeResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteReportScopeResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteReportScopeResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteReportScopeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteReportScopeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteReportScopeResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type UpdateReportScopeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ReportScope
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r UpdateReportScopeResponse) GetJSON200() *ReportScope {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r UpdateReportScopeResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r UpdateReportScopeResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r UpdateReportScopeResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r UpdateReportScopeResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r UpdateReportScopeResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r UpdateReportScopeResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateReportScopeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateReportScopeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r UpdateReportScopeResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListReportsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -9196,8 +10335,11 @@ type ListReportsResponse struct {
 		ReportType          ListReports200JSONResponseBodyReportType `json:"reportType"`
 		ScopeApplicationId  *string                                  `json:"scopeApplicationId"`
 		ScopeApplicationIds *[]string                                `json:"scopeApplicationIds"`
-		Status              ListReports200JSONResponseBodyStatus     `json:"status"`
-		Title               string                                   `json:"title"`
+
+		// ScopeName Name of the report scope this export was generated for.
+		ScopeName *string                              `json:"scopeName"`
+		Status    ListReports200JSONResponseBodyStatus `json:"status"`
+		Title     string                               `json:"title"`
 	}
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
@@ -9220,8 +10362,11 @@ func (r ListReportsResponse) GetJSON200() *[]struct {
 	ReportType          ListReports200JSONResponseBodyReportType `json:"reportType"`
 	ScopeApplicationId  *string                                  `json:"scopeApplicationId"`
 	ScopeApplicationIds *[]string                                `json:"scopeApplicationIds"`
-	Status              ListReports200JSONResponseBodyStatus     `json:"status"`
-	Title               string                                   `json:"title"`
+
+	// ScopeName Name of the report scope this export was generated for.
+	ScopeName *string                              `json:"scopeName"`
+	Status    ListReports200JSONResponseBodyStatus `json:"status"`
+	Title     string                               `json:"title"`
 } {
 	return r.JSON200
 }
@@ -9373,9 +10518,12 @@ type GetReportResponse struct {
 		ReportType          GetReport200JSONResponseBodyReportType `json:"reportType"`
 		ScopeApplicationId  *string                                `json:"scopeApplicationId"`
 		ScopeApplicationIds *[]string                              `json:"scopeApplicationIds"`
-		Status              GetReport200JSONResponseBodyStatus     `json:"status"`
-		Title               string                                 `json:"title"`
-		Versions            []struct {
+
+		// ScopeName Name of the report scope this export was generated for.
+		ScopeName *string                            `json:"scopeName"`
+		Status    GetReport200JSONResponseBodyStatus `json:"status"`
+		Title     string                             `json:"title"`
+		Versions  []struct {
 			CreatedAt string `json:"createdAt"`
 			Id        string `json:"id"`
 			ReportId  string `json:"reportId"`
@@ -9401,9 +10549,12 @@ func (r GetReportResponse) GetJSON200() *struct {
 	ReportType          GetReport200JSONResponseBodyReportType `json:"reportType"`
 	ScopeApplicationId  *string                                `json:"scopeApplicationId"`
 	ScopeApplicationIds *[]string                              `json:"scopeApplicationIds"`
-	Status              GetReport200JSONResponseBodyStatus     `json:"status"`
-	Title               string                                 `json:"title"`
-	Versions            []struct {
+
+	// ScopeName Name of the report scope this export was generated for.
+	ScopeName *string                            `json:"scopeName"`
+	Status    GetReport200JSONResponseBodyStatus `json:"status"`
+	Title     string                             `json:"title"`
+	Versions  []struct {
 		CreatedAt string `json:"createdAt"`
 		Id        string `json:"id"`
 		ReportId  string `json:"reportId"`
@@ -10341,6 +11492,32 @@ func (c *ClientWithResponses) ApplyCompensatingControlWithResponse(ctx context.C
 	return ParseApplyCompensatingControlResponse(rsp)
 }
 
+// ReportFalsePositiveWithBodyWithResponse performs a POST /findings/{id}/false-positive (the `ReportFalsePositive` operationId) request,
+// with any type of body and a specified content type.
+//
+// Report a finding as a false positive with a comment. Heist reviews the report before closing the finding. Requires Editor or Admin.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ReportFalsePositiveWithBodyWithResponse(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ReportFalsePositiveResponse, error) {
+	rsp, err := c.ReportFalsePositiveWithBody(ctx, id, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseReportFalsePositiveResponse(rsp)
+}
+
+// ReportFalsePositiveWithResponse performs a POST /findings/{id}/false-positive (the `ReportFalsePositive` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Report a finding as a false positive with a comment. Heist reviews the report before closing the finding. Requires Editor or Admin.
+func (c *ClientWithResponses) ReportFalsePositiveWithResponse(ctx context.Context, id openapi_types.UUID, body ReportFalsePositiveJSONRequestBody, reqEditors ...RequestEditorFn) (*ReportFalsePositiveResponse, error) {
+	rsp, err := c.ReportFalsePositive(ctx, id, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseReportFalsePositiveResponse(rsp)
+}
+
 // GetFindingRetestWithResponse performs a GET /findings/{id}/retest (the `GetFindingRetest` operationId) request.
 //
 // Observe the latest retained retest execution and current finding detail. NOT_STARTED means no retained execution exists (never started or aged out), not successful completion. Terminal failures are explicit and do not imply a successful finding result.
@@ -10367,9 +11544,22 @@ func (c *ClientWithResponses) RetestFindingWithResponse(ctx context.Context, id 
 	return ParseRetestFindingResponse(rsp)
 }
 
+// GetFindingStatusHistoryWithResponse performs a GET /findings/{id}/status-history (the `GetFindingStatusHistory` operationId) request.
+//
+// List a finding's status changes, oldest first. Transitions through statuses hidden from finding detail are omitted.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetFindingStatusHistoryWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetFindingStatusHistoryResponse, error) {
+	rsp, err := c.GetFindingStatusHistory(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetFindingStatusHistoryResponse(rsp)
+}
+
 // ListInboxItemsWithResponse performs a GET /inbox (the `ListInboxItems` operationId) request.
 //
-// Read the active workspace inbox in priority order, using the same visibility, grouping, and snooze rules as the UI. Items include findings, minor-findings bundles, applications awaiting review, domain verification requests, and agent tickets. Reading does not mark items as read.
+// Read the active workspace inbox in priority order, using the same visibility, grouping, and snooze rules as the UI. Items include findings, minor-findings bundles, applications awaiting review, domain verification requests, agent tickets, and GitHub repositories that need GitHub reconnected. Reading does not mark items as read.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListInboxItemsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListInboxItemsResponse, error) {
@@ -10482,6 +11672,84 @@ func (c *ClientWithResponses) GetReportExportWithResponse(ctx context.Context, i
 		return nil, err
 	}
 	return ParseGetReportExportResponse(rsp)
+}
+
+// ListReportScopesWithResponse performs a GET /report-scopes (the `ListReportScopes` operationId) request.
+//
+// List named report scopes. When a workspace has report scopes, reports generated automatically after a pentest are produced once per scope.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListReportScopesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListReportScopesResponse, error) {
+	rsp, err := c.ListReportScopes(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListReportScopesResponse(rsp)
+}
+
+// CreateReportScopeWithBodyWithResponse performs a POST /report-scopes (the `CreateReportScope` operationId) request,
+// with any type of body and a specified content type.
+//
+// Create a named report scope from in-scope applications of this workspace.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateReportScopeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateReportScopeResponse, error) {
+	rsp, err := c.CreateReportScopeWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateReportScopeResponse(rsp)
+}
+
+// CreateReportScopeWithResponse performs a POST /report-scopes (the `CreateReportScope` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Create a named report scope from in-scope applications of this workspace.
+func (c *ClientWithResponses) CreateReportScopeWithResponse(ctx context.Context, body CreateReportScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateReportScopeResponse, error) {
+	rsp, err := c.CreateReportScope(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateReportScopeResponse(rsp)
+}
+
+// DeleteReportScopeWithResponse performs a DELETE /report-scopes/{id} (the `DeleteReportScope` operationId) request.
+//
+// Delete a report scope. Existing reports generated for it are kept.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteReportScopeWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteReportScopeResponse, error) {
+	rsp, err := c.DeleteReportScope(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteReportScopeResponse(rsp)
+}
+
+// UpdateReportScopeWithBodyWithResponse performs a POST /report-scopes/{id} (the `UpdateReportScope` operationId) request,
+// with any type of body and a specified content type.
+//
+// Replace a report scope's name and applications. Existing reports keep the scope name they were generated with.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateReportScopeWithBodyWithResponse(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateReportScopeResponse, error) {
+	rsp, err := c.UpdateReportScopeWithBody(ctx, id, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateReportScopeResponse(rsp)
+}
+
+// UpdateReportScopeWithResponse performs a POST /report-scopes/{id} (the `UpdateReportScope` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Replace a report scope's name and applications. Existing reports keep the scope name they were generated with.
+func (c *ClientWithResponses) UpdateReportScopeWithResponse(ctx context.Context, id openapi_types.UUID, body UpdateReportScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateReportScopeResponse, error) {
+	rsp, err := c.UpdateReportScope(ctx, id, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateReportScopeResponse(rsp)
 }
 
 // ListReportsWithResponse performs a GET /reports (the `ListReports` operationId) request.
@@ -12406,6 +13674,67 @@ func ParseApplyCompensatingControlResponse(rsp *http.Response) (*ApplyCompensati
 	return response, nil
 }
 
+// ParseReportFalsePositiveResponse parses an HTTP response from a ReportFalsePositiveWithResponse call
+func ParseReportFalsePositiveResponse(rsp *http.Response) (*ReportFalsePositiveResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ReportFalsePositiveResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest FindingDetail
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetFindingRetestResponse parses an HTTP response from a GetFindingRetestWithResponse call
 func ParseGetFindingRetestResponse(rsp *http.Response) (*GetFindingRetestResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -12532,6 +13861,73 @@ func ParseRetestFindingResponse(rsp *http.Response) (*RetestFindingResponse, err
 			return nil, err
 		}
 		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetFindingStatusHistoryResponse parses an HTTP response from a GetFindingStatusHistoryWithResponse call
+func ParseGetFindingStatusHistoryResponse(rsp *http.Response) (*GetFindingStatusHistoryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetFindingStatusHistoryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []struct {
+			ChangedAt       string                                               `json:"changedAt"`
+			ChangedByUserId *string                                              `json:"changedByUserId"`
+			FromStatus      GetFindingStatusHistory200JSONResponseBodyFromStatus `json:"fromStatus"`
+			Id              string                                               `json:"id"`
+			ToStatus        GetFindingStatusHistory200JSONResponseBodyToStatus   `json:"toStatus"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest Error
@@ -12995,14 +14391,263 @@ func ParseGetReportExportResponse(rsp *http.Response) (*GetReportExportResponse,
 				ReportType          GetReportExport200JSONResponseBodyReportsReportType `json:"reportType"`
 				ScopeApplicationId  *string                                             `json:"scopeApplicationId"`
 				ScopeApplicationIds *[]string                                           `json:"scopeApplicationIds"`
-				Status              GetReportExport200JSONResponseBodyReportsStatus     `json:"status"`
-				Title               string                                              `json:"title"`
+
+				// ScopeName Name of the report scope this export was generated for.
+				ScopeName *string                                         `json:"scopeName"`
+				Status    GetReportExport200JSONResponseBodyReportsStatus `json:"status"`
+				Title     string                                          `json:"title"`
 			} `json:"reports"`
 			RunId      *string                                  `json:"runId"`
 			StartedAt  *string                                  `json:"startedAt"`
 			Status     GetReportExport200JSONResponseBodyStatus `json:"status"`
 			WorkflowId string                                   `json:"workflowId"`
 		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListReportScopesResponse parses an HTTP response from a ListReportScopesWithResponse call
+func ParseListReportScopesResponse(rsp *http.Response) (*ListReportScopesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListReportScopesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []ReportScope
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateReportScopeResponse parses an HTTP response from a CreateReportScopeWithResponse call
+func ParseCreateReportScopeResponse(rsp *http.Response) (*CreateReportScopeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateReportScopeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest ReportScope
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteReportScopeResponse parses an HTTP response from a DeleteReportScopeWithResponse call
+func ParseDeleteReportScopeResponse(rsp *http.Response) (*DeleteReportScopeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteReportScopeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Ok DeleteReportScope200JSONResponseBodyOk `json:"ok"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateReportScopeResponse parses an HTTP response from a UpdateReportScopeWithResponse call
+func ParseUpdateReportScopeResponse(rsp *http.Response) (*UpdateReportScopeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateReportScopeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ReportScope
 		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -13071,8 +14716,11 @@ func ParseListReportsResponse(rsp *http.Response) (*ListReportsResponse, error) 
 			ReportType          ListReports200JSONResponseBodyReportType `json:"reportType"`
 			ScopeApplicationId  *string                                  `json:"scopeApplicationId"`
 			ScopeApplicationIds *[]string                                `json:"scopeApplicationIds"`
-			Status              ListReports200JSONResponseBodyStatus     `json:"status"`
-			Title               string                                   `json:"title"`
+
+			// ScopeName Name of the report scope this export was generated for.
+			ScopeName *string                              `json:"scopeName"`
+			Status    ListReports200JSONResponseBodyStatus `json:"status"`
+			Title     string                               `json:"title"`
 		}
 		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
@@ -13205,9 +14853,12 @@ func ParseGetReportResponse(rsp *http.Response) (*GetReportResponse, error) {
 			ReportType          GetReport200JSONResponseBodyReportType `json:"reportType"`
 			ScopeApplicationId  *string                                `json:"scopeApplicationId"`
 			ScopeApplicationIds *[]string                              `json:"scopeApplicationIds"`
-			Status              GetReport200JSONResponseBodyStatus     `json:"status"`
-			Title               string                                 `json:"title"`
-			Versions            []struct {
+
+			// ScopeName Name of the report scope this export was generated for.
+			ScopeName *string                            `json:"scopeName"`
+			Status    GetReport200JSONResponseBodyStatus `json:"status"`
+			Title     string                             `json:"title"`
+			Versions  []struct {
 				CreatedAt string `json:"createdAt"`
 				Id        string `json:"id"`
 				ReportId  string `json:"reportId"`
