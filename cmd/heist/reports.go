@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/rand"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -578,18 +579,16 @@ func openReportPDF(ctx context.Context, client *heist.ClientWithResponses, id op
 }
 
 // writeFileAtomic writes r to path through a temporary file in the same
-// directory, so a failed download leaves no partial file.
+// directory, so a failed download leaves no partial file. The file is created
+// with mode 0666 less the umask, like any other new file; os.CreateTemp would
+// make it 0600.
 func writeFileAtomic(path string, r io.Reader) error {
-	f, err := os.CreateTemp(filepath.Dir(path), ".heist-download-*")
+	tmp := filepath.Join(filepath.Dir(path), ".heist-download-"+rand.Text())
+	f, err := os.OpenFile(tmp, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o666)
 	if err != nil {
 		return err
 	}
 	defer os.Remove(f.Name()) // no-op after a successful rename
-	// CreateTemp makes the file private; use the usual mode for a download.
-	if err := f.Chmod(0o644); err != nil {
-		f.Close()
-		return err
-	}
 	if _, err := io.Copy(f, r); err != nil {
 		f.Close()
 		return err
