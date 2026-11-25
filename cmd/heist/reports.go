@@ -579,6 +579,11 @@ func writeFileAtomic(path string, r io.Reader) error {
 		return err
 	}
 	defer os.Remove(f.Name()) // no-op after a successful rename
+	// CreateTemp makes the file private; use the usual mode for a download.
+	if err := f.Chmod(0o644); err != nil {
+		f.Close()
+		return err
+	}
 	if _, err := io.Copy(f, r); err != nil {
 		f.Close()
 		return err

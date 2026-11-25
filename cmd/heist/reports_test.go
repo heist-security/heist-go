@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -209,6 +210,9 @@ func TestReportsDownload(t *testing.T) {
 	}
 	if got, err := os.ReadFile(reportID + ".pdf"); err != nil || string(got) != "%PDF latest.pdf" {
 		t.Errorf("default file = %q, %v", got, err)
+	}
+	if info, err := os.Stat(reportID + ".pdf"); err == nil && runtime.GOOS != "windows" && info.Mode().Perm() != 0o644 {
+		t.Errorf("file mode = %v, want 0644", info.Mode().Perm())
 	}
 
 	out := filepath.Join("out", "r.pdf")
