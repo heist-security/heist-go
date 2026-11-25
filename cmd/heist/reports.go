@@ -85,7 +85,9 @@ Flags:
 
 Exit status:
   0   Success, and the export has not failed (it may still be RUNNING)
-  1   Error, for example an API or authentication failure
+  1   Error, for example an API or authentication failure, or NOT_FOUND: no
+      export has this ID, or its history has expired (its reports remain
+      listed by heist reports list --export-id)
   2   Invalid usage
   3   The export ended without completing: FAILED, CANCELLED, TERMINATED or
       TIMED_OUT. It may still have written some reports.
@@ -459,7 +461,11 @@ func runReportsExportStatus(args []string, stdout, stderr io.Writer) int {
 	if err != nil {
 		return printError(stderr, name, err)
 	}
-	if status := res.JSON200.Status; slices.Contains(failedExportStatuses, status) {
+	switch status := res.JSON200.Status; {
+	case status == "NOT_FOUND":
+		fmt.Fprintf(stderr, "heist %s: export not found, or its history has expired\n", name)
+		return 1
+	case slices.Contains(failedExportStatuses, status):
 		fmt.Fprintf(stderr, "heist %s: export %s\n", name, status)
 		return exitExportFailed
 	}

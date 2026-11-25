@@ -157,6 +157,7 @@ func TestReportsExportStatus(t *testing.T) {
 		{"COMPLETED", "null", 0},
 		{"FAILED", `"PDF render failed"`, exitExportFailed},
 		{"TIMED_OUT", "null", exitExportFailed},
+		{"NOT_FOUND", "null", 1},
 	} {
 		t.Run(tt.status, func(t *testing.T) {
 			reportsServer(t, map[string]http.HandlerFunc{
@@ -170,6 +171,9 @@ func TestReportsExportStatus(t *testing.T) {
 			}
 			if !strings.Contains(stdout, "Status:   "+tt.status+"\n") || !strings.Contains(stdout, reportID) {
 				t.Errorf("stdout =\n%s", stdout)
+			}
+			if tt.status == "NOT_FOUND" && stderr != "heist reports export-status: export not found, or its history has expired\n" {
+				t.Errorf("stderr = %q", stderr)
 			}
 			if tt.code == exitExportFailed && stderr != "heist reports export-status: export "+tt.status+"\n" {
 				t.Errorf("stderr = %q", stderr)

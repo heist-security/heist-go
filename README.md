@@ -120,8 +120,9 @@ heist reports scopes create --name Prod --application <id>,<id>
 `generate` includes all in-scope applications unless `--application` is
 given, and returns as soon as generation starts. Run `export-status` until the
 status is `COMPLETED`. It exits with status 3 when the export ended without
-completing (`FAILED`, `CANCELLED`, `TERMINATED`, or `TIMED_OUT`); errors exit
-with 1 and usage errors with 2. Generating reports and changing scopes require
+completing (`FAILED`, `CANCELLED`, `TERMINATED`, or `TIMED_OUT`). Errors exit
+with 1, including an export ID that is unknown or whose history has expired,
+and usage errors with 2. Generating reports and changing scopes require
 the Admin role and a plan with reports. Pass `--json` to any command that
 prints data for the API's JSON response.
 
