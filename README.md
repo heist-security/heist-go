@@ -113,7 +113,7 @@ heist reports list
 heist reports get <id>                      # the report and its PDF versions
 heist reports generate --application <id>   # prints the export ID
 heist reports export-status <export-id>     # exit 3 if the export failed
-heist reports download <id> -o report.pdf   # default <id>.pdf; -o - for stdout
+heist reports download -o report.pdf <id>   # default <id>.pdf; -o - for stdout
 heist reports scopes create --name Prod --application <id>,<id>
 ```
 
