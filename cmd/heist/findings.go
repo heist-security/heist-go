@@ -7,8 +7,8 @@ import (
 	"io"
 	"iter"
 	"slices"
+	"strconv"
 	"strings"
-	"text/tabwriter"
 
 	"github.com/heist-security/heist-go/heist"
 	openapi_types "github.com/oapi-codegen/runtime/types"
@@ -103,16 +103,26 @@ Exit status:
 			if err != nil {
 				return err
 			}
-			ctx := cmd.Context()
 			findings := []json.RawMessage{}
-			for finding, err := range allRawFindings(ctx, client, params) {
-				if err != nil {
-					return err
+			total := 0 // findings matching the filters, ignoring --limit
+			err = withProgress(cmd, asJSON, "Fetching findings", func(ctx context.Context, progress progressFunc) error {
+				track := func(status string, done, n int) {
+					total = n
+					progress(status, done, n)
 				}
-				findings = append(findings, finding)
-				if len(findings) == limit {
-					break
+				for finding, err := range allRawFindings(ctx, client, params, track) {
+					if err != nil {
+						return err
+					}
+					findings = append(findings, finding)
+					if len(findings) == limit {
+						break
+					}
 				}
+				return nil
+			})
+			if err != nil {
+				return err
 			}
 			if asJSON {
 				err = writeJSON(cmd.OutOrStdout(), findings)
@@ -123,7 +133,9 @@ Exit status:
 						return err
 					}
 				}
-				err = writeFindingsTable(cmd.OutOrStdout(), typed)
+				err = printStyled(cmd, func(w io.Writer, s styles) error {
+					return writeFindingsTable(w, s, typed, total)
+				})
 			}
 			if err != nil {
 				return err
@@ -132,7 +144,7 @@ Exit status:
 			if threshold < 0 {
 				return nil
 			}
-			n, err := countAtOrAbove(ctx, client, params, severities[threshold])
+			n, err := countAtOrAbove(cmd.Context(), client, params, severities[threshold])
 			if err != nil {
 				return err
 			}
@@ -154,8 +166,9 @@ Exit status:
 
 // allRawFindings yields every finding matching params as the API's JSON, so
 // --json output keeps fields added by later API releases. It ignores
-// params.Page.
-func allRawFindings(ctx context.Context, client *heist.ClientWithResponses, params heist.ListFindingsParams) iter.Seq2[json.RawMessage, error] {
+// params.Page. It reports the findings fetched so far to progress.
+func allRawFindings(ctx context.Context, client *heist.ClientWithResponses, params heist.ListFindingsParams, progress progressFunc) iter.Seq2[json.RawMessage, error] {
+	fetched := 0
 	return heist.Paginate(ctx, func(ctx context.Context, page int) ([]json.RawMessage, int, error) {
 		params.Page = &page
 		res, err := client.ListFindingsWithResponse(ctx, &params)
@@ -171,6 +184,8 @@ func allRawFindings(ctx context.Context, client *heist.ClientWithResponses, para
 		if err := json.Unmarshal(res.Body, &body); err != nil {
 			return nil, 0, err
 		}
+		fetched += len(body.Items)
+		progress("Fetching findings", fetched, res.JSON200.Total)
 		return body.Items, res.JSON200.Total, nil
 	})
 }
@@ -216,13 +231,48 @@ func listParams(severity, status []string, search string) heist.ListFindingsPara
 	return params
 }
 
-func writeFindingsTable(w io.Writer, findings []heist.Finding) error {
-	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, "ID\tSEVERITY\tSTATUS\tTITLE")
-	for _, f := range findings {
-		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n", f.Id, f.Severity, f.ValidationStatus, oneLine(f.Title))
+// writeFindingsTable writes findings as a table. Styled output leads with
+// severity and title, dims the status and ID, and ends with a summary of
+// total, the number of findings matching the filters.
+func writeFindingsTable(w io.Writer, s styles, findings []heist.Finding, total int) error {
+	if !s.on {
+		rows := make([][]string, len(findings))
+		for i, f := range findings {
+			rows[i] = []string{f.Id, string(f.Severity), string(f.ValidationStatus), oneLine(f.Title)}
+		}
+		return writeTable(w, s, []string{"ID", "SEVERITY", "STATUS", "TITLE"}, rows)
 	}
-	return tw.Flush()
+
+	rows := make([][]string, len(findings))
+	open := 0
+	for i, f := range findings {
+		rows[i] = []string{s.severity(string(f.Severity)), oneLine(f.Title), s.dim(s.status(string(f.ValidationStatus))), s.dim(f.Id)}
+		if f.ValidationStatus == heist.FindingValidationStatusPUBLISHED {
+			open++
+		}
+	}
+	if err := s.list(w, rows, 1); err != nil {
+		return err
+	}
+	var summary string
+	switch {
+	case len(findings) == 0:
+		summary = "No findings"
+	case len(findings) < total:
+		summary = fmt.Sprintf("First %d of %d findings", len(findings), total)
+	default:
+		summary = joinDot(plural(len(findings), "finding"), fmt.Sprintf("%d open", open))
+	}
+	_, err := fmt.Fprintf(w, "\n%s\n", s.dim(summary))
+	return err
+}
+
+// plural formats n and noun, adding an s unless n is 1.
+func plural(n int, noun string) string {
+	if n == 1 {
+		return "1 " + noun
+	}
+	return fmt.Sprintf("%d %ss", n, noun)
 }
 
 func newFindingsGetCmd() *cobra.Command {
@@ -245,7 +295,11 @@ repository, and route.
 			if err != nil {
 				return err
 			}
-			res, err := client.GetFindingWithResponse(cmd.Context(), id)
+			var res *heist.GetFindingResponse
+			err = withProgress(cmd, asJSON, "Fetching finding", func(ctx context.Context, _ progressFunc) error {
+				res, err = client.GetFindingWithResponse(ctx, id)
+				return err
+			})
 			if err != nil {
 				return err
 			}
@@ -255,29 +309,41 @@ repository, and route.
 			if asJSON {
 				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
 			}
-			return writeFindingDetail(cmd.OutOrStdout(), res.JSON200)
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				return writeFindingDetail(w, s, res.JSON200)
+			})
 		},
 	}
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
 	return cmd
 }
 
-func writeFindingDetail(w io.Writer, f *heist.FindingDetail) error {
-	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	field := func(label, value string) {
-		if value != "" {
-			fmt.Fprintf(tw, "%s:\t%s\n", label, value)
+// writeFindingDetail writes a finding's fields and text sections. Styled
+// output puts the severity and title first, with the status and other
+// metadata on one dim line.
+func writeFindingDetail(w io.Writer, s styles, f *heist.FindingDetail) error {
+	fields := fieldWriter{s: s}
+	field := fields.add
+	if s.on {
+		_, err := fmt.Fprintf(w, "%s  %s\n%s\n%s\n",
+			s.severity(string(f.Severity)), s.bold(oneLine(f.Title)),
+			s.dim(joinDot(s.status(string(f.ValidationStatus)), f.Category, f.Type, string(f.SourceKind),
+				"created "+s.date(f.CreatedAt), "updated "+s.date(f.UpdatedAt))),
+			s.dim(f.Id))
+		if err != nil {
+			return err
 		}
+	} else {
+		field("Title", oneLine(f.Title))
+		field("ID", f.Id)
+		field("Severity", string(f.Severity))
+		field("Status", string(f.ValidationStatus))
+		field("Category", f.Category)
+		field("Type", f.Type)
+		field("Source", string(f.SourceKind))
+		field("Created", f.CreatedAt)
+		field("Updated", f.UpdatedAt)
 	}
-	field("Title", oneLine(f.Title))
-	field("ID", f.Id)
-	field("Severity", string(f.Severity))
-	field("Status", string(f.ValidationStatus))
-	field("Category", f.Category)
-	field("Type", f.Type)
-	field("Source", string(f.SourceKind))
-	field("Created", f.CreatedAt)
-	field("Updated", f.UpdatedAt)
 	if f.Application != nil {
 		field("Application", f.Application.Url)
 	}
@@ -303,7 +369,12 @@ func writeFindingDetail(w io.Writer, f *heist.FindingDetail) error {
 	if f.RuntimeValidationOutcome != nil {
 		field("Runtime validation", string(*f.RuntimeValidationOutcome))
 	}
-	if err := tw.Flush(); err != nil {
+	if s.on && len(fields.fields) > 0 {
+		if _, err := fmt.Fprintln(w); err != nil {
+			return err
+		}
+	}
+	if err := fields.write(w); err != nil {
 		return err
 	}
 
@@ -325,11 +396,11 @@ func writeFindingDetail(w io.Writer, f *heist.FindingDetail) error {
 		{"Compensating control reason", f.CompensatingControlReason},
 		{"Retest comment", f.RetestComment},
 	}
-	for _, s := range sections {
-		if s.text == nil || strings.TrimSpace(*s.text) == "" {
+	for _, sec := range sections {
+		if sec.text == nil || strings.TrimSpace(*sec.text) == "" {
 			continue
 		}
-		if _, err := fmt.Fprintf(w, "\n%s:\n%s\n", s.title, strings.TrimRight(*s.text, "\n")); err != nil {
+		if err := s.section(w, sec.title, *sec.text); err != nil {
 			return err
 		}
 	}
@@ -358,51 +429,74 @@ func newFindingsCountsCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			ctx := cmd.Context()
-			res, err := client.FindingCountsWithResponse(ctx)
-			if err != nil {
-				return err
-			}
-			if res.JSON200 == nil {
-				return fmt.Errorf("unexpected %s response", res.Status())
-			}
 			params := listParams(nil, status, "")
 			if params.Status == nil {
 				params.Status = &openStatuses
 			}
 			counts := findingCounts{
-				Status:           res.Body,
 				Severity:         map[heist.ListFindingsParamsSeverity]int{},
 				SeverityStatuses: *params.Status,
 			}
-			for _, s := range severities {
-				params.Severity = &[]heist.ListFindingsParamsSeverity{s}
-				if counts.Severity[s], err = client.CountFindings(ctx, params); err != nil {
+			var res *heist.FindingCountsResponse
+			err = withProgress(cmd, asJSON, "Counting findings", func(ctx context.Context, progress progressFunc) error {
+				res, err = client.FindingCountsWithResponse(ctx)
+				if err != nil {
 					return err
 				}
+				if res.JSON200 == nil {
+					return fmt.Errorf("unexpected %s response", res.Status())
+				}
+				counts.Status = res.Body
+				for i, s := range severities {
+					progress("Counting findings", i+1, len(severities)+1)
+					params.Severity = &[]heist.ListFindingsParamsSeverity{s}
+					if counts.Severity[s], err = client.CountFindings(ctx, params); err != nil {
+						return err
+					}
+				}
+				return nil
+			})
+			if err != nil {
+				return err
 			}
 
 			if asJSON {
 				return writeJSON(cmd.OutOrStdout(), counts)
 			}
-			tw := tabwriter.NewWriter(cmd.OutOrStdout(), 0, 0, 2, ' ', 0)
-			c := res.JSON200
-			fmt.Fprintf(tw, "STATUS\tCOUNT\nopen\t%d\nclosed\t%d\naccepted\t%d\ncompensating control\t%d\nall\t%d\n",
-				c.Open, c.Closed, c.Accepted, c.CompensatingControl, c.All)
-			var scope []string
-			for _, s := range counts.SeverityStatuses {
-				scope = append(scope, string(s))
-			}
-			fmt.Fprintf(tw, "\nSEVERITY (%s)\tCOUNT\n", strings.Join(scope, ","))
-			for _, s := range slices.Backward(severities) {
-				fmt.Fprintf(tw, "%s\t%d\n", s, counts.Severity[s])
-			}
-			return tw.Flush()
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				return writeFindingCounts(w, s, res, counts)
+			})
 		},
 	}
 	cmd.Flags().Var(&status, "status", "statuses the severity counts include, comma-separated or\nrepeated (default PUBLISHED, the open findings)")
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the counts as JSON")
 	return cmd
+}
+
+// writeFindingCounts writes status counts from res, which must have a 200
+// body, and counts by severity.
+func writeFindingCounts(w io.Writer, s styles, res *heist.FindingCountsResponse, counts findingCounts) error {
+	c := res.JSON200
+	err := writeTable(w, s, []string{"STATUS", "COUNT"}, [][]string{
+		{"open", strconv.Itoa(c.Open)},
+		{"closed", strconv.Itoa(c.Closed)},
+		{"accepted", strconv.Itoa(c.Accepted)},
+		{"compensating control", strconv.Itoa(c.CompensatingControl)},
+		{"all", strconv.Itoa(c.All)},
+	})
+	if err != nil {
+		return err
+	}
+	var scope []string
+	for _, st := range counts.SeverityStatuses {
+		scope = append(scope, string(st))
+	}
+	var rows [][]string
+	for _, sev := range slices.Backward(severities) {
+		rows = append(rows, []string{string(sev), strconv.Itoa(counts.Severity[sev])})
+	}
+	fmt.Fprintln(w)
+	return writeTable(w, s, []string{fmt.Sprintf("SEVERITY (%s)", strings.Join(scope, ",")), "COUNT"}, rows)
 }
 
 func writeJSON(w io.Writer, v any) error {

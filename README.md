@@ -130,6 +130,7 @@ scopes:
 heist reports list
 heist reports get <id>                      # the report and its PDF versions
 heist reports generate --application <id>   # prints the export ID
+heist reports generate --wait               # waits, then prints the export status
 heist reports export-status <export-id>     # exit 3 if the export failed
 heist reports download -o report.pdf <id>   # default <id>.pdf; -o - for stdout
 heist reports scopes create --name Prod --application <id>,<id>
@@ -137,12 +138,25 @@ heist reports scopes create --name Prod --application <id>,<id>
 
 `generate` includes all in-scope applications unless `--application` is
 given, and returns as soon as generation starts. Run `export-status` until the
-status is `COMPLETED`. It exits with status 3 when the export ended without
+status is `COMPLETED`, or pass `--wait` to `generate` to wait for the export
+to end and print its status as `export-status` does. `export-status` exits with status 3 when the export ended without
 completing (`FAILED`, `CANCELLED`, `TERMINATED`, or `TIMED_OUT`). Errors exit
 with 1, including an export ID that is unknown or whose history has expired,
 and usage errors with 2. Generating reports and changing scopes require
 the Admin role and a plan with reports. Pass `--json` to any command that
 prints data for the API's JSON response.
+
+In a terminal, output is formatted for reading: lists lead with severity and
+title, statuses read as `open` or `fixed`, IDs and other details are dimmed,
+and output taller than the terminal opens in `$PAGER` (default `less`; set
+`PAGER=cat` to turn it off). Commands that wait on the API show a spinner or
+progress bar on stderr. When stdout isn't a terminal, or with `--json`,
+commands print the plain text or JSON shown above with no animation, and exit
+codes are the same either way. Set `NO_COLOR` to turn off colors.
+
+`heist browse` is an experimental full-screen view for browsing findings and
+reports, opening their details and saving report PDFs. It needs a terminal;
+scripts should use `heist findings` and `heist reports`.
 
 Flags can go before or after arguments. Long flags take two dashes
 (`--json`); single-letter flags take one (`-o`, `-X`). Run `heist help`, or

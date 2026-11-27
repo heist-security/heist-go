@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 )
 
 const (
@@ -335,5 +336,33 @@ func TestReportsHelp(t *testing.T) {
 		if code != 0 || stderr != "" || !strings.Contains(stdout, "Usage:\n  heist reports") {
 			t.Errorf("%v: exit %d, stdout %q, stderr %q", args, code, stdout, stderr)
 		}
+	}
+}
+
+func TestReportsGenerateWait(t *testing.T) {
+	exportPollInterval = 0
+	t.Cleanup(func() { exportPollInterval = 3 * time.Second })
+	polls := 0
+	reportsServer(t, map[string]http.HandlerFunc{
+		"POST /reports": respondJSON(http.StatusAccepted, `{"workflowId":"wf","exportId":"`+exportID+`"}`),
+		"GET /report-exports/{id}": func(w http.ResponseWriter, r *http.Request) {
+			polls++
+			status := "RUNNING"
+			if polls == 3 {
+				status = "FAILED"
+			}
+			respondJSON(http.StatusOK, `{"exportId":"`+exportID+`","workflowId":"wf","runId":null,"status":"`+status+
+				`","startedAt":"2026-11-01T00:00:00Z","closedAt":null,"failure":null,"reports":[]}`)(w, r)
+		},
+	})
+	code, stdout, stderr := runCLI(t, "reports", "generate", "--wait")
+	if code != exitExportFailed || polls != 3 {
+		t.Fatalf("exit %d after %d polls, stderr %q", code, polls, stderr)
+	}
+	if want := "Export:   " + exportID + "\nStatus:   FAILED\n"; !strings.HasPrefix(stdout, want) {
+		t.Errorf("stdout =\n%s\nwant prefix\n%s", stdout, want)
+	}
+	if stderr != "heist reports generate: export FAILED\n" {
+		t.Errorf("stderr = %q", stderr)
 	}
 }
