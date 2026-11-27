@@ -24,7 +24,7 @@ Never commit access tokens, `.env` files or real customer data.
 
 The `heist` package owns the REST client, request and response types,
 authentication, error handling and pagination. CLI commands, output formats
-and progress handling belong in `cmd/heist`. Terraform state and resource
+and progress handling belong in `cmd/heist`, a separate Go module. Terraform state and resource
 lifecycle belong in the separate `terraform-provider-heist` repository.
 
 The Heist service owns the API contract. Preserve its field names and

@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"errors"
-	"flag"
 	"fmt"
 	"io"
 	"net/http"
@@ -17,6 +16,7 @@ import (
 
 	"github.com/heist-security/heist-go/heist"
 	openapi_types "github.com/oapi-codegen/runtime/types"
+	"github.com/spf13/cobra"
 )
 
 // exitExportFailed is the exit status of `heist reports export-status` when
@@ -29,184 +29,46 @@ var failedExportStatuses = []heist.GetReportExport200JSONResponseBodyStatus{
 	"FAILED", "CANCELLED", "TERMINATED", "TIMED_OUT",
 }
 
-const reportsUsage = `Usage: heist reports <command> [flags]
+func newReportsCmd() *cobra.Command {
+	cmd := groupCmd(&cobra.Command{
+		Use:   "reports",
+		Short: "List, generate and download reports, and manage report scopes",
+		Long: `List, generate and download reports, and manage report scopes.
 
-Commands:
-  list            List workspace reports
-  get             Show a report and its PDF versions
-  generate        Start generating reports and print the export ID
-  export-status   Show a report export's state and its reports
-  download        Save a report's PDF
-  scopes          List, create, update and delete report scopes
+Generating reports and changing report scopes require the Admin role and a
+plan with reports.
 
-Run heist reports <command> -h for each command's flags. Generating reports
-and changing report scopes require the Admin role and a plan with reports.
-
-` + envUsage
-
-const reportsListUsage = `Usage: heist reports list [--export-id id] [--json]
-
-List workspace reports.
-
-Flags:
-      --export-id id   Only reports from this export, as printed by
-                       heist reports generate
-      --json           Print the API's JSON response
-
-` + envUsage
-
-const reportsGetUsage = `Usage: heist reports get [--json] <id>
-
-Show a report and its retained PDF versions, newest first.
-
-Flags:
-      --json   Print the API's JSON response
-
-` + envUsage
-
-const reportsGenerateUsage = `Usage: heist reports generate [--application id]... [--json]
-
-Start generating full, summary and attestation PDF reports, and print the
-export ID. Generation runs in the background; check it with
-heist reports export-status <export-id>. Previous reports are kept.
-
-Flags:
-      --application id   Include this application, comma-separated or
-                         repeated (default all in-scope applications)
-      --json             Print the API's JSON response
-
-` + envUsage
-
-const reportsExportStatusUsage = `Usage: heist reports export-status [--json] <export-id>
-
-Show a report export's state and the reports it has written so far.
-
-Flags:
-      --json   Print the API's JSON response
-
-Exit status:
-  0   Success, and the export has not failed (it may still be RUNNING)
-  1   Error, for example an API or authentication failure, or NOT_FOUND: no
-      export has this ID, or its history has expired (its reports remain
-      listed by heist reports list --export-id)
-  2   Invalid usage
-  3   The export ended without completing: FAILED, CANCELLED, TERMINATED or
-      TIMED_OUT. It may still have written some reports.
-
-` + envUsage
-
-const reportsDownloadUsage = `Usage: heist reports download [--version id] [-o file] <id>
-
-Save a report's PDF.
-
-Flags:
-      --version id   Download this version (default the latest)
-  -o, --output file  Write to file (default <id>.pdf); use - for stdout
-
-` + envUsage
-
-const reportScopesUsage = `Usage: heist reports scopes <command> [flags]
-
-Commands:
-  list     List report scopes
-  create   Create a report scope
-  update   Replace a report scope's name and applications
-  delete   Delete a report scope
-
-When a workspace has report scopes, reports generated automatically after a
-pentest are produced once per scope. Run heist reports scopes <command> -h for
-each command's flags.
-
-` + envUsage
-
-const reportScopesListUsage = `Usage: heist reports scopes list [--json]
-
-List report scopes.
-
-Flags:
-      --json   Print the API's JSON response
-
-` + envUsage
-
-const reportScopesCreateUsage = `Usage: heist reports scopes create --name name --application id... [--json]
-
-Create a report scope from in-scope applications.
-
-Flags:
-      --name name        Scope name (required)
-      --application id   Include this application, comma-separated or
-                         repeated (at least one required)
-      --json             Print the API's JSON response
-
-` + envUsage
-
-const reportScopesUpdateUsage = `Usage: heist reports scopes update --name name --application id... [--json] <id>
-
-Replace a report scope's name and applications. Existing reports keep the scope
-name they were generated with.
-
-Flags:
-      --name name        Scope name (required)
-      --application id   Include this application, comma-separated or
-                         repeated (at least one required)
-      --json             Print the API's JSON response
-
-` + envUsage
-
-const reportScopesDeleteUsage = `Usage: heist reports scopes delete <id>
-
-Delete a report scope. Reports generated for it are kept.
-
-` + envUsage
-
-func runReports(args []string, stdout, stderr io.Writer) int {
-	if len(args) == 0 {
-		fmt.Fprint(stderr, reportsUsage)
-		return 2
-	}
-	switch args[0] {
-	case "list":
-		return runReportsList(args[1:], stdout, stderr)
-	case "get":
-		return runReportsGet(args[1:], stdout, stderr)
-	case "generate":
-		return runReportsGenerate(args[1:], stdout, stderr)
-	case "export-status":
-		return runReportsExportStatus(args[1:], stdout, stderr)
-	case "download":
-		return runReportsDownload(args[1:], stdout, stderr)
-	case "scopes":
-		return runReportScopes(args[1:], stdout, stderr)
-	case "help", "-h", "--help":
-		fmt.Fprint(stdout, reportsUsage)
-		return 0
-	default:
-		fmt.Fprintf(stderr, "heist reports: unknown command %q\n\n%s", args[0], reportsUsage)
-		return 2
-	}
+` + envUsage,
+	})
+	cmd.AddCommand(
+		newReportsListCmd(),
+		newReportsGetCmd(),
+		newReportsGenerateCmd(),
+		newReportsExportStatusCmd(),
+		newReportsDownloadCmd(),
+		newReportScopesCmd(),
+	)
+	return cmd
 }
 
-func runReportScopes(args []string, stdout, stderr io.Writer) int {
-	if len(args) == 0 {
-		fmt.Fprint(stderr, reportScopesUsage)
-		return 2
-	}
-	switch args[0] {
-	case "list":
-		return runReportScopesList(args[1:], stdout, stderr)
-	case "create":
-		return runReportScopesCreate(args[1:], stdout, stderr)
-	case "update":
-		return runReportScopesUpdate(args[1:], stdout, stderr)
-	case "delete":
-		return runReportScopesDelete(args[1:], stdout, stderr)
-	case "help", "-h", "--help":
-		fmt.Fprint(stdout, reportScopesUsage)
-		return 0
-	default:
-		fmt.Fprintf(stderr, "heist reports scopes: unknown command %q\n\n%s", args[0], reportScopesUsage)
-		return 2
-	}
+func newReportScopesCmd() *cobra.Command {
+	cmd := groupCmd(&cobra.Command{
+		Use:   "scopes",
+		Short: "List, create, update and delete report scopes",
+		Long: `List, create, update and delete report scopes.
+
+When a workspace has report scopes, reports generated automatically after a
+pentest are produced once per scope.
+
+` + envUsage,
+	})
+	cmd.AddCommand(
+		newReportScopesListCmd(),
+		newReportScopesCreateCmd(),
+		newReportScopesUpdateCmd(),
+		newReportScopesDeleteCmd(),
+	)
+	return cmd
 }
 
 // uuidsFlag collects comma-separated or repeated UUIDs. Empty values are
@@ -221,6 +83,8 @@ func (u *uuidsFlag) String() string {
 	}
 	return strings.Join(s, ",")
 }
+
+func (u *uuidsFlag) Type() string { return "ids" }
 
 func (u *uuidsFlag) Set(value string) error {
 	for v := range strings.SplitSeq(value, ",") {
@@ -243,14 +107,6 @@ func parseUUID(s string) (openapi_types.UUID, error) {
 		return id, fmt.Errorf("invalid ID %q", s)
 	}
 	return id, nil
-}
-
-// idArg parses the single ID argument of a command.
-func idArg(fs *flag.FlagSet, kind string) (openapi_types.UUID, error) {
-	if fs.NArg() != 1 {
-		return openapi_types.UUID{}, fmt.Errorf("expected one %s ID", kind)
-	}
-	return parseUUID(fs.Arg(0))
 }
 
 // reportRow is a report as shown in tables. The list and export responses
@@ -276,84 +132,82 @@ func writeReportsTable(w io.Writer, reports []reportRow) error {
 	return tw.Flush()
 }
 
-func runReportsList(args []string, stdout, stderr io.Writer) int {
-	const name = "reports list"
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
-	exportID := fs.String("export-id", "", "")
-	asJSON := fs.Bool("json", false, "")
-	if code, ok := parseFlags(fs, args, reportsListUsage, stdout, stderr); !ok {
-		return code
-	}
-	if fs.NArg() != 0 {
-		return usageError(stderr, name, "unexpected arguments", reportsListUsage)
-	}
-	var params heist.ListReportsParams
-	if *exportID != "" {
-		id, err := parseUUID(*exportID)
-		if err != nil {
-			return usageError(stderr, name, "--export-id: "+err.Error(), reportsListUsage)
-		}
-		params.ExportId = &id
-	}
+func newReportsListCmd() *cobra.Command {
+	var exportID string
+	var asJSON bool
+	cmd := &cobra.Command{
+		Use:   "list",
+		Short: "List workspace reports",
+		Long:  "List workspace reports.\n\n" + envUsage,
+		Args:  noArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			var params heist.ListReportsParams
+			if exportID != "" {
+				id, err := parseUUID(exportID)
+				if err != nil {
+					return usageErrorf("--export-id: %w", err)
+				}
+				params.ExportId = &id
+			}
 
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			res, err := client.ListReportsWithResponse(cmd.Context(), &params)
+			if err != nil {
+				return err
+			}
+			if res.JSON200 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			if asJSON {
+				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
+			}
+			rows := make([]reportRow, len(*res.JSON200))
+			for i, r := range *res.JSON200 {
+				rows[i] = newReportRow(r.Id, string(r.ReportType), string(r.Status), r.ScopeName, r.CreatedAt, r.Title)
+			}
+			return writeReportsTable(cmd.OutOrStdout(), rows)
+		},
 	}
-	res, err := client.ListReportsWithResponse(context.Background(), &params)
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if res.JSON200 == nil {
-		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
-	}
-	if *asJSON {
-		err = writeJSON(stdout, json.RawMessage(res.Body))
-	} else {
-		rows := make([]reportRow, len(*res.JSON200))
-		for i, r := range *res.JSON200 {
-			rows[i] = newReportRow(r.Id, string(r.ReportType), string(r.Status), r.ScopeName, r.CreatedAt, r.Title)
-		}
-		err = writeReportsTable(stdout, rows)
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	return 0
+	cmd.Flags().StringVar(&exportID, "export-id", "", "only reports from this export `id`, as printed by\nheist reports generate")
+	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
+	return cmd
 }
 
-func runReportsGet(args []string, stdout, stderr io.Writer) int {
-	const name = "reports get"
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
-	asJSON := fs.Bool("json", false, "")
-	if code, ok := parseFlags(fs, args, reportsGetUsage, stdout, stderr); !ok {
-		return code
-	}
-	id, err := idArg(fs, "report")
-	if err != nil {
-		return usageError(stderr, name, err.Error(), reportsGetUsage)
-	}
+func newReportsGetCmd() *cobra.Command {
+	var asJSON bool
+	cmd := &cobra.Command{
+		Use:   "get <id>",
+		Short: "Show a report and its PDF versions",
+		Long:  "Show a report and its retained PDF versions, newest first.\n\n" + envUsage,
+		Args:  oneArg("report ID"),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			id, err := parseUUID(args[0])
+			if err != nil {
+				return usageError{err}
+			}
 
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			res, err := client.GetReportWithResponse(cmd.Context(), id)
+			if err != nil {
+				return err
+			}
+			if res.JSON200 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			if asJSON {
+				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
+			}
+			return writeReportDetail(cmd.OutOrStdout(), res)
+		},
 	}
-	res, err := client.GetReportWithResponse(context.Background(), id)
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if res.JSON200 == nil {
-		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
-	}
-	if *asJSON {
-		err = writeJSON(stdout, json.RawMessage(res.Body))
-	} else {
-		err = writeReportDetail(stdout, res)
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	return 0
+	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
+	return cmd
 }
 
 // writeReportDetail writes a report and its versions. res must have a 200
@@ -394,86 +248,102 @@ func writeReportDetail(w io.Writer, res *heist.GetReportResponse) error {
 	return tw.Flush()
 }
 
-func runReportsGenerate(args []string, stdout, stderr io.Writer) int {
-	const name = "reports generate"
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
+func newReportsGenerateCmd() *cobra.Command {
 	var applications uuidsFlag
-	fs.Var(&applications, "application", "")
-	asJSON := fs.Bool("json", false, "")
-	if code, ok := parseFlags(fs, args, reportsGenerateUsage, stdout, stderr); !ok {
-		return code
-	}
-	if fs.NArg() != 0 {
-		return usageError(stderr, name, "unexpected arguments", reportsGenerateUsage)
-	}
-	var body heist.GenerateReportJSONRequestBody
-	if len(applications) > 0 {
-		ids := []openapi_types.UUID(applications)
-		body.ApplicationIds = &ids
-	}
+	var asJSON bool
+	cmd := &cobra.Command{
+		Use:   "generate",
+		Short: "Start generating reports and print the export ID",
+		Long: `Start generating full, summary and attestation PDF reports, and print the
+export ID. Generation runs in the background; check it with
+heist reports export-status <export-id>. Previous reports are kept.
 
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
+` + envUsage,
+		Args: noArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			var body heist.GenerateReportJSONRequestBody
+			if len(applications) > 0 {
+				ids := []openapi_types.UUID(applications)
+				body.ApplicationIds = &ids
+			}
+
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			res, err := client.GenerateReportWithResponse(cmd.Context(), body)
+			if err != nil {
+				return err
+			}
+			if res.JSON202 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			if asJSON {
+				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
+			}
+			_, err = fmt.Fprintln(cmd.OutOrStdout(), res.JSON202.ExportId)
+			return err
+		},
 	}
-	res, err := client.GenerateReportWithResponse(context.Background(), body)
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if res.JSON202 == nil {
-		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
-	}
-	if *asJSON {
-		err = writeJSON(stdout, json.RawMessage(res.Body))
-	} else {
-		_, err = fmt.Fprintln(stdout, res.JSON202.ExportId)
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	return 0
+	cmd.Flags().Var(&applications, "application", "include this application, comma-separated or\nrepeated (default all in-scope applications)")
+	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
+	return cmd
 }
 
-func runReportsExportStatus(args []string, stdout, stderr io.Writer) int {
-	const name = "reports export-status"
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
-	asJSON := fs.Bool("json", false, "")
-	if code, ok := parseFlags(fs, args, reportsExportStatusUsage, stdout, stderr); !ok {
-		return code
-	}
-	id, err := idArg(fs, "export")
-	if err != nil {
-		return usageError(stderr, name, err.Error(), reportsExportStatusUsage)
-	}
+func newReportsExportStatusCmd() *cobra.Command {
+	var asJSON bool
+	cmd := &cobra.Command{
+		Use:   "export-status <export-id>",
+		Short: "Show a report export's state and its reports",
+		Long: `Show a report export's state and the reports it has written so far.
 
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
+Exit status:
+  0   Success, and the export has not failed (it may still be RUNNING)
+  1   Error, for example an API or authentication failure, or NOT_FOUND: no
+      export has this ID, or its history has expired (its reports remain
+      listed by heist reports list --export-id)
+  2   Invalid usage
+  3   The export ended without completing: FAILED, CANCELLED, TERMINATED or
+      TIMED_OUT. It may still have written some reports.
+
+` + envUsage,
+		Args: oneArg("export ID"),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			id, err := parseUUID(args[0])
+			if err != nil {
+				return usageError{err}
+			}
+
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			res, err := client.GetReportExportWithResponse(cmd.Context(), id)
+			if err != nil {
+				return err
+			}
+			if res.JSON200 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			if asJSON {
+				err = writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
+			} else {
+				err = writeExportStatus(cmd.OutOrStdout(), res)
+			}
+			if err != nil {
+				return err
+			}
+			switch status := res.JSON200.Status; {
+			case status == "NOT_FOUND":
+				return errors.New("export not found, or its history has expired")
+			case slices.Contains(failedExportStatuses, status):
+				return &exitError{exitExportFailed, fmt.Sprintf("export %s", status)}
+			}
+			return nil
+		},
 	}
-	res, err := client.GetReportExportWithResponse(context.Background(), id)
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if res.JSON200 == nil {
-		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
-	}
-	if *asJSON {
-		err = writeJSON(stdout, json.RawMessage(res.Body))
-	} else {
-		err = writeExportStatus(stdout, res)
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	switch status := res.JSON200.Status; {
-	case status == "NOT_FOUND":
-		fmt.Fprintf(stderr, "heist %s: export not found, or its history has expired\n", name)
-		return 1
-	case slices.Contains(failedExportStatuses, status):
-		fmt.Fprintf(stderr, "heist %s: export %s\n", name, status)
-		return exitExportFailed
-	}
-	return 0
+	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
+	return cmd
 }
 
 // writeExportStatus writes an export's state and its reports. res must have
@@ -508,50 +378,49 @@ func writeExportStatus(w io.Writer, res *heist.GetReportExportResponse) error {
 	return writeReportsTable(w, rows)
 }
 
-func runReportsDownload(args []string, stdout, stderr io.Writer) int {
-	const name = "reports download"
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
-	versionID := fs.String("version", "", "")
-	output := fs.String("o", "", "")
-	fs.StringVar(output, "output", "", "")
-	if code, ok := parseFlags(fs, args, reportsDownloadUsage, stdout, stderr); !ok {
-		return code
-	}
-	id, err := idArg(fs, "report")
-	if err != nil {
-		return usageError(stderr, name, err.Error(), reportsDownloadUsage)
-	}
-	var params heist.DownloadReportParams
-	if *versionID != "" {
-		v, err := parseUUID(*versionID)
-		if err != nil {
-			return usageError(stderr, name, "--version: "+err.Error(), reportsDownloadUsage)
-		}
-		params.VersionId = &v
-	}
-	if *output == "" {
-		*output = id.String() + ".pdf"
-	}
+func newReportsDownloadCmd() *cobra.Command {
+	var versionID, output string
+	cmd := &cobra.Command{
+		Use:   "download <id>",
+		Short: "Save a report's PDF",
+		Long:  "Save a report's PDF.\n\n" + envUsage,
+		Args:  oneArg("report ID"),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			id, err := parseUUID(args[0])
+			if err != nil {
+				return usageError{err}
+			}
+			var params heist.DownloadReportParams
+			if versionID != "" {
+				v, err := parseUUID(versionID)
+				if err != nil {
+					return usageErrorf("--version: %w", err)
+				}
+				params.VersionId = &v
+			}
+			if output == "" {
+				output = id.String() + ".pdf"
+			}
 
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			pdf, err := openReportPDF(cmd.Context(), client, id, params)
+			if err != nil {
+				return err
+			}
+			defer pdf.Close()
+			if output == "-" {
+				_, err = io.Copy(cmd.OutOrStdout(), pdf)
+				return err
+			}
+			return writeFileAtomic(output, pdf)
+		},
 	}
-	ctx := context.Background()
-	pdf, err := openReportPDF(ctx, client, id, params)
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	defer pdf.Close()
-	if *output == "-" {
-		_, err = io.Copy(stdout, pdf)
-	} else {
-		err = writeFileAtomic(*output, pdf)
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	return 0
+	cmd.Flags().StringVar(&versionID, "version", "", "download this version `id` (default the latest)")
+	cmd.Flags().StringVarP(&output, "output", "o", "", "write to `file` (default <id>.pdf); use - for stdout")
+	return cmd
 }
 
 // openReportPDF requests a signed download URL for a report version and
@@ -611,37 +480,33 @@ func writeReportScopes(w io.Writer, scopes []heist.ReportScope) error {
 	return tw.Flush()
 }
 
-func runReportScopesList(args []string, stdout, stderr io.Writer) int {
-	const name = "reports scopes list"
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
-	asJSON := fs.Bool("json", false, "")
-	if code, ok := parseFlags(fs, args, reportScopesListUsage, stdout, stderr); !ok {
-		return code
+func newReportScopesListCmd() *cobra.Command {
+	var asJSON bool
+	cmd := &cobra.Command{
+		Use:   "list",
+		Short: "List report scopes",
+		Long:  "List report scopes.\n\n" + envUsage,
+		Args:  noArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			res, err := client.ListReportScopesWithResponse(cmd.Context())
+			if err != nil {
+				return err
+			}
+			if res.JSON200 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			if asJSON {
+				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
+			}
+			return writeReportScopes(cmd.OutOrStdout(), *res.JSON200)
+		},
 	}
-	if fs.NArg() != 0 {
-		return usageError(stderr, name, "unexpected arguments", reportScopesListUsage)
-	}
-
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	res, err := client.ListReportScopesWithResponse(context.Background())
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if res.JSON200 == nil {
-		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
-	}
-	if *asJSON {
-		err = writeJSON(stdout, json.RawMessage(res.Body))
-	} else {
-		err = writeReportScopes(stdout, *res.JSON200)
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	return 0
+	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
+	return cmd
 }
 
 // scopeInput holds the flags shared by scope create and update.
@@ -651,13 +516,10 @@ type scopeInput struct {
 	json         bool
 }
 
-func newScopeFlags(name string) (*flag.FlagSet, *scopeInput) {
-	in := &scopeInput{}
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
-	fs.StringVar(&in.name, "name", "", "")
-	fs.Var(&in.applications, "application", "")
-	fs.BoolVar(&in.json, "json", false, "")
-	return fs, in
+func (in *scopeInput) addFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&in.name, "name", "", "scope `name` (required)")
+	cmd.Flags().Var(&in.applications, "application", "include this application, comma-separated or\nrepeated (at least one required)")
+	cmd.Flags().BoolVar(&in.json, "json", false, "print the API's JSON response")
 }
 
 // body returns the request body. The API requires a name and at least one
@@ -672,100 +534,105 @@ func (in *scopeInput) body() (heist.CreateReportScopeJSONRequestBody, error) {
 	return heist.CreateReportScopeJSONRequestBody{Name: in.name, ApplicationIds: in.applications}, nil
 }
 
-func runReportScopesCreate(args []string, stdout, stderr io.Writer) int {
-	const name = "reports scopes create"
-	fs, in := newScopeFlags(name)
-	if code, ok := parseFlags(fs, args, reportScopesCreateUsage, stdout, stderr); !ok {
-		return code
-	}
-	if fs.NArg() != 0 {
-		return usageError(stderr, name, "unexpected arguments", reportScopesCreateUsage)
-	}
-	body, err := in.body()
-	if err != nil {
-		return usageError(stderr, name, err.Error(), reportScopesCreateUsage)
-	}
+func newReportScopesCreateCmd() *cobra.Command {
+	var in scopeInput
+	cmd := &cobra.Command{
+		Use:   "create",
+		Short: "Create a report scope",
+		Long:  "Create a report scope from in-scope applications.\n\n" + envUsage,
+		Args:  noArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			body, err := in.body()
+			if err != nil {
+				return usageError{err}
+			}
 
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			res, err := client.CreateReportScopeWithResponse(cmd.Context(), body)
+			if err != nil {
+				return err
+			}
+			if res.JSON201 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			if in.json {
+				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
+			}
+			return writeReportScopes(cmd.OutOrStdout(), []heist.ReportScope{*res.JSON201})
+		},
 	}
-	res, err := client.CreateReportScopeWithResponse(context.Background(), body)
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if res.JSON201 == nil {
-		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
-	}
-	if in.json {
-		err = writeJSON(stdout, json.RawMessage(res.Body))
-	} else {
-		err = writeReportScopes(stdout, []heist.ReportScope{*res.JSON201})
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	return 0
+	in.addFlags(cmd)
+	return cmd
 }
 
-func runReportScopesUpdate(args []string, stdout, stderr io.Writer) int {
-	const name = "reports scopes update"
-	fs, in := newScopeFlags(name)
-	if code, ok := parseFlags(fs, args, reportScopesUpdateUsage, stdout, stderr); !ok {
-		return code
-	}
-	id, err := idArg(fs, "scope")
-	if err != nil {
-		return usageError(stderr, name, err.Error(), reportScopesUpdateUsage)
-	}
-	body, err := in.body()
-	if err != nil {
-		return usageError(stderr, name, err.Error(), reportScopesUpdateUsage)
-	}
+func newReportScopesUpdateCmd() *cobra.Command {
+	var in scopeInput
+	cmd := &cobra.Command{
+		Use:   "update <id>",
+		Short: "Replace a report scope's name and applications",
+		Long: `Replace a report scope's name and applications. Existing reports keep the scope
+name they were generated with.
 
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
+` + envUsage,
+		Args: oneArg("scope ID"),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			id, err := parseUUID(args[0])
+			if err != nil {
+				return usageError{err}
+			}
+			body, err := in.body()
+			if err != nil {
+				return usageError{err}
+			}
+
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			res, err := client.UpdateReportScopeWithResponse(cmd.Context(), id, heist.UpdateReportScopeJSONRequestBody(body))
+			if err != nil {
+				return err
+			}
+			if res.JSON200 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			if in.json {
+				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
+			}
+			return writeReportScopes(cmd.OutOrStdout(), []heist.ReportScope{*res.JSON200})
+		},
 	}
-	res, err := client.UpdateReportScopeWithResponse(context.Background(), id, heist.UpdateReportScopeJSONRequestBody(body))
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if res.JSON200 == nil {
-		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
-	}
-	if in.json {
-		err = writeJSON(stdout, json.RawMessage(res.Body))
-	} else {
-		err = writeReportScopes(stdout, []heist.ReportScope{*res.JSON200})
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	return 0
+	in.addFlags(cmd)
+	return cmd
 }
 
-func runReportScopesDelete(args []string, stdout, stderr io.Writer) int {
-	const name = "reports scopes delete"
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
-	if code, ok := parseFlags(fs, args, reportScopesDeleteUsage, stdout, stderr); !ok {
-		return code
-	}
-	id, err := idArg(fs, "scope")
-	if err != nil {
-		return usageError(stderr, name, err.Error(), reportScopesDeleteUsage)
-	}
+func newReportScopesDeleteCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "delete <id>",
+		Short: "Delete a report scope",
+		Long:  "Delete a report scope. Reports generated for it are kept.\n\n" + envUsage,
+		Args:  oneArg("scope ID"),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			id, err := parseUUID(args[0])
+			if err != nil {
+				return usageError{err}
+			}
 
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			res, err := client.DeleteReportScopeWithResponse(cmd.Context(), id)
+			if err != nil {
+				return err
+			}
+			if res.JSON200 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			return nil
+		},
 	}
-	res, err := client.DeleteReportScopeWithResponse(context.Background(), id)
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if res.JSON200 == nil {
-		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
-	}
-	return 0
 }

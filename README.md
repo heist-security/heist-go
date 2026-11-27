@@ -9,7 +9,9 @@ API.
 - `cmd/heist/`: the CLI, built on the SDK.
 - `api/`: the published OpenAPI snapshot the SDK is generated from.
 
-The SDK and CLI share one Go module and one set of version tags.
+The SDK (`github.com/heist-security/heist-go`) and the CLI
+(`github.com/heist-security/heist-go/cmd/heist`) are separate Go modules with
+their own version tags, so SDK users don't inherit the CLI's dependencies.
 
 ## Using the SDK
 
@@ -126,8 +128,11 @@ and usage errors with 2. Generating reports and changing scopes require
 the Admin role and a plan with reports. Pass `--json` to any command that
 prints data for the API's JSON response.
 
-Run `heist api -h`, `heist findings <command> -h`, or
-`heist reports <command> -h` for every flag and environment variable.
+Flags can go before or after arguments. Long flags take two dashes
+(`--json`); single-letter flags take one (`-o`, `-X`). Run `heist help`, or
+`heist <command> --help` at any level, for every command, flag and environment
+variable. `heist completion <shell>` prints a shell completion script for bash,
+zsh, fish or PowerShell.
 
 ## Development
 
@@ -144,6 +149,12 @@ make generate      # regenerate heist/openapi.gen.go from api/openapi.json
 
 After `make deps`, builds, tests, and generation work offline, for example
 with `GOPROXY=off`. CI runs every check this way.
+
+`cmd/heist/go.work` builds the CLI against the SDK in this checkout, so run Go
+commands for the CLI from `cmd/heist/` and CLI changes can use unreleased SDK
+changes. `go install` and CLI release builds ignore the workspace and use the
+SDK version in `cmd/heist/go.mod`; a CLI release needs that version to provide
+everything the CLI uses (see [Releases](#releases)).
 
 ### OpenAPI snapshot
 
@@ -171,24 +182,41 @@ inherit its dependencies. Never edit `heist/openapi.gen.go` directly.
 
 ## Releases
 
-Releases are Git tags on `main` using semantic versioning (`vMAJOR.MINOR.PATCH`).
-The tag versions the SDK and CLI together. While the SDK API is still settling,
-releases use `v0.x.y`, and minor versions may break compatibility.
+Releases are Git tags on `main` using semantic versioning. SDK tags are
+`vMAJOR.MINOR.PATCH`; CLI tags are `cmd/heist/vMAJOR.MINOR.PATCH`. While the
+SDK API is still settling, releases use `v0.x.y`, and minor versions may break
+compatibility.
 
 Don't push release tags by hand. To release, run the **Release** workflow
-(`.github/workflows/release.yml`) on `main` with the version, for example
-`gh workflow run release.yml --ref main -f version=v0.1.0`. It:
+(`.github/workflows/release.yml`) on `main` with the module and version:
 
-1. Runs every check and builds CLI binaries for Linux, macOS and Windows
-   (amd64 and arm64) without build caches.
+```sh
+gh workflow run release.yml --ref main -f module=sdk -f version=v0.4.0
+gh workflow run release.yml --ref main -f module=cli -f version=v0.4.0
+```
+
+It:
+
+1. Runs every check. For the CLI, it also tests and builds binaries for Linux,
+   macOS and Windows (amd64 and arm64) without build caches and without the
+   workspace, as `go install` would.
 2. Waits for a second maintainer to approve the `release` environment.
-3. Records signed build provenance for each binary, then creates the tag and a
-   GitHub release with the binaries and `SHA256SUMS`.
+3. Records signed build provenance for each CLI binary, then creates the tag
+   and a GitHub release, with the binaries and `SHA256SUMS` for the CLI.
+
+When the CLI needs SDK changes that aren't released yet, release the SDK first,
+then update the CLI's requirement in a pull request before releasing the CLI:
+
+```sh
+cd cmd/heist
+GOWORK=off go get github.com/heist-security/heist-go@v0.4.0
+GOWORK=off go mod tidy
+```
 
 Verify a downloaded binary with:
 
 ```sh
-gh attestation verify heist_v0.1.0_linux_amd64 --repo heist-security/heist-go
+gh attestation verify heist_v0.4.0_linux_amd64 --repo heist-security/heist-go
 ```
 
 Consumers pin a release in `go.mod`:

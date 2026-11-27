@@ -3,8 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"errors"
-	"flag"
 	"fmt"
 	"io"
 	"iter"
@@ -14,6 +12,7 @@ import (
 
 	"github.com/heist-security/heist-go/heist"
 	openapi_types "github.com/oapi-codegen/runtime/types"
+	"github.com/spf13/cobra"
 )
 
 // exitFailOn is the exit status of `heist findings list --fail-on` when a
@@ -33,82 +32,14 @@ var severities = []heist.ListFindingsParamsSeverity{
 // The API's /findings/counts "open" bucket is PUBLISHED findings.
 var openStatuses = []heist.ListFindingsParamsStatus{heist.ListFindingsParamsStatusPUBLISHED}
 
-const findingsUsage = `Usage: heist findings <command> [flags]
-
-Commands:
-  list     List findings, optionally failing on a severity threshold
-  get      Show a finding's full detail
-  counts   Count findings by status and severity
-
-Run heist findings <command> -h for each command's flags.
-
-` + envUsage
-
-const findingsListUsage = `Usage: heist findings list [flags]
-
-List findings matching the filters, following pagination, as a table or JSON.
-
-Flags:
-      --severity list   Only these severities, comma-separated or repeated:
-                        INFORMATIONAL, LOW, MEDIUM, HIGH, CRITICAL
-      --status list     Only these statuses, comma-separated or repeated:
-                        PUBLISHED (open), FIXED, ACCEPTED, COMPENSATING_CONTROL
-      --search text     Only findings matching the search text
-      --limit n         Print at most n findings (default all)
-      --fail-on sev     Exit 3 when any finding matching the filters is at or
-                        above severity sev. Only open (PUBLISHED) findings
-                        count unless --status is given. --limit does not
-                        affect the check.
-      --json            Print a JSON array of findings
-
-Exit status:
-  0   Success, and no finding reached the --fail-on severity
-  1   Error, for example an API or authentication failure
-  2   Invalid usage
-  3   A finding reached the --fail-on severity
-
-` + envUsage
-
-const findingsGetUsage = `Usage: heist findings get [--json] <id>
-
-Show a finding's full detail, including its report and linked application,
-repository, and route.
-
-Flags:
-      --json   Print the API's JSON response
-
-` + envUsage
-
-const findingsCountsUsage = `Usage: heist findings counts [--status list] [--json]
-
-Count findings by status, and by severity for the given statuses.
-
-Flags:
-      --status list   Statuses the severity counts include, comma-separated or
-                      repeated (default PUBLISHED, the open findings)
-      --json          Print the counts as JSON
-
-` + envUsage
-
-func runFindings(args []string, stdout, stderr io.Writer) int {
-	if len(args) == 0 {
-		fmt.Fprint(stderr, findingsUsage)
-		return 2
-	}
-	switch args[0] {
-	case "list":
-		return runFindingsList(args[1:], stdout, stderr)
-	case "get":
-		return runFindingsGet(args[1:], stdout, stderr)
-	case "counts":
-		return runFindingsCounts(args[1:], stdout, stderr)
-	case "help", "-h", "--help":
-		fmt.Fprint(stdout, findingsUsage)
-		return 0
-	default:
-		fmt.Fprintf(stderr, "heist findings: unknown command %q\n\n%s", args[0], findingsUsage)
-		return 2
-	}
+func newFindingsCmd() *cobra.Command {
+	cmd := groupCmd(&cobra.Command{
+		Use:   "findings",
+		Short: "List, show and count findings, and gate CI on severity",
+		Long:  "List, show and count findings, and gate CI on severity.\n\n" + envUsage,
+	})
+	cmd.AddCommand(newFindingsListCmd(), newFindingsGetCmd(), newFindingsCountsCmd())
+	return cmd
 }
 
 // listFlag collects comma-separated or repeated values, upper-cased to match
@@ -116,6 +47,8 @@ func runFindings(args []string, stdout, stderr io.Writer) int {
 type listFlag []string
 
 func (l *listFlag) String() string { return strings.Join(*l, ",") }
+
+func (l *listFlag) Type() string { return "list" }
 
 func (l *listFlag) Set(value string) error {
 	for v := range strings.SplitSeq(value, ",") {
@@ -126,100 +59,96 @@ func (l *listFlag) Set(value string) error {
 	return nil
 }
 
-// parseFlags parses args, printing usage on -h or a parse error. It returns
-// ok=false with the exit status when the command should stop.
-func parseFlags(fs *flag.FlagSet, args []string, usage string, stdout, stderr io.Writer) (code int, ok bool) {
-	fs.SetOutput(io.Discard)
-	if err := fs.Parse(args); err != nil {
-		if errors.Is(err, flag.ErrHelp) {
-			fmt.Fprint(stdout, usage)
-			return 0, false
-		}
-		fmt.Fprintf(stderr, "heist %s: %v\n\n%s", fs.Name(), err, usage)
-		return 2, false
-	}
-	return 0, true
-}
-
-func usageError(stderr io.Writer, command, msg, usage string) int {
-	fmt.Fprintf(stderr, "heist %s: %s\n\n%s", command, msg, usage)
-	return 2
-}
-
-func runFindingsList(args []string, stdout, stderr io.Writer) int {
-	const name = "findings list"
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
+func newFindingsListCmd() *cobra.Command {
 	var severity, status listFlag
-	fs.Var(&severity, "severity", "")
-	fs.Var(&status, "status", "")
-	search := fs.String("search", "", "")
-	limit := fs.Int("limit", 0, "")
-	failOn := fs.String("fail-on", "", "")
-	asJSON := fs.Bool("json", false, "")
-	if code, ok := parseFlags(fs, args, findingsListUsage, stdout, stderr); !ok {
-		return code
-	}
-	if fs.NArg() != 0 {
-		return usageError(stderr, name, "unexpected arguments", findingsListUsage)
-	}
-	if *limit < 0 {
-		return usageError(stderr, name, "--limit must not be negative", findingsListUsage)
-	}
-	threshold := -1
-	if *failOn != "" {
-		threshold = slices.Index(severities, heist.ListFindingsParamsSeverity(strings.ToUpper(*failOn)))
-		if threshold < 0 {
-			return usageError(stderr, name, fmt.Sprintf("unknown --fail-on severity %q", *failOn), findingsListUsage)
-		}
-	}
+	var search, failOn string
+	var limit int
+	var asJSON bool
+	cmd := &cobra.Command{
+		Use:   "list",
+		Short: "List findings, optionally failing on a severity threshold",
+		Long: `List findings matching the filters, following pagination, as a table or JSON.
 
-	params := listParams(severity, status, *search)
-	if *limit > 0 {
-		size := min(*limit, 100) // the API's maximum page size
-		params.Size = &size
-	}
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	ctx := context.Background()
-	findings := []json.RawMessage{}
-	for finding, err := range allRawFindings(ctx, client, params) {
-		if err != nil {
-			return printError(stderr, name, err)
-		}
-		findings = append(findings, finding)
-		if len(findings) == *limit {
-			break
-		}
-	}
-	if *asJSON {
-		err = writeJSON(stdout, findings)
-	} else {
-		typed := make([]heist.Finding, len(findings))
-		for i, raw := range findings {
-			if err := json.Unmarshal(raw, &typed[i]); err != nil {
-				return printError(stderr, name, err)
+--fail-on exits with status 3 when any finding matching the filters is at or
+above the given severity. Only open (PUBLISHED) findings count unless --status
+is given. --limit does not affect the check.
+
+Exit status:
+  0   Success, and no finding reached the --fail-on severity
+  1   Error, for example an API or authentication failure
+  2   Invalid usage
+  3   A finding reached the --fail-on severity
+
+` + envUsage,
+		Args: noArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			if limit < 0 {
+				return usageErrorf("--limit must not be negative")
 			}
-		}
-		err = writeFindingsTable(stdout, typed)
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
+			threshold := -1
+			if failOn != "" {
+				threshold = slices.Index(severities, heist.ListFindingsParamsSeverity(strings.ToUpper(failOn)))
+				if threshold < 0 {
+					return usageErrorf("unknown --fail-on severity %q", failOn)
+				}
+			}
 
-	if threshold < 0 {
-		return 0
+			params := listParams(severity, status, search)
+			if limit > 0 {
+				size := min(limit, 100) // the API's maximum page size
+				params.Size = &size
+			}
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			ctx := cmd.Context()
+			findings := []json.RawMessage{}
+			for finding, err := range allRawFindings(ctx, client, params) {
+				if err != nil {
+					return err
+				}
+				findings = append(findings, finding)
+				if len(findings) == limit {
+					break
+				}
+			}
+			if asJSON {
+				err = writeJSON(cmd.OutOrStdout(), findings)
+			} else {
+				typed := make([]heist.Finding, len(findings))
+				for i, raw := range findings {
+					if err := json.Unmarshal(raw, &typed[i]); err != nil {
+						return err
+					}
+				}
+				err = writeFindingsTable(cmd.OutOrStdout(), typed)
+			}
+			if err != nil {
+				return err
+			}
+
+			if threshold < 0 {
+				return nil
+			}
+			n, err := countAtOrAbove(ctx, client, params, severities[threshold])
+			if err != nil {
+				return err
+			}
+			if n > 0 {
+				return &exitError{exitFailOn, fmt.Sprintf("%d finding(s) at or above %s", n, severities[threshold])}
+			}
+			return nil
+		},
 	}
-	n, err := countAtOrAbove(ctx, client, params, severities[threshold])
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if n > 0 {
-		fmt.Fprintf(stderr, "heist %s: %d finding(s) at or above %s\n", name, n, severities[threshold])
-		return exitFailOn
-	}
-	return 0
+	f := cmd.Flags()
+	f.Var(&severity, "severity", "only these severities, comma-separated or repeated:\nINFORMATIONAL, LOW, MEDIUM, HIGH, CRITICAL")
+	f.Var(&status, "status", "only these statuses, comma-separated or repeated:\nPUBLISHED (open), FIXED, ACCEPTED, COMPENSATING_CONTROL")
+	f.StringVar(&search, "search", "", "only findings matching the search `text`")
+	f.IntVar(&limit, "limit", 0, "print at most `n` findings (default all)")
+	f.StringVar(&failOn, "fail-on", "", "exit 3 when a finding is at or above `severity`")
+	f.BoolVar(&asJSON, "json", false, "print a JSON array of findings")
+	return cmd
 }
 
 // allRawFindings yields every finding matching params as the API's JSON, so
@@ -295,41 +224,41 @@ func writeFindingsTable(w io.Writer, findings []heist.Finding) error {
 	return tw.Flush()
 }
 
-func runFindingsGet(args []string, stdout, stderr io.Writer) int {
-	const name = "findings get"
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
-	asJSON := fs.Bool("json", false, "")
-	if code, ok := parseFlags(fs, args, findingsGetUsage, stdout, stderr); !ok {
-		return code
-	}
-	if fs.NArg() != 1 {
-		return usageError(stderr, name, "expected one finding ID", findingsGetUsage)
-	}
-	var id openapi_types.UUID
-	if err := id.UnmarshalText([]byte(fs.Arg(0))); err != nil {
-		return usageError(stderr, name, fmt.Sprintf("invalid finding ID %q", fs.Arg(0)), findingsGetUsage)
-	}
+func newFindingsGetCmd() *cobra.Command {
+	var asJSON bool
+	cmd := &cobra.Command{
+		Use:   "get <id>",
+		Short: "Show a finding's full detail",
+		Long: `Show a finding's full detail, including its report and linked application,
+repository, and route.
 
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
+` + envUsage,
+		Args: oneArg("finding ID"),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			var id openapi_types.UUID
+			if err := id.UnmarshalText([]byte(args[0])); err != nil {
+				return usageErrorf("invalid finding ID %q", args[0])
+			}
+
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			res, err := client.GetFindingWithResponse(cmd.Context(), id)
+			if err != nil {
+				return err
+			}
+			if res.JSON200 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			if asJSON {
+				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
+			}
+			return writeFindingDetail(cmd.OutOrStdout(), res.JSON200)
+		},
 	}
-	res, err := client.GetFindingWithResponse(context.Background(), id)
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if res.JSON200 == nil {
-		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
-	}
-	if *asJSON {
-		err = writeJSON(stdout, json.RawMessage(res.Body))
-	} else {
-		err = writeFindingDetail(stdout, res.JSON200)
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	return 0
+	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
+	return cmd
 }
 
 func writeFindingDetail(w io.Writer, f *heist.FindingDetail) error {
@@ -415,68 +344,64 @@ type findingCounts struct {
 	SeverityStatuses []heist.ListFindingsParamsStatus         `json:"severityStatuses"`
 }
 
-func runFindingsCounts(args []string, stdout, stderr io.Writer) int {
-	const name = "findings counts"
-	fs := flag.NewFlagSet(name, flag.ContinueOnError)
+func newFindingsCountsCmd() *cobra.Command {
 	var status listFlag
-	fs.Var(&status, "status", "")
-	asJSON := fs.Bool("json", false, "")
-	if code, ok := parseFlags(fs, args, findingsCountsUsage, stdout, stderr); !ok {
-		return code
-	}
-	if fs.NArg() != 0 {
-		return usageError(stderr, name, "unexpected arguments", findingsCountsUsage)
-	}
+	var asJSON bool
+	cmd := &cobra.Command{
+		Use:   "counts",
+		Short: "Count findings by status and severity",
+		Long:  "Count findings by status, and by severity for the given statuses.\n\n" + envUsage,
+		Args:  noArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			client, err := newClient()
+			if err != nil {
+				return err
+			}
+			ctx := cmd.Context()
+			res, err := client.FindingCountsWithResponse(ctx)
+			if err != nil {
+				return err
+			}
+			if res.JSON200 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			params := listParams(nil, status, "")
+			if params.Status == nil {
+				params.Status = &openStatuses
+			}
+			counts := findingCounts{
+				Status:           res.Body,
+				Severity:         map[heist.ListFindingsParamsSeverity]int{},
+				SeverityStatuses: *params.Status,
+			}
+			for _, s := range severities {
+				params.Severity = &[]heist.ListFindingsParamsSeverity{s}
+				if counts.Severity[s], err = client.CountFindings(ctx, params); err != nil {
+					return err
+				}
+			}
 
-	client, err := newClient()
-	if err != nil {
-		return printError(stderr, name, err)
+			if asJSON {
+				return writeJSON(cmd.OutOrStdout(), counts)
+			}
+			tw := tabwriter.NewWriter(cmd.OutOrStdout(), 0, 0, 2, ' ', 0)
+			c := res.JSON200
+			fmt.Fprintf(tw, "STATUS\tCOUNT\nopen\t%d\nclosed\t%d\naccepted\t%d\ncompensating control\t%d\nall\t%d\n",
+				c.Open, c.Closed, c.Accepted, c.CompensatingControl, c.All)
+			var scope []string
+			for _, s := range counts.SeverityStatuses {
+				scope = append(scope, string(s))
+			}
+			fmt.Fprintf(tw, "\nSEVERITY (%s)\tCOUNT\n", strings.Join(scope, ","))
+			for _, s := range slices.Backward(severities) {
+				fmt.Fprintf(tw, "%s\t%d\n", s, counts.Severity[s])
+			}
+			return tw.Flush()
+		},
 	}
-	ctx := context.Background()
-	res, err := client.FindingCountsWithResponse(ctx)
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	if res.JSON200 == nil {
-		return printError(stderr, name, fmt.Errorf("unexpected %s response", res.Status()))
-	}
-	params := listParams(nil, status, "")
-	if params.Status == nil {
-		params.Status = &openStatuses
-	}
-	counts := findingCounts{
-		Status:           res.Body,
-		Severity:         map[heist.ListFindingsParamsSeverity]int{},
-		SeverityStatuses: *params.Status,
-	}
-	for _, s := range severities {
-		params.Severity = &[]heist.ListFindingsParamsSeverity{s}
-		if counts.Severity[s], err = client.CountFindings(ctx, params); err != nil {
-			return printError(stderr, name, err)
-		}
-	}
-
-	if *asJSON {
-		err = writeJSON(stdout, counts)
-	} else {
-		tw := tabwriter.NewWriter(stdout, 0, 0, 2, ' ', 0)
-		c := res.JSON200
-		fmt.Fprintf(tw, "STATUS\tCOUNT\nopen\t%d\nclosed\t%d\naccepted\t%d\ncompensating control\t%d\nall\t%d\n",
-			c.Open, c.Closed, c.Accepted, c.CompensatingControl, c.All)
-		var scope []string
-		for _, s := range counts.SeverityStatuses {
-			scope = append(scope, string(s))
-		}
-		fmt.Fprintf(tw, "\nSEVERITY (%s)\tCOUNT\n", strings.Join(scope, ","))
-		for _, s := range slices.Backward(severities) {
-			fmt.Fprintf(tw, "%s\t%d\n", s, counts.Severity[s])
-		}
-		err = tw.Flush()
-	}
-	if err != nil {
-		return printError(stderr, name, err)
-	}
-	return 0
+	cmd.Flags().Var(&status, "status", "statuses the severity counts include, comma-separated or\nrepeated (default PUBLISHED, the open findings)")
+	cmd.Flags().BoolVar(&asJSON, "json", false, "print the counts as JSON")
+	return cmd
 }
 
 func writeJSON(w io.Writer, v any) error {

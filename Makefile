@@ -7,6 +7,7 @@ check: check-generated check-sdk check-cli
 # needs the network.
 deps:
 	go mod download
+	cd cmd/heist && go mod download
 	cd tools && go mod download
 
 # SDK: format, vet, and test the public package and the snapshot tooling.
@@ -15,11 +16,12 @@ check-sdk:
 	go vet ./heist/... ./internal/...
 	go test ./heist/... ./internal/...
 
-# CLI: build, format, vet, and test.
+# CLI: build, format, vet, and test. cmd/heist is its own module; its go.work
+# builds it against the SDK in this checkout.
 check-cli: build
 	test -z "$$(gofmt -l cmd)"
-	go vet ./cmd/...
-	go test ./cmd/...
+	cd cmd/heist && go vet ./...
+	cd cmd/heist && go test ./...
 
 # Fail if generated code is stale relative to api/openapi.json.
 check-generated: generate
@@ -27,12 +29,15 @@ check-generated: generate
 	test -z "$$(git ls-files --others --exclude-standard -- heist)"
 
 # Report known vulnerabilities in reachable code. Queries vuln.go.dev, so it
-# needs network access and is not part of the offline check target.
+# needs network access and is not part of the offline check target. -modfile
+# can't be used in workspace mode, so the CLI is scanned with a built binary.
 vulncheck:
 	go tool -modfile=tools/go.mod govulncheck ./...
+	go build -modfile=tools/go.mod -o dist/govulncheck golang.org/x/vuln/cmd/govulncheck
+	cd cmd/heist && ../../dist/govulncheck ./...
 
 generate:
 	go generate ./...
 
 build:
-	go build -o dist/heist ./cmd/heist
+	cd cmd/heist && go build -o ../../dist/heist .

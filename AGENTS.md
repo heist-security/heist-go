@@ -10,6 +10,10 @@ private Heist services beyond the published OpenAPI contract.
   handling, and pagination. Keep CLI commands, output formatting, and progress
   handling in `cmd/heist/`. Terraform state and lifecycle behavior belong in the
   separate `terraform-provider-heist` repository.
+- `cmd/heist/` is a separate Go module so SDK users don't inherit CLI
+  dependencies. Add CLI dependencies to `cmd/heist/go.mod`, never the root
+  `go.mod`, and run Go commands for the CLI from `cmd/heist/`, where `go.work`
+  uses the SDK in this checkout.
 - Code must not depend on private Heist packages or repositories.
 - The service owns the contract. Preserve the API's field names and semantics.
 

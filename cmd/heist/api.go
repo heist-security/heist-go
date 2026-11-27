@@ -2,57 +2,39 @@ package main
 
 import (
 	"context"
-	"errors"
-	"flag"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"strings"
 
 	"github.com/heist-security/heist-go/heist"
+	"github.com/spf13/cobra"
 )
 
-const apiUsage = `Usage: heist api [-X method] [--input file] <path>
-
-Send an authenticated request to the Heist API and write the response body
+func newAPICmd() *cobra.Command {
+	var method, input string
+	cmd := &cobra.Command{
+		Use:   "api <path>",
+		Short: "Make an authenticated API request and print the response",
+		Long: `Send an authenticated request to the Heist API and write the response body
 to stdout. The path is relative to the API server URL, for example
 /findings?severity=high.
 
-Flags:
-  -X, --method method   HTTP method (default GET, or POST with --input)
-      --input file      Send the file as a JSON request body; use - for stdin
-
-` + envUsage
-
-func runAPI(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
-	fs := flag.NewFlagSet("api", flag.ContinueOnError)
-	fs.SetOutput(io.Discard)
-	method := fs.String("X", "", "")
-	fs.StringVar(method, "method", "", "")
-	input := fs.String("input", "", "")
-	if err := fs.Parse(args); err != nil {
-		if errors.Is(err, flag.ErrHelp) {
-			fmt.Fprint(stdout, apiUsage)
-			return 0
-		}
-		fmt.Fprintf(stderr, "heist api: %v\n\n%s", err, apiUsage)
-		return 2
+` + envUsage,
+		Args: oneArg("path argument"),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if method == "" {
+				method = http.MethodGet
+				if input != "" {
+					method = http.MethodPost
+				}
+			}
+			return apiRequest(cmd.Context(), strings.ToUpper(method), args[0], input, cmd.InOrStdin(), cmd.OutOrStdout())
+		},
 	}
-	if fs.NArg() != 1 {
-		fmt.Fprintf(stderr, "heist api: expected one path argument\n\n%s", apiUsage)
-		return 2
-	}
-	if *method == "" {
-		*method = http.MethodGet
-		if *input != "" {
-			*method = http.MethodPost
-		}
-	}
-	if err := apiRequest(context.Background(), strings.ToUpper(*method), fs.Arg(0), *input, stdin, stdout); err != nil {
-		return printError(stderr, "api", err)
-	}
-	return 0
+	cmd.Flags().StringVarP(&method, "method", "X", "", "HTTP `method` (default GET, or POST with --input)")
+	cmd.Flags().StringVar(&input, "input", "", "send the `file` as a JSON request body; use - for stdin")
+	return cmd
 }
 
 func apiRequest(ctx context.Context, method, path, input string, stdin io.Reader, stdout io.Writer) error {

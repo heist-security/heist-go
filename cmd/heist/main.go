@@ -2,6 +2,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -10,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/heist-security/heist-go/heist"
+	"github.com/spf13/cobra"
 )
 
 // version is the CLI release, set by release builds with
@@ -20,41 +22,108 @@ func main() {
 	os.Exit(run(os.Args[1:], os.Stdin, os.Stdout, os.Stderr))
 }
 
+// run executes the command line in args and returns the exit status: 0 for
+// success, 1 for errors, 2 for usage errors, or a command's exitError code.
 func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
-	if len(args) == 0 {
-		usage(stderr)
+	root := newRootCmd()
+	root.SetArgs(args)
+	root.SetIn(stdin)
+	root.SetOut(stdout)
+	root.SetErr(stderr)
+	cmd, err := root.ExecuteContextC(context.Background())
+	if err == nil {
+		return 0
+	}
+	// SDK errors already start with "heist: ".
+	fmt.Fprintf(stderr, "%s: %s\n", cmd.CommandPath(), strings.TrimPrefix(err.Error(), "heist: "))
+	var usage usageError
+	if errors.As(err, &usage) {
+		fmt.Fprintf(stderr, "\n%s", cmd.UsageString())
 		return 2
 	}
-	switch args[0] {
-	case "api":
-		return runAPI(args[1:], stdin, stdout, stderr)
-	case "findings":
-		return runFindings(args[1:], stdout, stderr)
-	case "reports":
-		return runReports(args[1:], stdout, stderr)
-	case "version":
-		fmt.Fprintf(stdout, "heist %s (API contract %s)\n", cliVersion(), heist.APIVersion)
-		return 0
-	case "help", "-h", "--help":
-		usage(stdout)
-		return 0
-	default:
-		fmt.Fprintf(stderr, "heist: unknown command %q\n\n", args[0])
-		usage(stderr)
-		return 2
+	var exit *exitError
+	if errors.As(err, &exit) {
+		return exit.code
 	}
+	return 1
 }
 
-func usage(w io.Writer) {
-	fmt.Fprint(w, `Usage: heist <command>
+func newRootCmd() *cobra.Command {
+	root := groupCmd(&cobra.Command{
+		Use:           "heist",
+		Short:         "Heist command-line interface",
+		SilenceErrors: true,
+		SilenceUsage:  true,
+	})
+	root.SetFlagErrorFunc(func(_ *cobra.Command, err error) error {
+		return usageError{err}
+	})
+	root.AddCommand(newAPICmd(), newFindingsCmd(), newReportsCmd(), &cobra.Command{
+		Use:   "version",
+		Short: "Print the CLI version and targeted API contract version",
+		Args:  noArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			_, err := fmt.Fprintf(cmd.OutOrStdout(), "heist %s (API contract %s)\n", cliVersion(), heist.APIVersion)
+			return err
+		},
+	})
+	return root
+}
 
-Commands:
-  api        Make an authenticated API request and print the response
-  findings   List, show and count findings, and gate CI on severity
-  reports    List, generate and download reports, and manage report scopes
-  version    Print the CLI version and targeted API contract version
-  help       Show this help
-`)
+// groupCmd makes cmd reject a missing or unknown subcommand as a usage
+// error. Without this, Cobra prints help and exits 0 for a mistyped
+// subcommand of a nested command.
+func groupCmd(cmd *cobra.Command) *cobra.Command {
+	cmd.Args = cobra.ArbitraryArgs
+	cmd.SuggestionsMinimumDistance = 2 // Cobra's default for root commands
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		if len(args) == 0 {
+			return usageErrorf("expected a command")
+		}
+		msg := fmt.Sprintf("unknown command %q", args[0])
+		if s := cmd.SuggestionsFor(args[0]); len(s) > 0 {
+			msg += "; did you mean " + strings.Join(s, " or ") + "?"
+		}
+		return usageError{errors.New(msg)}
+	}
+	return cmd
+}
+
+// usageError is an invalid command line. It exits with status 2 and prints
+// the command's usage.
+type usageError struct{ err error }
+
+func (e usageError) Error() string { return e.err.Error() }
+
+func usageErrorf(format string, a ...any) error {
+	return usageError{fmt.Errorf(format, a...)}
+}
+
+// exitError reports a result that exits with a status other than 1, such as
+// a --fail-on threshold being reached.
+type exitError struct {
+	code int
+	msg  string
+}
+
+func (e *exitError) Error() string { return e.msg }
+
+// noArgs rejects positional arguments.
+func noArgs(_ *cobra.Command, args []string) error {
+	if len(args) != 0 {
+		return usageErrorf("unexpected arguments")
+	}
+	return nil
+}
+
+// oneArg requires exactly one positional argument, described by what.
+func oneArg(what string) cobra.PositionalArgs {
+	return func(_ *cobra.Command, args []string) error {
+		if len(args) != 1 {
+			return usageErrorf("expected one %s", what)
+		}
+		return nil
+	}
 }
 
 func cliVersion() string {
@@ -70,8 +139,7 @@ func cliVersion() string {
 const envUsage = `Environment:
   HEIST_CLIENT_ID, HEIST_CLIENT_SECRET   OAuth app credentials (required)
   HEIST_SERVER_URL                       API server URL (default ` + heist.DefaultServerURL + `)
-  HEIST_TOKEN_URL                        OAuth token URL (default ` + heist.DefaultTokenURL + `)
-`
+  HEIST_TOKEN_URL                        OAuth token URL (default ` + heist.DefaultTokenURL + `)`
 
 // newClient returns an SDK client authenticated with the OAuth app
 // credentials from the environment.
@@ -88,11 +156,4 @@ func newClient() (*heist.ClientWithResponses, error) {
 		ServerURL: os.Getenv("HEIST_SERVER_URL"),
 		UserAgent: "heist-cli/" + cliVersion(),
 	})
-}
-
-// printError reports a command failure on stderr and returns exit code 1.
-func printError(stderr io.Writer, command string, err error) int {
-	// SDK errors already start with "heist: ".
-	fmt.Fprintf(stderr, "heist %s: %s\n", command, strings.TrimPrefix(err.Error(), "heist: "))
-	return 1
 }
