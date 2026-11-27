@@ -878,6 +878,108 @@ func (e RetestRequestStatus) Valid() bool {
 	}
 }
 
+// Defines values for RouteAccessLevel.
+const (
+	RouteAccessLevelProtected RouteAccessLevel = "protected"
+	RouteAccessLevelPublic    RouteAccessLevel = "public"
+	RouteAccessLevelUnknown   RouteAccessLevel = "unknown"
+)
+
+// Valid indicates whether the value is a known member of the RouteAccessLevel enum.
+func (e RouteAccessLevel) Valid() bool {
+	switch e {
+	case RouteAccessLevelProtected:
+		return true
+	case RouteAccessLevelPublic:
+		return true
+	case RouteAccessLevelUnknown:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for RouteMaxFindingSeverity.
+const (
+	RouteMaxFindingSeverityCRITICAL      RouteMaxFindingSeverity = "CRITICAL"
+	RouteMaxFindingSeverityHIGH          RouteMaxFindingSeverity = "HIGH"
+	RouteMaxFindingSeverityINFORMATIONAL RouteMaxFindingSeverity = "INFORMATIONAL"
+	RouteMaxFindingSeverityLOW           RouteMaxFindingSeverity = "LOW"
+	RouteMaxFindingSeverityMEDIUM        RouteMaxFindingSeverity = "MEDIUM"
+)
+
+// Valid indicates whether the value is a known member of the RouteMaxFindingSeverity enum.
+func (e RouteMaxFindingSeverity) Valid() bool {
+	switch e {
+	case RouteMaxFindingSeverityCRITICAL:
+		return true
+	case RouteMaxFindingSeverityHIGH:
+		return true
+	case RouteMaxFindingSeverityINFORMATIONAL:
+		return true
+	case RouteMaxFindingSeverityLOW:
+		return true
+	case RouteMaxFindingSeverityMEDIUM:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for RouteRouteAccessStatus.
+const (
+	REACHABLE   RouteRouteAccessStatus = "REACHABLE"
+	UNREACHABLE RouteRouteAccessStatus = "UNREACHABLE"
+)
+
+// Valid indicates whether the value is a known member of the RouteRouteAccessStatus enum.
+func (e RouteRouteAccessStatus) Valid() bool {
+	switch e {
+	case REACHABLE:
+		return true
+	case UNREACHABLE:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for RouteRouteType.
+const (
+	RouteRouteTypeFrameworkRoute    RouteRouteType = "framework_route"
+	RouteRouteTypeGraphqlOperation  RouteRouteType = "graphql_operation"
+	RouteRouteTypeMcpTool           RouteRouteType = "mcp_tool"
+	RouteRouteTypeRestEndpoint      RouteRouteType = "rest_endpoint"
+	RouteRouteTypeSupabaseEndpoint  RouteRouteType = "supabase_endpoint"
+	RouteRouteTypeTrpcProcedure     RouteRouteType = "trpc_procedure"
+	RouteRouteTypeWebpage           RouteRouteType = "webpage"
+	RouteRouteTypeWebsocketEndpoint RouteRouteType = "websocket_endpoint"
+)
+
+// Valid indicates whether the value is a known member of the RouteRouteType enum.
+func (e RouteRouteType) Valid() bool {
+	switch e {
+	case RouteRouteTypeFrameworkRoute:
+		return true
+	case RouteRouteTypeGraphqlOperation:
+		return true
+	case RouteRouteTypeMcpTool:
+		return true
+	case RouteRouteTypeRestEndpoint:
+		return true
+	case RouteRouteTypeSupabaseEndpoint:
+		return true
+	case RouteRouteTypeTrpcProcedure:
+		return true
+	case RouteRouteTypeWebpage:
+		return true
+	case RouteRouteTypeWebsocketEndpoint:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for ScopeRuleAction.
 const (
 	ScopeRuleActionALLOW ScopeRuleAction = "ALLOW"
@@ -1084,22 +1186,22 @@ func (e ApplicationScopeProcessing200JSONResponseBodyProcessStatus) Valid() bool
 
 // Defines values for ApplicationSecuritySummary200JSONResponseBodyBucketsStatus.
 const (
-	Fail    ApplicationSecuritySummary200JSONResponseBodyBucketsStatus = "fail"
-	Ok      ApplicationSecuritySummary200JSONResponseBodyBucketsStatus = "ok"
-	Unknown ApplicationSecuritySummary200JSONResponseBodyBucketsStatus = "unknown"
-	Warn    ApplicationSecuritySummary200JSONResponseBodyBucketsStatus = "warn"
+	ApplicationSecuritySummary200JSONResponseBodyBucketsStatusFail    ApplicationSecuritySummary200JSONResponseBodyBucketsStatus = "fail"
+	ApplicationSecuritySummary200JSONResponseBodyBucketsStatusOk      ApplicationSecuritySummary200JSONResponseBodyBucketsStatus = "ok"
+	ApplicationSecuritySummary200JSONResponseBodyBucketsStatusUnknown ApplicationSecuritySummary200JSONResponseBodyBucketsStatus = "unknown"
+	ApplicationSecuritySummary200JSONResponseBodyBucketsStatusWarn    ApplicationSecuritySummary200JSONResponseBodyBucketsStatus = "warn"
 )
 
 // Valid indicates whether the value is a known member of the ApplicationSecuritySummary200JSONResponseBodyBucketsStatus enum.
 func (e ApplicationSecuritySummary200JSONResponseBodyBucketsStatus) Valid() bool {
 	switch e {
-	case Fail:
+	case ApplicationSecuritySummary200JSONResponseBodyBucketsStatusFail:
 		return true
-	case Ok:
+	case ApplicationSecuritySummary200JSONResponseBodyBucketsStatusOk:
 		return true
-	case Unknown:
+	case ApplicationSecuritySummary200JSONResponseBodyBucketsStatusUnknown:
 		return true
-	case Warn:
+	case ApplicationSecuritySummary200JSONResponseBodyBucketsStatusWarn:
 		return true
 	default:
 		return false
@@ -1210,12 +1312,18 @@ func (e StartCredentialSignupJSONBodyLane) Valid() bool {
 
 // Defines values for CreateCodeProviderConnectLinkJSONBodyProvider.
 const (
-	CreateCodeProviderConnectLinkJSONBodyProviderGithub CreateCodeProviderConnectLinkJSONBodyProvider = "github"
+	CreateCodeProviderConnectLinkJSONBodyProviderAzureDevops CreateCodeProviderConnectLinkJSONBodyProvider = "azure_devops"
+	CreateCodeProviderConnectLinkJSONBodyProviderBitbucket   CreateCodeProviderConnectLinkJSONBodyProvider = "bitbucket"
+	CreateCodeProviderConnectLinkJSONBodyProviderGithub      CreateCodeProviderConnectLinkJSONBodyProvider = "github"
 )
 
 // Valid indicates whether the value is a known member of the CreateCodeProviderConnectLinkJSONBodyProvider enum.
 func (e CreateCodeProviderConnectLinkJSONBodyProvider) Valid() bool {
 	switch e {
+	case CreateCodeProviderConnectLinkJSONBodyProviderAzureDevops:
+		return true
+	case CreateCodeProviderConnectLinkJSONBodyProviderBitbucket:
+		return true
 	case CreateCodeProviderConnectLinkJSONBodyProviderGithub:
 		return true
 	default:
@@ -1838,6 +1946,138 @@ func (e GetReport200JSONResponseBodyStatus) Valid() bool {
 	}
 }
 
+// Defines values for ListRoutesParamsRouteTypes.
+const (
+	ListRoutesParamsRouteTypesFrameworkRoute    ListRoutesParamsRouteTypes = "framework_route"
+	ListRoutesParamsRouteTypesGraphqlOperation  ListRoutesParamsRouteTypes = "graphql_operation"
+	ListRoutesParamsRouteTypesMcpTool           ListRoutesParamsRouteTypes = "mcp_tool"
+	ListRoutesParamsRouteTypesRestEndpoint      ListRoutesParamsRouteTypes = "rest_endpoint"
+	ListRoutesParamsRouteTypesSupabaseEndpoint  ListRoutesParamsRouteTypes = "supabase_endpoint"
+	ListRoutesParamsRouteTypesTrpcProcedure     ListRoutesParamsRouteTypes = "trpc_procedure"
+	ListRoutesParamsRouteTypesWebpage           ListRoutesParamsRouteTypes = "webpage"
+	ListRoutesParamsRouteTypesWebsocketEndpoint ListRoutesParamsRouteTypes = "websocket_endpoint"
+)
+
+// Valid indicates whether the value is a known member of the ListRoutesParamsRouteTypes enum.
+func (e ListRoutesParamsRouteTypes) Valid() bool {
+	switch e {
+	case ListRoutesParamsRouteTypesFrameworkRoute:
+		return true
+	case ListRoutesParamsRouteTypesGraphqlOperation:
+		return true
+	case ListRoutesParamsRouteTypesMcpTool:
+		return true
+	case ListRoutesParamsRouteTypesRestEndpoint:
+		return true
+	case ListRoutesParamsRouteTypesSupabaseEndpoint:
+		return true
+	case ListRoutesParamsRouteTypesTrpcProcedure:
+		return true
+	case ListRoutesParamsRouteTypesWebpage:
+		return true
+	case ListRoutesParamsRouteTypesWebsocketEndpoint:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListRoutesParamsInScope.
+const (
+	ListRoutesParamsInScopeFalse ListRoutesParamsInScope = "false"
+	ListRoutesParamsInScopeTrue  ListRoutesParamsInScope = "true"
+)
+
+// Valid indicates whether the value is a known member of the ListRoutesParamsInScope enum.
+func (e ListRoutesParamsInScope) Valid() bool {
+	switch e {
+	case ListRoutesParamsInScopeFalse:
+		return true
+	case ListRoutesParamsInScopeTrue:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListRoutesParamsArchived.
+const (
+	ListRoutesParamsArchivedFalse ListRoutesParamsArchived = "false"
+	ListRoutesParamsArchivedTrue  ListRoutesParamsArchived = "true"
+)
+
+// Valid indicates whether the value is a known member of the ListRoutesParamsArchived enum.
+func (e ListRoutesParamsArchived) Valid() bool {
+	switch e {
+	case ListRoutesParamsArchivedFalse:
+		return true
+	case ListRoutesParamsArchivedTrue:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListRoutesParamsSeverityFilter.
+const (
+	ListRoutesParamsSeverityFilterCRITICAL      ListRoutesParamsSeverityFilter = "CRITICAL"
+	ListRoutesParamsSeverityFilterHIGH          ListRoutesParamsSeverityFilter = "HIGH"
+	ListRoutesParamsSeverityFilterINFORMATIONAL ListRoutesParamsSeverityFilter = "INFORMATIONAL"
+	ListRoutesParamsSeverityFilterLOW           ListRoutesParamsSeverityFilter = "LOW"
+	ListRoutesParamsSeverityFilterMEDIUM        ListRoutesParamsSeverityFilter = "MEDIUM"
+	ListRoutesParamsSeverityFilterNONE          ListRoutesParamsSeverityFilter = "NONE"
+)
+
+// Valid indicates whether the value is a known member of the ListRoutesParamsSeverityFilter enum.
+func (e ListRoutesParamsSeverityFilter) Valid() bool {
+	switch e {
+	case ListRoutesParamsSeverityFilterCRITICAL:
+		return true
+	case ListRoutesParamsSeverityFilterHIGH:
+		return true
+	case ListRoutesParamsSeverityFilterINFORMATIONAL:
+		return true
+	case ListRoutesParamsSeverityFilterLOW:
+		return true
+	case ListRoutesParamsSeverityFilterMEDIUM:
+		return true
+	case ListRoutesParamsSeverityFilterNONE:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ArchiveRoutes200JSONResponseBodyOk.
+const (
+	ArchiveRoutes200JSONResponseBodyOkTrue ArchiveRoutes200JSONResponseBodyOk = true
+)
+
+// Valid indicates whether the value is a known member of the ArchiveRoutes200JSONResponseBodyOk enum.
+func (e ArchiveRoutes200JSONResponseBodyOk) Valid() bool {
+	switch e {
+	case ArchiveRoutes200JSONResponseBodyOkTrue:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for DeleteArchivedRoutes200JSONResponseBodyOk.
+const (
+	DeleteArchivedRoutes200JSONResponseBodyOkTrue DeleteArchivedRoutes200JSONResponseBodyOk = true
+)
+
+// Valid indicates whether the value is a known member of the DeleteArchivedRoutes200JSONResponseBodyOk enum.
+func (e DeleteArchivedRoutes200JSONResponseBodyOk) Valid() bool {
+	switch e {
+	case DeleteArchivedRoutes200JSONResponseBodyOkTrue:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CreateScopeRuleJSONBodyAction.
 const (
 	CreateScopeRuleJSONBodyActionALLOW CreateScopeRuleJSONBodyAction = "ALLOW"
@@ -2043,6 +2283,13 @@ type CodeReviewRepository struct {
 	Owner         string                       `json:"owner"`
 	Project       *string                      `json:"project"`
 	Provider      CodeReviewRepositoryProvider `json:"provider"`
+	ReviewScope   struct {
+		// Exclude Globs relative to the repository root that reviews skip. A pattern without a slash matches at any depth (*.test.ts); a folder pattern covers its files (src/legacy/).
+		Exclude []string `json:"exclude"`
+
+		// Include When non-empty, reviews only cover files matching one of these globs, such as *.ts.
+		Include []string `json:"include"`
+	} `json:"reviewScope"`
 }
 
 // CodeReviewRepositoryProvider defines model for CodeReviewRepository.Provider.
@@ -2471,6 +2718,53 @@ type RetestRequest struct {
 // RetestRequestStatus defines model for RetestRequest.Status.
 type RetestRequestStatus string
 
+// Route defines model for Route.
+type Route struct {
+	// AccessLevel public when an unauthenticated replay succeeded, protected when checks ran but none succeeded unauthenticated, unknown before any check.
+	AccessLevel RouteAccessLevel `json:"accessLevel"`
+	Application *struct {
+		Id      string  `json:"id"`
+		InScope bool    `json:"inScope"`
+		Url     *string `json:"url"`
+	} `json:"application"`
+	CreatedAt               string                   `json:"createdAt"`
+	ExampleNetworkEventId   *string                  `json:"exampleNetworkEventId"`
+	FindingsCount           int                      `json:"findingsCount"`
+	GraphqlOperationName    *string                  `json:"graphqlOperationName"`
+	GraphqlOperationType    *string                  `json:"graphqlOperationType"`
+	HttpMethods             []string                 `json:"httpMethods"`
+	Id                      string                   `json:"id"`
+	LastCheckedAt           *string                  `json:"lastCheckedAt"`
+	MaxFindingSeverity      *RouteMaxFindingSeverity `json:"maxFindingSeverity"`
+	MaxFindingSeverityCount int                      `json:"maxFindingSeverityCount"`
+	McpToolName             *string                  `json:"mcpToolName"`
+
+	// Reachable Whether scheduled route checks can select this route.
+	Reachable   bool `json:"reachable"`
+	RouteAccess []struct {
+		ApplicationId string                 `json:"applicationId"`
+		Status        RouteRouteAccessStatus `json:"status"`
+	} `json:"routeAccess"`
+	RouteType RouteRouteType `json:"routeType"`
+
+	// Supported Whether Heist's full route check can test this route.
+	Supported bool     `json:"supported"`
+	Tags      []string `json:"tags"`
+	Url       string   `json:"url"`
+}
+
+// RouteAccessLevel public when an unauthenticated replay succeeded, protected when checks ran but none succeeded unauthenticated, unknown before any check.
+type RouteAccessLevel string
+
+// RouteMaxFindingSeverity defines model for Route.MaxFindingSeverity.
+type RouteMaxFindingSeverity string
+
+// RouteRouteAccessStatus defines model for Route.RouteAccess.Status.
+type RouteRouteAccessStatus string
+
+// RouteRouteType defines model for Route.RouteType.
+type RouteRouteType string
+
 // ScopeRule defines model for ScopeRule.
 type ScopeRule struct {
 	Action    ScopeRuleAction `json:"action"`
@@ -2642,6 +2936,15 @@ type AddCodeReviewRepositoriesJSONBody struct {
 // AddCodeReviewRepositoriesJSONBodyRepositoriesProvider defines model for AddCodeReviewRepositoriesJSONBody.Repositories.Provider.
 type AddCodeReviewRepositoriesJSONBodyRepositoriesProvider string
 
+// UpdateCodeReviewRepositoryScopeJSONBody defines body for UpdateCodeReviewRepositoryScope for application/json ContentType.
+type UpdateCodeReviewRepositoryScopeJSONBody struct {
+	// Exclude Globs relative to the repository root that reviews skip. A pattern without a slash matches at any depth (*.test.ts); a folder pattern covers its files (src/legacy/).
+	Exclude []string `json:"exclude"`
+
+	// Include When non-empty, reviews only cover files matching one of these globs, such as *.ts.
+	Include []string `json:"include"`
+}
+
 // CreateCredentialJSONBody defines body for CreateCredential for application/json ContentType.
 type CreateCredentialJSONBody struct {
 	Anon *struct {
@@ -2663,12 +2966,12 @@ type CreateCredentialJSONBody struct {
 		Username string `json:"username"`
 	} `json:"basic,omitempty"`
 	Custom *struct {
-		Email   string  `json:"email"`
+		Email   *string `json:"email,omitempty"`
 		Phone   *string `json:"phone"`
-		Secrets []struct {
+		Secrets *[]struct {
 			Name  string `json:"name"`
 			Value string `json:"value"`
-		} `json:"secrets"`
+		} `json:"secrets,omitempty"`
 	} `json:"custom,omitempty"`
 	CustomHeaders *[]struct {
 		Name  string `json:"name"`
@@ -2735,10 +3038,10 @@ type UpdateCustomCredentialJSONBody struct {
 	Email        *string `json:"email"`
 	Instructions *string `json:"instructions"`
 	Phone        *string `json:"phone"`
-	Secrets      []struct {
+	Secrets      *[]struct {
 		Name  string  `json:"name"`
 		Value *string `json:"value"`
-	} `json:"secrets"`
+	} `json:"secrets,omitempty"`
 }
 
 // LinkCredentialJSONBody defines body for LinkCredential for application/json ContentType.
@@ -2888,6 +3191,46 @@ type DownloadReportParams struct {
 	VersionId *openapi_types.UUID `form:"versionId,omitempty" json:"versionId,omitempty"`
 }
 
+// ListRoutesParams defines parameters for ListRoutes.
+type ListRoutesParams struct {
+	Page           *int                              `form:"page,omitempty" json:"page,omitempty"`
+	Size           *int                              `form:"size,omitempty" json:"size,omitempty"`
+	RouteTypes     *[]ListRoutesParamsRouteTypes     `form:"routeTypes,omitempty" json:"routeTypes,omitempty"`
+	InScope        *ListRoutesParamsInScope          `form:"inScope,omitempty" json:"inScope,omitempty"`
+	ApplicationId  *openapi_types.UUID               `form:"applicationId,omitempty" json:"applicationId,omitempty"`
+	Search         *string                           `form:"search,omitempty" json:"search,omitempty"`
+	Archived       *ListRoutesParamsArchived         `form:"archived,omitempty" json:"archived,omitempty"`
+	SeverityFilter *[]ListRoutesParamsSeverityFilter `form:"severityFilter,omitempty" json:"severityFilter,omitempty"`
+}
+
+// ListRoutesParamsRouteTypes defines parameters for ListRoutes.
+type ListRoutesParamsRouteTypes string
+
+// ListRoutesParamsInScope defines parameters for ListRoutes.
+type ListRoutesParamsInScope string
+
+// ListRoutesParamsArchived defines parameters for ListRoutes.
+type ListRoutesParamsArchived string
+
+// ListRoutesParamsSeverityFilter defines parameters for ListRoutes.
+type ListRoutesParamsSeverityFilter string
+
+// ArchiveRoutesJSONBody defines body for ArchiveRoutes for application/json ContentType.
+type ArchiveRoutesJSONBody struct {
+	RouteIds []openapi_types.UUID `json:"routeIds"`
+}
+
+// ArchiveRoutes200JSONResponseBodyOk defines model for ArchiveRoutes200JSONResponseBody.Ok.
+type ArchiveRoutes200JSONResponseBodyOk bool
+
+// DeleteArchivedRoutesJSONBody defines body for DeleteArchivedRoutes for application/json ContentType.
+type DeleteArchivedRoutesJSONBody struct {
+	RouteIds []openapi_types.UUID `json:"routeIds"`
+}
+
+// DeleteArchivedRoutes200JSONResponseBodyOk defines model for DeleteArchivedRoutes200JSONResponseBody.Ok.
+type DeleteArchivedRoutes200JSONResponseBodyOk bool
+
 // CreateScopeRuleJSONBody defines body for CreateScopeRule for application/json ContentType.
 type CreateScopeRuleJSONBody struct {
 	Action CreateScopeRuleJSONBodyAction `json:"action"`
@@ -2928,6 +3271,9 @@ type CreateCodeProviderConnectLinkJSONRequestBody CreateCodeProviderConnectLinkJ
 
 // AddCodeReviewRepositoriesJSONRequestBody defines body for AddCodeReviewRepositories for application/json ContentType.
 type AddCodeReviewRepositoriesJSONRequestBody AddCodeReviewRepositoriesJSONBody
+
+// UpdateCodeReviewRepositoryScopeJSONRequestBody defines body for UpdateCodeReviewRepositoryScope for application/json ContentType.
+type UpdateCodeReviewRepositoryScopeJSONRequestBody UpdateCodeReviewRepositoryScopeJSONBody
 
 // CreateCredentialJSONRequestBody defines body for CreateCredential for application/json ContentType.
 type CreateCredentialJSONRequestBody CreateCredentialJSONBody
@@ -2970,6 +3316,12 @@ type UpdateReportScopeJSONRequestBody UpdateReportScopeJSONBody
 
 // GenerateReportJSONRequestBody defines body for GenerateReport for application/json ContentType.
 type GenerateReportJSONRequestBody GenerateReportJSONBody
+
+// ArchiveRoutesJSONRequestBody defines body for ArchiveRoutes for application/json ContentType.
+type ArchiveRoutesJSONRequestBody ArchiveRoutesJSONBody
+
+// DeleteArchivedRoutesJSONRequestBody defines body for DeleteArchivedRoutes for application/json ContentType.
+type DeleteArchivedRoutesJSONRequestBody DeleteArchivedRoutesJSONBody
 
 // CreateScopeRuleJSONRequestBody defines body for CreateScopeRule for application/json ContentType.
 type CreateScopeRuleJSONRequestBody CreateScopeRuleJSONBody
@@ -3455,23 +3807,23 @@ type ClientInterface interface {
 	// CreateCodeProviderConnectLinkWithBody performs a POST /code-providers/connect-link (the `CreateCodeProviderConnectLink` operationId) request,
 	// with any type of body and a specified content type.
 	//
-	// Create a link that connects a code provider to the active workspace; only github (installs the Heist GitHub App) is supported for now. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
+	// Create a link that connects a code provider to the active workspace: github installs the Heist GitHub App; bitbucket and azure_devops sign in with OAuth. GitHub Enterprise is connected in the dashboard. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
 	CreateCodeProviderConnectLinkWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// CreateCodeProviderConnectLink performs a POST /code-providers/connect-link (the `CreateCodeProviderConnectLink` operationId) request.
 	// Takes a body of the `application/json` content type.
 	//
-	// Create a link that connects a code provider to the active workspace; only github (installs the Heist GitHub App) is supported for now. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
+	// Create a link that connects a code provider to the active workspace: github installs the Heist GitHub App; bitbucket and azure_devops sign in with OAuth. GitHub Enterprise is connected in the dashboard. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
 	CreateCodeProviderConnectLink(ctx context.Context, body CreateCodeProviderConnectLinkJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListCodeRepositories performs a GET /code-repositories (the `ListCodeRepositories` operationId) request.
 	//
-	// List the repositories a connected code provider can access, as shown in the dashboard's repository picker. Returns 409 when the provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+	// List the repositories a connected code provider can access, as shown in the dashboard's repository picker. Returns 409 when the provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 	ListCodeRepositories(ctx context.Context, params *ListCodeRepositoriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListCodeRepositoryBranches performs a GET /code-repositories/branches (the `ListCodeRepositoryBranches` operationId) request.
 	//
-	// List a repository's branches from a connected code provider, optionally filtered by search. Pass nextCursor as cursor to read the next page. project is required for Azure DevOps repositories. Returns 409 when the provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+	// List a repository's branches from a connected code provider, optionally filtered by search. Pass nextCursor as cursor to read the next page. project is required for Azure DevOps repositories. Returns 409 when the provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 	ListCodeRepositoryBranches(ctx context.Context, params *ListCodeRepositoryBranchesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListCodeReviewRepositories performs a GET /code-review-repositories (the `ListCodeReviewRepositories` operationId) request.
@@ -3482,19 +3834,31 @@ type ClientInterface interface {
 	// AddCodeReviewRepositoriesWithBody performs a POST /code-review-repositories (the `AddCodeReviewRepositories` operationId) request,
 	// with any type of body and a specified content type.
 	//
-	// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+	// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 	AddCodeReviewRepositoriesWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// AddCodeReviewRepositories performs a POST /code-review-repositories (the `AddCodeReviewRepositories` operationId) request.
 	// Takes a body of the `application/json` content type.
 	//
-	// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+	// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 	AddCodeReviewRepositories(ctx context.Context, body AddCodeReviewRepositoriesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// RemoveCodeReviewRepository performs a DELETE /code-review-repositories/{id} (the `RemoveCodeReviewRepository` operationId) request.
 	//
 	// Remove a repository from code review and return it. Applications linked to it are unlinked.
 	RemoveCodeReviewRepository(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateCodeReviewRepositoryScopeWithBody performs a POST /code-review-repositories/{id}/review-scope (the `UpdateCodeReviewRepositoryScope` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Replace the files a code review repository's reviews skip or cover, and return the repository. Applies to repository scans and PR reviews started afterwards; findings already reported for excluded files stay. A leading ./ is removed, and blank and duplicate patterns are dropped; each list holds at most 50 patterns of at most 200 characters, without a leading / or .. segment.
+	UpdateCodeReviewRepositoryScopeWithBody(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateCodeReviewRepositoryScope performs a POST /code-review-repositories/{id}/review-scope (the `UpdateCodeReviewRepositoryScope` operationId) request.
+	// Takes a body of the `application/json` content type.
+	//
+	// Replace the files a code review repository's reviews skip or cover, and return the repository. Applies to repository scans and PR reviews started afterwards; findings already reported for excluded files stay. A leading ./ is removed, and blank and duplicate patterns are dropped; each list holds at most 50 patterns of at most 200 characters, without a leading / or .. segment.
+	UpdateCodeReviewRepositoryScope(ctx context.Context, id openapi_types.UUID, body UpdateCodeReviewRepositoryScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListCredentials performs a GET /credentials (the `ListCredentials` operationId) request.
 	//
@@ -3504,13 +3868,13 @@ type ClientInterface interface {
 	// CreateCredentialWithBody performs a POST /credentials (the `CreateCredential` operationId) request,
 	// with any type of body and a specified content type.
 	//
-	// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT and CUSTOM use a generated Heist email. SMS and CUSTOM use an available Heist phone. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
+	// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT uses a generated Heist email and SMS an available Heist phone, both from credential_creation_options. CUSTOM is signed in by Heist's custom authentication agent following your instructions: omit custom.email and custom.phone to have Heist assign a generated email and, while one is free, an SMS number, which the response returns in hint so the user can set up the account. In CUSTOM instructions refer to these as @EMAIL and @PHONE and to secrets as @NAME; put secret values only in custom.secrets, never in instructions. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
 	CreateCredentialWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// CreateCredential performs a POST /credentials (the `CreateCredential` operationId) request.
 	// Takes a body of the `application/json` content type.
 	//
-	// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT and CUSTOM use a generated Heist email. SMS and CUSTOM use an available Heist phone. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
+	// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT uses a generated Heist email and SMS an available Heist phone, both from credential_creation_options. CUSTOM is signed in by Heist's custom authentication agent following your instructions: omit custom.email and custom.phone to have Heist assign a generated email and, while one is free, an SMS number, which the response returns in hint so the user can set up the account. In CUSTOM instructions refer to these as @EMAIL and @PHONE and to secrets as @NAME; put secret values only in custom.secrets, never in instructions. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
 	CreateCredential(ctx context.Context, body CreateCredentialJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// CredentialCreationOptions performs a GET /credentials/options (the `CredentialCreationOptions` operationId) request.
@@ -3531,13 +3895,13 @@ type ClientInterface interface {
 	// UpdateCustomCredentialWithBody performs a POST /credentials/{id}/custom (the `UpdateCustomCredential` operationId) request,
 	// with any type of body and a specified content type.
 	//
-	// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
+	// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them; omit secrets to keep all of them. Refer to the email, phone and secrets in instructions as @EMAIL, @PHONE and @NAME, and never put secret values in instructions. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
 	UpdateCustomCredentialWithBody(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// UpdateCustomCredential performs a POST /credentials/{id}/custom (the `UpdateCustomCredential` operationId) request.
 	// Takes a body of the `application/json` content type.
 	//
-	// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
+	// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them; omit secrets to keep all of them. Refer to the email, phone and secrets in instructions as @EMAIL, @PHONE and @NAME, and never put secret values in instructions. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
 	UpdateCustomCredential(ctx context.Context, id openapi_types.UUID, body UpdateCustomCredentialJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// LinkCredentialWithBody performs a POST /credentials/{id}/link (the `LinkCredential` operationId) request,
@@ -3753,6 +4117,21 @@ type ClientInterface interface {
 	// List ended application, route and code review processes, newest first. Pass nextCursor back as cursor for the next page; it is null on the last page. History reaches back as far as workflow retention (30 days by default).
 	ListPastProcesses(ctx context.Context, params *ListPastProcessesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetProcessingStatus performs a GET /processing (the `GetProcessingStatus` operationId) request.
+	//
+	// Whether workspace processing is paused. While paused, Heist starts no new testing work.
+	GetProcessingStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PauseProcessing performs a POST /processing/pause (the `PauseProcessing` operationId) request.
+	//
+	// Pause workspace processing: stops the workspace's workers and cancels running agent pentests and validations. Other workflows wait and continue after resume_processing. Returns once processing has stopped, which can take about a minute; if stopping fails, processing stays paused and you can retry.
+	PauseProcessing(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ResumeProcessing performs a POST /processing/resume (the `ResumeProcessing` operationId) request.
+	//
+	// Resume workspace processing so paused workflows continue. Returns the resulting paused state.
+	ResumeProcessing(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetReportExport performs a GET /report-exports/{id} (the `GetReportExport` operationId) request.
 	//
 	// Observe an export using its exportId and list its reports. COMPLETED means the workflow finished writing all PDFs. NOT_FOUND means no retained workflow exists; persisted reports remain available after workflow history expires. Failed workflows can have partial reports and are never reported as successful. Canceled customers retain read access.
@@ -3818,6 +4197,40 @@ type ClientInterface interface {
 	//
 	// Get a one-hour signed PDF download URL for a report version without a browser. Omit versionId for the latest version. Canceled customers retain download access.
 	DownloadReport(ctx context.Context, id openapi_types.UUID, params *DownloadReportParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListRoutes performs a GET /routes (the `ListRoutes` operationId) request.
+	//
+	// List routes Heist has discovered in the active workspace, with published finding aggregates. Returns active routes unless archived is true. Repeat routeTypes/severityFilter query parameters to filter on multiple values; severityFilter NONE matches routes without published findings.
+	ListRoutes(ctx context.Context, params *ListRoutesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ArchiveRoutesWithBody performs a POST /routes/archive (the `ArchiveRoutes` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Archive routes so Heist stops testing them. Archives nothing when any route is not found.
+	ArchiveRoutesWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ArchiveRoutes performs a POST /routes/archive (the `ArchiveRoutes` operationId) request.
+	// Takes a body of the `application/json` content type.
+	//
+	// Archive routes so Heist stops testing them. Archives nothing when any route is not found.
+	ArchiveRoutes(ctx context.Context, body ArchiveRoutesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteArchivedRoutesWithBody performs a POST /routes/delete-archived (the `DeleteArchivedRoutes` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Permanently delete archived routes and their findings. Routes that are not archived are skipped; deletedCount says how many were deleted.
+	DeleteArchivedRoutesWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteArchivedRoutes performs a POST /routes/delete-archived (the `DeleteArchivedRoutes` operationId) request.
+	// Takes a body of the `application/json` content type.
+	//
+	// Permanently delete archived routes and their findings. Routes that are not archived are skipped; deletedCount says how many were deleted.
+	DeleteArchivedRoutes(ctx context.Context, body DeleteArchivedRoutesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetRoute performs a GET /routes/{id} (the `GetRoute` operationId) request.
+	//
+	// Get a discovered route in the active workspace.
+	GetRoute(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListScopeRules performs a GET /scope/rules (the `ListScopeRules` operationId) request.
 	//
@@ -4199,7 +4612,7 @@ func (c *Client) StartCredentialSignup(ctx context.Context, id openapi_types.UUI
 // CreateCodeProviderConnectLinkWithBody performs a POST /code-providers/connect-link (the `CreateCodeProviderConnectLink` operationId) request,
 // with any type of body and a specified content type.
 //
-// Create a link that connects a code provider to the active workspace; only github (installs the Heist GitHub App) is supported for now. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
+// Create a link that connects a code provider to the active workspace: github installs the Heist GitHub App; bitbucket and azure_devops sign in with OAuth. GitHub Enterprise is connected in the dashboard. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
 func (c *Client) CreateCodeProviderConnectLinkWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateCodeProviderConnectLinkRequestWithBody(c.Server, contentType, body)
 	if err != nil {
@@ -4215,7 +4628,7 @@ func (c *Client) CreateCodeProviderConnectLinkWithBody(ctx context.Context, cont
 // CreateCodeProviderConnectLink performs a POST /code-providers/connect-link (the `CreateCodeProviderConnectLink` operationId) request.
 // Takes a body of the `application/json` content type.
 //
-// Create a link that connects a code provider to the active workspace; only github (installs the Heist GitHub App) is supported for now. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
+// Create a link that connects a code provider to the active workspace: github installs the Heist GitHub App; bitbucket and azure_devops sign in with OAuth. GitHub Enterprise is connected in the dashboard. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
 func (c *Client) CreateCodeProviderConnectLink(ctx context.Context, body CreateCodeProviderConnectLinkJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateCodeProviderConnectLinkRequest(c.Server, body)
 	if err != nil {
@@ -4230,7 +4643,7 @@ func (c *Client) CreateCodeProviderConnectLink(ctx context.Context, body CreateC
 
 // ListCodeRepositories performs a GET /code-repositories (the `ListCodeRepositories` operationId) request.
 //
-// List the repositories a connected code provider can access, as shown in the dashboard's repository picker. Returns 409 when the provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+// List the repositories a connected code provider can access, as shown in the dashboard's repository picker. Returns 409 when the provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 func (c *Client) ListCodeRepositories(ctx context.Context, params *ListCodeRepositoriesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListCodeRepositoriesRequest(c.Server, params)
 	if err != nil {
@@ -4245,7 +4658,7 @@ func (c *Client) ListCodeRepositories(ctx context.Context, params *ListCodeRepos
 
 // ListCodeRepositoryBranches performs a GET /code-repositories/branches (the `ListCodeRepositoryBranches` operationId) request.
 //
-// List a repository's branches from a connected code provider, optionally filtered by search. Pass nextCursor as cursor to read the next page. project is required for Azure DevOps repositories. Returns 409 when the provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+// List a repository's branches from a connected code provider, optionally filtered by search. Pass nextCursor as cursor to read the next page. project is required for Azure DevOps repositories. Returns 409 when the provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 func (c *Client) ListCodeRepositoryBranches(ctx context.Context, params *ListCodeRepositoryBranchesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListCodeRepositoryBranchesRequest(c.Server, params)
 	if err != nil {
@@ -4276,7 +4689,7 @@ func (c *Client) ListCodeReviewRepositories(ctx context.Context, params *ListCod
 // AddCodeReviewRepositoriesWithBody performs a POST /code-review-repositories (the `AddCodeReviewRepositories` operationId) request,
 // with any type of body and a specified content type.
 //
-// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 func (c *Client) AddCodeReviewRepositoriesWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddCodeReviewRepositoriesRequestWithBody(c.Server, contentType, body)
 	if err != nil {
@@ -4292,7 +4705,7 @@ func (c *Client) AddCodeReviewRepositoriesWithBody(ctx context.Context, contentT
 // AddCodeReviewRepositories performs a POST /code-review-repositories (the `AddCodeReviewRepositories` operationId) request.
 // Takes a body of the `application/json` content type.
 //
-// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 func (c *Client) AddCodeReviewRepositories(ctx context.Context, body AddCodeReviewRepositoriesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddCodeReviewRepositoriesRequest(c.Server, body)
 	if err != nil {
@@ -4310,6 +4723,38 @@ func (c *Client) AddCodeReviewRepositories(ctx context.Context, body AddCodeRevi
 // Remove a repository from code review and return it. Applications linked to it are unlinked.
 func (c *Client) RemoveCodeReviewRepository(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewRemoveCodeReviewRepositoryRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateCodeReviewRepositoryScopeWithBody performs a POST /code-review-repositories/{id}/review-scope (the `UpdateCodeReviewRepositoryScope` operationId) request,
+// with any type of body and a specified content type.
+//
+// Replace the files a code review repository's reviews skip or cover, and return the repository. Applies to repository scans and PR reviews started afterwards; findings already reported for excluded files stay. A leading ./ is removed, and blank and duplicate patterns are dropped; each list holds at most 50 patterns of at most 200 characters, without a leading / or .. segment.
+func (c *Client) UpdateCodeReviewRepositoryScopeWithBody(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateCodeReviewRepositoryScopeRequestWithBody(c.Server, id, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateCodeReviewRepositoryScope performs a POST /code-review-repositories/{id}/review-scope (the `UpdateCodeReviewRepositoryScope` operationId) request.
+// Takes a body of the `application/json` content type.
+//
+// Replace the files a code review repository's reviews skip or cover, and return the repository. Applies to repository scans and PR reviews started afterwards; findings already reported for excluded files stay. A leading ./ is removed, and blank and duplicate patterns are dropped; each list holds at most 50 patterns of at most 200 characters, without a leading / or .. segment.
+func (c *Client) UpdateCodeReviewRepositoryScope(ctx context.Context, id openapi_types.UUID, body UpdateCodeReviewRepositoryScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateCodeReviewRepositoryScopeRequest(c.Server, id, body)
 	if err != nil {
 		return nil, err
 	}
@@ -4338,7 +4783,7 @@ func (c *Client) ListCredentials(ctx context.Context, reqEditors ...RequestEdito
 // CreateCredentialWithBody performs a POST /credentials (the `CreateCredential` operationId) request,
 // with any type of body and a specified content type.
 //
-// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT and CUSTOM use a generated Heist email. SMS and CUSTOM use an available Heist phone. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
+// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT uses a generated Heist email and SMS an available Heist phone, both from credential_creation_options. CUSTOM is signed in by Heist's custom authentication agent following your instructions: omit custom.email and custom.phone to have Heist assign a generated email and, while one is free, an SMS number, which the response returns in hint so the user can set up the account. In CUSTOM instructions refer to these as @EMAIL and @PHONE and to secrets as @NAME; put secret values only in custom.secrets, never in instructions. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
 func (c *Client) CreateCredentialWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateCredentialRequestWithBody(c.Server, contentType, body)
 	if err != nil {
@@ -4354,7 +4799,7 @@ func (c *Client) CreateCredentialWithBody(ctx context.Context, contentType strin
 // CreateCredential performs a POST /credentials (the `CreateCredential` operationId) request.
 // Takes a body of the `application/json` content type.
 //
-// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT and CUSTOM use a generated Heist email. SMS and CUSTOM use an available Heist phone. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
+// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT uses a generated Heist email and SMS an available Heist phone, both from credential_creation_options. CUSTOM is signed in by Heist's custom authentication agent following your instructions: omit custom.email and custom.phone to have Heist assign a generated email and, while one is free, an SMS number, which the response returns in hint so the user can set up the account. In CUSTOM instructions refer to these as @EMAIL and @PHONE and to secrets as @NAME; put secret values only in custom.secrets, never in instructions. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
 func (c *Client) CreateCredential(ctx context.Context, body CreateCredentialJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateCredentialRequest(c.Server, body)
 	if err != nil {
@@ -4415,7 +4860,7 @@ func (c *Client) GetCredential(ctx context.Context, id openapi_types.UUID, reqEd
 // UpdateCustomCredentialWithBody performs a POST /credentials/{id}/custom (the `UpdateCustomCredential` operationId) request,
 // with any type of body and a specified content type.
 //
-// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
+// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them; omit secrets to keep all of them. Refer to the email, phone and secrets in instructions as @EMAIL, @PHONE and @NAME, and never put secret values in instructions. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
 func (c *Client) UpdateCustomCredentialWithBody(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateCustomCredentialRequestWithBody(c.Server, id, contentType, body)
 	if err != nil {
@@ -4431,7 +4876,7 @@ func (c *Client) UpdateCustomCredentialWithBody(ctx context.Context, id openapi_
 // UpdateCustomCredential performs a POST /credentials/{id}/custom (the `UpdateCustomCredential` operationId) request.
 // Takes a body of the `application/json` content type.
 //
-// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
+// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them; omit secrets to keep all of them. Refer to the email, phone and secrets in instructions as @EMAIL, @PHONE and @NAME, and never put secret values in instructions. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
 func (c *Client) UpdateCustomCredential(ctx context.Context, id openapi_types.UUID, body UpdateCustomCredentialJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateCustomCredentialRequest(c.Server, id, body)
 	if err != nil {
@@ -5047,6 +5492,51 @@ func (c *Client) ListPastProcesses(ctx context.Context, params *ListPastProcesse
 	return c.Client.Do(req)
 }
 
+// GetProcessingStatus performs a GET /processing (the `GetProcessingStatus` operationId) request.
+//
+// Whether workspace processing is paused. While paused, Heist starts no new testing work.
+func (c *Client) GetProcessingStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetProcessingStatusRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PauseProcessing performs a POST /processing/pause (the `PauseProcessing` operationId) request.
+//
+// Pause workspace processing: stops the workspace's workers and cancels running agent pentests and validations. Other workflows wait and continue after resume_processing. Returns once processing has stopped, which can take about a minute; if stopping fails, processing stays paused and you can retry.
+func (c *Client) PauseProcessing(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPauseProcessingRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ResumeProcessing performs a POST /processing/resume (the `ResumeProcessing` operationId) request.
+//
+// Resume workspace processing so paused workflows continue. Returns the resulting paused state.
+func (c *Client) ResumeProcessing(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewResumeProcessingRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GetReportExport performs a GET /report-exports/{id} (the `GetReportExport` operationId) request.
 //
 // Observe an export using its exportId and list its reports. COMPLETED means the workflow finished writing all PDFs. NOT_FOUND means no retained workflow exists; persisted reports remain available after workflow history expires. Failed workflows can have partial reports and are never reported as successful. Canceled customers retain read access.
@@ -5223,6 +5713,100 @@ func (c *Client) GetReport(ctx context.Context, id openapi_types.UUID, reqEditor
 // Get a one-hour signed PDF download URL for a report version without a browser. Omit versionId for the latest version. Canceled customers retain download access.
 func (c *Client) DownloadReport(ctx context.Context, id openapi_types.UUID, params *DownloadReportParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDownloadReportRequest(c.Server, id, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListRoutes performs a GET /routes (the `ListRoutes` operationId) request.
+//
+// List routes Heist has discovered in the active workspace, with published finding aggregates. Returns active routes unless archived is true. Repeat routeTypes/severityFilter query parameters to filter on multiple values; severityFilter NONE matches routes without published findings.
+func (c *Client) ListRoutes(ctx context.Context, params *ListRoutesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListRoutesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ArchiveRoutesWithBody performs a POST /routes/archive (the `ArchiveRoutes` operationId) request,
+// with any type of body and a specified content type.
+//
+// Archive routes so Heist stops testing them. Archives nothing when any route is not found.
+func (c *Client) ArchiveRoutesWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewArchiveRoutesRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ArchiveRoutes performs a POST /routes/archive (the `ArchiveRoutes` operationId) request.
+// Takes a body of the `application/json` content type.
+//
+// Archive routes so Heist stops testing them. Archives nothing when any route is not found.
+func (c *Client) ArchiveRoutes(ctx context.Context, body ArchiveRoutesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewArchiveRoutesRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteArchivedRoutesWithBody performs a POST /routes/delete-archived (the `DeleteArchivedRoutes` operationId) request,
+// with any type of body and a specified content type.
+//
+// Permanently delete archived routes and their findings. Routes that are not archived are skipped; deletedCount says how many were deleted.
+func (c *Client) DeleteArchivedRoutesWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteArchivedRoutesRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteArchivedRoutes performs a POST /routes/delete-archived (the `DeleteArchivedRoutes` operationId) request.
+// Takes a body of the `application/json` content type.
+//
+// Permanently delete archived routes and their findings. Routes that are not archived are skipped; deletedCount says how many were deleted.
+func (c *Client) DeleteArchivedRoutes(ctx context.Context, body DeleteArchivedRoutesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteArchivedRoutesRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetRoute performs a GET /routes/{id} (the `GetRoute` operationId) request.
+//
+// Get a discovered route in the active workspace.
+func (c *Client) GetRoute(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetRouteRequest(c.Server, id)
 	if err != nil {
 		return nil, err
 	}
@@ -6356,6 +6940,53 @@ func NewRemoveCodeReviewRepositoryRequest(server string, id openapi_types.UUID) 
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewUpdateCodeReviewRepositoryScopeRequest calls the generic UpdateCodeReviewRepositoryScope builder with application/json body
+func NewUpdateCodeReviewRepositoryScopeRequest(server string, id openapi_types.UUID, body UpdateCodeReviewRepositoryScopeJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := runtime.JSONMarshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateCodeReviewRepositoryScopeRequestWithBody(server, id, "application/json", bodyReader)
+}
+
+// NewUpdateCodeReviewRepositoryScopeRequestWithBody constructs an http.Request for the UpdateCodeReviewRepositoryScope method, with any body, and a specified content type
+func NewUpdateCodeReviewRepositoryScopeRequestWithBody(server string, id openapi_types.UUID, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "id", id, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: "uuid"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/code-review-repositories/" + pathParam0 + "/review-scope"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -7813,6 +8444,87 @@ func NewListPastProcessesRequest(server string, params *ListPastProcessesParams)
 	return req, nil
 }
 
+// NewGetProcessingStatusRequest constructs an http.Request for the GetProcessingStatus method
+func NewGetProcessingStatusRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/processing"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPauseProcessingRequest constructs an http.Request for the PauseProcessing method
+func NewPauseProcessingRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/processing/pause"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewResumeProcessingRequest constructs an http.Request for the ResumeProcessing method
+func NewResumeProcessingRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/processing/resume"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetReportExportRequest constructs an http.Request for the GetReportExport method
 func NewGetReportExportRequest(server string, id openapi_types.UUID) (*http.Request, error) {
 	var err error
@@ -8174,6 +8886,258 @@ func NewDownloadReportRequest(server string, id openapi_types.UUID, params *Down
 			rawQueryFragments = append(rawQueryFragments, encoded)
 		}
 		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListRoutesRequest constructs an http.Request for the ListRoutes method
+func NewListRoutesRequest(server string, params *ListRoutesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/routes"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Size != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "size", *params.Size, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.RouteTypes != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "routeTypes", *params.RouteTypes, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.InScope != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "inScope", *params.InScope, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.ApplicationId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "applicationId", *params.ApplicationId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "uuid"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Search != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "search", *params.Search, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Archived != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "archived", *params.Archived, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.SeverityFilter != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "severityFilter", *params.SeverityFilter, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewArchiveRoutesRequest calls the generic ArchiveRoutes builder with application/json body
+func NewArchiveRoutesRequest(server string, body ArchiveRoutesJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := runtime.JSONMarshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewArchiveRoutesRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewArchiveRoutesRequestWithBody constructs an http.Request for the ArchiveRoutes method, with any body, and a specified content type
+func NewArchiveRoutesRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/routes/archive"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteArchivedRoutesRequest calls the generic DeleteArchivedRoutes builder with application/json body
+func NewDeleteArchivedRoutesRequest(server string, body DeleteArchivedRoutesJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := runtime.JSONMarshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewDeleteArchivedRoutesRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewDeleteArchivedRoutesRequestWithBody constructs an http.Request for the DeleteArchivedRoutes method, with any body, and a specified content type
+func NewDeleteArchivedRoutesRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/routes/delete-archived"
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetRouteRequest constructs an http.Request for the GetRoute method
+func NewGetRouteRequest(server string, id openapi_types.UUID) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "id", id, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: "uuid"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := "/routes/" + pathParam0
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
 	}
 
 	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
@@ -8547,7 +9511,7 @@ type ClientWithResponsesInterface interface {
 	// CreateCodeProviderConnectLinkWithBodyWithResponse performs a POST /code-providers/connect-link (the `CreateCodeProviderConnectLink` operationId) request,
 	// with any type of body and a specified content type.
 	//
-	// Create a link that connects a code provider to the active workspace; only github (installs the Heist GitHub App) is supported for now. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
+	// Create a link that connects a code provider to the active workspace: github installs the Heist GitHub App; bitbucket and azure_devops sign in with OAuth. GitHub Enterprise is connected in the dashboard. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateCodeProviderConnectLinkWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCodeProviderConnectLinkResponse, error)
@@ -8555,19 +9519,19 @@ type ClientWithResponsesInterface interface {
 	// CreateCodeProviderConnectLinkWithResponse performs a POST /code-providers/connect-link (the `CreateCodeProviderConnectLink` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Create a link that connects a code provider to the active workspace; only github (installs the Heist GitHub App) is supported for now. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
+	// Create a link that connects a code provider to the active workspace: github installs the Heist GitHub App; bitbucket and azure_devops sign in with OAuth. GitHub Enterprise is connected in the dashboard. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
 	CreateCodeProviderConnectLinkWithResponse(ctx context.Context, body CreateCodeProviderConnectLinkJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCodeProviderConnectLinkResponse, error)
 
 	// ListCodeRepositoriesWithResponse performs a GET /code-repositories (the `ListCodeRepositories` operationId) request.
 	//
-	// List the repositories a connected code provider can access, as shown in the dashboard's repository picker. Returns 409 when the provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+	// List the repositories a connected code provider can access, as shown in the dashboard's repository picker. Returns 409 when the provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListCodeRepositoriesWithResponse(ctx context.Context, params *ListCodeRepositoriesParams, reqEditors ...RequestEditorFn) (*ListCodeRepositoriesResponse, error)
 
 	// ListCodeRepositoryBranchesWithResponse performs a GET /code-repositories/branches (the `ListCodeRepositoryBranches` operationId) request.
 	//
-	// List a repository's branches from a connected code provider, optionally filtered by search. Pass nextCursor as cursor to read the next page. project is required for Azure DevOps repositories. Returns 409 when the provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+	// List a repository's branches from a connected code provider, optionally filtered by search. Pass nextCursor as cursor to read the next page. project is required for Azure DevOps repositories. Returns 409 when the provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListCodeRepositoryBranchesWithResponse(ctx context.Context, params *ListCodeRepositoryBranchesParams, reqEditors ...RequestEditorFn) (*ListCodeRepositoryBranchesResponse, error)
@@ -8582,7 +9546,7 @@ type ClientWithResponsesInterface interface {
 	// AddCodeReviewRepositoriesWithBodyWithResponse performs a POST /code-review-repositories (the `AddCodeReviewRepositories` operationId) request,
 	// with any type of body and a specified content type.
 	//
-	// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+	// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 	//
 	// Returns a wrapper object for the known response body format(s).
 	AddCodeReviewRepositoriesWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddCodeReviewRepositoriesResponse, error)
@@ -8590,7 +9554,7 @@ type ClientWithResponsesInterface interface {
 	// AddCodeReviewRepositoriesWithResponse performs a POST /code-review-repositories (the `AddCodeReviewRepositories` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+	// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 	AddCodeReviewRepositoriesWithResponse(ctx context.Context, body AddCodeReviewRepositoriesJSONRequestBody, reqEditors ...RequestEditorFn) (*AddCodeReviewRepositoriesResponse, error)
 
 	// RemoveCodeReviewRepositoryWithResponse performs a DELETE /code-review-repositories/{id} (the `RemoveCodeReviewRepository` operationId) request.
@@ -8599,6 +9563,20 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	RemoveCodeReviewRepositoryWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*RemoveCodeReviewRepositoryResponse, error)
+
+	// UpdateCodeReviewRepositoryScopeWithBodyWithResponse performs a POST /code-review-repositories/{id}/review-scope (the `UpdateCodeReviewRepositoryScope` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Replace the files a code review repository's reviews skip or cover, and return the repository. Applies to repository scans and PR reviews started afterwards; findings already reported for excluded files stay. A leading ./ is removed, and blank and duplicate patterns are dropped; each list holds at most 50 patterns of at most 200 characters, without a leading / or .. segment.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	UpdateCodeReviewRepositoryScopeWithBodyWithResponse(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCodeReviewRepositoryScopeResponse, error)
+
+	// UpdateCodeReviewRepositoryScopeWithResponse performs a POST /code-review-repositories/{id}/review-scope (the `UpdateCodeReviewRepositoryScope` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Replace the files a code review repository's reviews skip or cover, and return the repository. Applies to repository scans and PR reviews started afterwards; findings already reported for excluded files stay. A leading ./ is removed, and blank and duplicate patterns are dropped; each list holds at most 50 patterns of at most 200 characters, without a leading / or .. segment.
+	UpdateCodeReviewRepositoryScopeWithResponse(ctx context.Context, id openapi_types.UUID, body UpdateCodeReviewRepositoryScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCodeReviewRepositoryScopeResponse, error)
 
 	// ListCredentialsWithResponse performs a GET /credentials (the `ListCredentials` operationId) request.
 	//
@@ -8610,7 +9588,7 @@ type ClientWithResponsesInterface interface {
 	// CreateCredentialWithBodyWithResponse performs a POST /credentials (the `CreateCredential` operationId) request,
 	// with any type of body and a specified content type.
 	//
-	// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT and CUSTOM use a generated Heist email. SMS and CUSTOM use an available Heist phone. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
+	// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT uses a generated Heist email and SMS an available Heist phone, both from credential_creation_options. CUSTOM is signed in by Heist's custom authentication agent following your instructions: omit custom.email and custom.phone to have Heist assign a generated email and, while one is free, an SMS number, which the response returns in hint so the user can set up the account. In CUSTOM instructions refer to these as @EMAIL and @PHONE and to secrets as @NAME; put secret values only in custom.secrets, never in instructions. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateCredentialWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCredentialResponse, error)
@@ -8618,7 +9596,7 @@ type ClientWithResponsesInterface interface {
 	// CreateCredentialWithResponse performs a POST /credentials (the `CreateCredential` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT and CUSTOM use a generated Heist email. SMS and CUSTOM use an available Heist phone. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
+	// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT uses a generated Heist email and SMS an available Heist phone, both from credential_creation_options. CUSTOM is signed in by Heist's custom authentication agent following your instructions: omit custom.email and custom.phone to have Heist assign a generated email and, while one is free, an SMS number, which the response returns in hint so the user can set up the account. In CUSTOM instructions refer to these as @EMAIL and @PHONE and to secrets as @NAME; put secret values only in custom.secrets, never in instructions. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
 	CreateCredentialWithResponse(ctx context.Context, body CreateCredentialJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCredentialResponse, error)
 
 	// CredentialCreationOptionsWithResponse performs a GET /credentials/options (the `CredentialCreationOptions` operationId) request.
@@ -8645,7 +9623,7 @@ type ClientWithResponsesInterface interface {
 	// UpdateCustomCredentialWithBodyWithResponse performs a POST /credentials/{id}/custom (the `UpdateCustomCredential` operationId) request,
 	// with any type of body and a specified content type.
 	//
-	// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
+	// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them; omit secrets to keep all of them. Refer to the email, phone and secrets in instructions as @EMAIL, @PHONE and @NAME, and never put secret values in instructions. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	UpdateCustomCredentialWithBodyWithResponse(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCustomCredentialResponse, error)
@@ -8653,7 +9631,7 @@ type ClientWithResponsesInterface interface {
 	// UpdateCustomCredentialWithResponse performs a POST /credentials/{id}/custom (the `UpdateCustomCredential` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
+	// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them; omit secrets to keep all of them. Refer to the email, phone and secrets in instructions as @EMAIL, @PHONE and @NAME, and never put secret values in instructions. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
 	UpdateCustomCredentialWithResponse(ctx context.Context, id openapi_types.UUID, body UpdateCustomCredentialJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCustomCredentialResponse, error)
 
 	// LinkCredentialWithBodyWithResponse performs a POST /credentials/{id}/link (the `LinkCredential` operationId) request,
@@ -8929,6 +9907,27 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	ListPastProcessesWithResponse(ctx context.Context, params *ListPastProcessesParams, reqEditors ...RequestEditorFn) (*ListPastProcessesResponse, error)
 
+	// GetProcessingStatusWithResponse performs a GET /processing (the `GetProcessingStatus` operationId) request.
+	//
+	// Whether workspace processing is paused. While paused, Heist starts no new testing work.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetProcessingStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetProcessingStatusResponse, error)
+
+	// PauseProcessingWithResponse performs a POST /processing/pause (the `PauseProcessing` operationId) request.
+	//
+	// Pause workspace processing: stops the workspace's workers and cancels running agent pentests and validations. Other workflows wait and continue after resume_processing. Returns once processing has stopped, which can take about a minute; if stopping fails, processing stays paused and you can retry.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PauseProcessingWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PauseProcessingResponse, error)
+
+	// ResumeProcessingWithResponse performs a POST /processing/resume (the `ResumeProcessing` operationId) request.
+	//
+	// Resume workspace processing so paused workflows continue. Returns the resulting paused state.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ResumeProcessingWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ResumeProcessingResponse, error)
+
 	// GetReportExportWithResponse performs a GET /report-exports/{id} (the `GetReportExport` operationId) request.
 	//
 	// Observe an export using its exportId and list its reports. COMPLETED means the workflow finished writing all PDFs. NOT_FOUND means no retained workflow exists; persisted reports remain available after workflow history expires. Failed workflows can have partial reports and are never reported as successful. Canceled customers retain read access.
@@ -9012,6 +10011,48 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DownloadReportWithResponse(ctx context.Context, id openapi_types.UUID, params *DownloadReportParams, reqEditors ...RequestEditorFn) (*DownloadReportResponse, error)
+
+	// ListRoutesWithResponse performs a GET /routes (the `ListRoutes` operationId) request.
+	//
+	// List routes Heist has discovered in the active workspace, with published finding aggregates. Returns active routes unless archived is true. Repeat routeTypes/severityFilter query parameters to filter on multiple values; severityFilter NONE matches routes without published findings.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListRoutesWithResponse(ctx context.Context, params *ListRoutesParams, reqEditors ...RequestEditorFn) (*ListRoutesResponse, error)
+
+	// ArchiveRoutesWithBodyWithResponse performs a POST /routes/archive (the `ArchiveRoutes` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Archive routes so Heist stops testing them. Archives nothing when any route is not found.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ArchiveRoutesWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ArchiveRoutesResponse, error)
+
+	// ArchiveRoutesWithResponse performs a POST /routes/archive (the `ArchiveRoutes` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Archive routes so Heist stops testing them. Archives nothing when any route is not found.
+	ArchiveRoutesWithResponse(ctx context.Context, body ArchiveRoutesJSONRequestBody, reqEditors ...RequestEditorFn) (*ArchiveRoutesResponse, error)
+
+	// DeleteArchivedRoutesWithBodyWithResponse performs a POST /routes/delete-archived (the `DeleteArchivedRoutes` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Permanently delete archived routes and their findings. Routes that are not archived are skipped; deletedCount says how many were deleted.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteArchivedRoutesWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*DeleteArchivedRoutesResponse, error)
+
+	// DeleteArchivedRoutesWithResponse performs a POST /routes/delete-archived (the `DeleteArchivedRoutes` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Permanently delete archived routes and their findings. Routes that are not archived are skipped; deletedCount says how many were deleted.
+	DeleteArchivedRoutesWithResponse(ctx context.Context, body DeleteArchivedRoutesJSONRequestBody, reqEditors ...RequestEditorFn) (*DeleteArchivedRoutesResponse, error)
+
+	// GetRouteWithResponse performs a GET /routes/{id} (the `GetRoute` operationId) request.
+	//
+	// Get a discovered route in the active workspace.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetRouteWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetRouteResponse, error)
 
 	// ListScopeRulesWithResponse performs a GET /scope/rules (the `ListScopeRules` operationId) request.
 	//
@@ -10856,6 +11897,82 @@ func (r RemoveCodeReviewRepositoryResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r RemoveCodeReviewRepositoryResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type UpdateCodeReviewRepositoryScopeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *CodeReviewRepository
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r UpdateCodeReviewRepositoryScopeResponse) GetJSON200() *CodeReviewRepository {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r UpdateCodeReviewRepositoryScopeResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r UpdateCodeReviewRepositoryScopeResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r UpdateCodeReviewRepositoryScopeResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r UpdateCodeReviewRepositoryScopeResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r UpdateCodeReviewRepositoryScopeResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r UpdateCodeReviewRepositoryScopeResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateCodeReviewRepositoryScopeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateCodeReviewRepositoryScopeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r UpdateCodeReviewRepositoryScopeResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -13716,6 +14833,246 @@ func (r ListPastProcessesResponse) ContentType() string {
 	return ""
 }
 
+type GetProcessingStatusResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *struct {
+		Paused bool `json:"paused"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetProcessingStatusResponse) GetJSON200() *struct {
+	Paused bool `json:"paused"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetProcessingStatusResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetProcessingStatusResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetProcessingStatusResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetProcessingStatusResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetProcessingStatusResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetProcessingStatusResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetProcessingStatusResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetProcessingStatusResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetProcessingStatusResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PauseProcessingResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *struct {
+		Paused bool `json:"paused"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PauseProcessingResponse) GetJSON200() *struct {
+	Paused bool `json:"paused"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PauseProcessingResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r PauseProcessingResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r PauseProcessingResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PauseProcessingResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PauseProcessingResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PauseProcessingResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PauseProcessingResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PauseProcessingResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PauseProcessingResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ResumeProcessingResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *struct {
+		Paused bool `json:"paused"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ResumeProcessingResponse) GetJSON200() *struct {
+	Paused bool `json:"paused"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ResumeProcessingResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r ResumeProcessingResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r ResumeProcessingResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ResumeProcessingResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ResumeProcessingResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ResumeProcessingResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ResumeProcessingResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ResumeProcessingResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ResumeProcessingResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetReportExportResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -14524,6 +15881,332 @@ func (r DownloadReportResponse) ContentType() string {
 	return ""
 }
 
+type ListRoutesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *struct {
+		Items []Route `json:"items"`
+		Page  int     `json:"page"`
+		Size  int     `json:"size"`
+		Total int     `json:"total"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListRoutesResponse) GetJSON200() *struct {
+	Items []Route `json:"items"`
+	Page  int     `json:"page"`
+	Size  int     `json:"size"`
+	Total int     `json:"total"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ListRoutesResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r ListRoutesResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r ListRoutesResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListRoutesResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListRoutesResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListRoutesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListRoutesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListRoutesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListRoutesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ArchiveRoutesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *struct {
+		ArchivedCount int                                `json:"archivedCount"`
+		Ok            ArchiveRoutes200JSONResponseBodyOk `json:"ok"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ArchiveRoutesResponse) GetJSON200() *struct {
+	ArchivedCount int                                `json:"archivedCount"`
+	Ok            ArchiveRoutes200JSONResponseBodyOk `json:"ok"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ArchiveRoutesResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r ArchiveRoutesResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r ArchiveRoutesResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ArchiveRoutesResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ArchiveRoutesResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ArchiveRoutesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ArchiveRoutesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ArchiveRoutesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ArchiveRoutesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteArchivedRoutesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *struct {
+		DeletedCount int                                       `json:"deletedCount"`
+		Ok           DeleteArchivedRoutes200JSONResponseBodyOk `json:"ok"`
+	}
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r DeleteArchivedRoutesResponse) GetJSON200() *struct {
+	DeletedCount int                                       `json:"deletedCount"`
+	Ok           DeleteArchivedRoutes200JSONResponseBodyOk `json:"ok"`
+} {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r DeleteArchivedRoutesResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r DeleteArchivedRoutesResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r DeleteArchivedRoutesResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteArchivedRoutesResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteArchivedRoutesResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteArchivedRoutesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteArchivedRoutesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteArchivedRoutesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteArchivedRoutesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetRouteResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *Route
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetRouteResponse) GetJSON200() *Route {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetRouteResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetRouteResponse) GetJSON401() *Error {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetRouteResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetRouteResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetRouteResponse) GetJSON500() *Error {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetRouteResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetRouteResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetRouteResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetRouteResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListScopeRulesResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -15201,7 +16884,7 @@ func (c *ClientWithResponses) StartCredentialSignupWithResponse(ctx context.Cont
 // CreateCodeProviderConnectLinkWithBodyWithResponse performs a POST /code-providers/connect-link (the `CreateCodeProviderConnectLink` operationId) request,
 // with any type of body and a specified content type.
 //
-// Create a link that connects a code provider to the active workspace; only github (installs the Heist GitHub App) is supported for now. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
+// Create a link that connects a code provider to the active workspace: github installs the Heist GitHub App; bitbucket and azure_devops sign in with OAuth. GitHub Enterprise is connected in the dashboard. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateCodeProviderConnectLinkWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCodeProviderConnectLinkResponse, error) {
@@ -15215,7 +16898,7 @@ func (c *ClientWithResponses) CreateCodeProviderConnectLinkWithBodyWithResponse(
 // CreateCodeProviderConnectLinkWithResponse performs a POST /code-providers/connect-link (the `CreateCodeProviderConnectLink` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Create a link that connects a code provider to the active workspace; only github (installs the Heist GitHub App) is supported for now. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
+// Create a link that connects a code provider to the active workspace: github installs the Heist GitHub App; bitbucket and azure_devops sign in with OAuth. GitHub Enterprise is connected in the dashboard. Give the link to the user: they must open it within 10 minutes, signed in to Heist as an Editor or Admin with this workspace active. Once they finish, list_code_repositories works for that provider.
 func (c *ClientWithResponses) CreateCodeProviderConnectLinkWithResponse(ctx context.Context, body CreateCodeProviderConnectLinkJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCodeProviderConnectLinkResponse, error) {
 	rsp, err := c.CreateCodeProviderConnectLink(ctx, body, reqEditors...)
 	if err != nil {
@@ -15226,7 +16909,7 @@ func (c *ClientWithResponses) CreateCodeProviderConnectLinkWithResponse(ctx cont
 
 // ListCodeRepositoriesWithResponse performs a GET /code-repositories (the `ListCodeRepositories` operationId) request.
 //
-// List the repositories a connected code provider can access, as shown in the dashboard's repository picker. Returns 409 when the provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+// List the repositories a connected code provider can access, as shown in the dashboard's repository picker. Returns 409 when the provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListCodeRepositoriesWithResponse(ctx context.Context, params *ListCodeRepositoriesParams, reqEditors ...RequestEditorFn) (*ListCodeRepositoriesResponse, error) {
@@ -15239,7 +16922,7 @@ func (c *ClientWithResponses) ListCodeRepositoriesWithResponse(ctx context.Conte
 
 // ListCodeRepositoryBranchesWithResponse performs a GET /code-repositories/branches (the `ListCodeRepositoryBranches` operationId) request.
 //
-// List a repository's branches from a connected code provider, optionally filtered by search. Pass nextCursor as cursor to read the next page. project is required for Azure DevOps repositories. Returns 409 when the provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+// List a repository's branches from a connected code provider, optionally filtered by search. Pass nextCursor as cursor to read the next page. project is required for Azure DevOps repositories. Returns 409 when the provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListCodeRepositoryBranchesWithResponse(ctx context.Context, params *ListCodeRepositoryBranchesParams, reqEditors ...RequestEditorFn) (*ListCodeRepositoryBranchesResponse, error) {
@@ -15266,7 +16949,7 @@ func (c *ClientWithResponses) ListCodeReviewRepositoriesWithResponse(ctx context
 // AddCodeReviewRepositoriesWithBodyWithResponse performs a POST /code-review-repositories (the `AddCodeReviewRepositories` operationId) request,
 // with any type of body and a specified content type.
 //
-// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) AddCodeReviewRepositoriesWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddCodeReviewRepositoriesResponse, error) {
@@ -15280,7 +16963,7 @@ func (c *ClientWithResponses) AddCodeReviewRepositoriesWithBodyWithResponse(ctx 
 // AddCodeReviewRepositoriesWithResponse performs a POST /code-review-repositories (the `AddCodeReviewRepositories` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first (for GitHub, create_code_provider_connect_link returns a link to connect it).
+// Enroll repositories in code review and return them. Each repository must be listed by list_code_repositories; if any is not, nothing is saved and the error names every unavailable repository. project is required for Azure DevOps repositories. defaultBranch defaults to the provider's default branch. Adding an enrolled repository updates it. Returns 409 when a provider is not connected; connect it in the Heist dashboard first, or use create_code_provider_connect_link (not available for GitHub Enterprise).
 func (c *ClientWithResponses) AddCodeReviewRepositoriesWithResponse(ctx context.Context, body AddCodeReviewRepositoriesJSONRequestBody, reqEditors ...RequestEditorFn) (*AddCodeReviewRepositoriesResponse, error) {
 	rsp, err := c.AddCodeReviewRepositories(ctx, body, reqEditors...)
 	if err != nil {
@@ -15302,6 +16985,32 @@ func (c *ClientWithResponses) RemoveCodeReviewRepositoryWithResponse(ctx context
 	return ParseRemoveCodeReviewRepositoryResponse(rsp)
 }
 
+// UpdateCodeReviewRepositoryScopeWithBodyWithResponse performs a POST /code-review-repositories/{id}/review-scope (the `UpdateCodeReviewRepositoryScope` operationId) request,
+// with any type of body and a specified content type.
+//
+// Replace the files a code review repository's reviews skip or cover, and return the repository. Applies to repository scans and PR reviews started afterwards; findings already reported for excluded files stay. A leading ./ is removed, and blank and duplicate patterns are dropped; each list holds at most 50 patterns of at most 200 characters, without a leading / or .. segment.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateCodeReviewRepositoryScopeWithBodyWithResponse(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCodeReviewRepositoryScopeResponse, error) {
+	rsp, err := c.UpdateCodeReviewRepositoryScopeWithBody(ctx, id, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateCodeReviewRepositoryScopeResponse(rsp)
+}
+
+// UpdateCodeReviewRepositoryScopeWithResponse performs a POST /code-review-repositories/{id}/review-scope (the `UpdateCodeReviewRepositoryScope` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Replace the files a code review repository's reviews skip or cover, and return the repository. Applies to repository scans and PR reviews started afterwards; findings already reported for excluded files stay. A leading ./ is removed, and blank and duplicate patterns are dropped; each list holds at most 50 patterns of at most 200 characters, without a leading / or .. segment.
+func (c *ClientWithResponses) UpdateCodeReviewRepositoryScopeWithResponse(ctx context.Context, id openapi_types.UUID, body UpdateCodeReviewRepositoryScopeJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCodeReviewRepositoryScopeResponse, error) {
+	rsp, err := c.UpdateCodeReviewRepositoryScope(ctx, id, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateCodeReviewRepositoryScopeResponse(rsp)
+}
+
 // ListCredentialsWithResponse performs a GET /credentials (the `ListCredentials` operationId) request.
 //
 // List safe credential metadata and application links in the active workspace. Secrets and custom header values are excluded.
@@ -15318,7 +17027,7 @@ func (c *ClientWithResponses) ListCredentialsWithResponse(ctx context.Context, r
 // CreateCredentialWithBodyWithResponse performs a POST /credentials (the `CreateCredential` operationId) request,
 // with any type of body and a specified content type.
 //
-// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT and CUSTOM use a generated Heist email. SMS and CUSTOM use an available Heist phone. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
+// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT uses a generated Heist email and SMS an available Heist phone, both from credential_creation_options. CUSTOM is signed in by Heist's custom authentication agent following your instructions: omit custom.email and custom.phone to have Heist assign a generated email and, while one is free, an SMS number, which the response returns in hint so the user can set up the account. In CUSTOM instructions refer to these as @EMAIL and @PHONE and to secrets as @NAME; put secret values only in custom.secrets, never in instructions. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateCredentialWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCredentialResponse, error) {
@@ -15332,7 +17041,7 @@ func (c *ClientWithResponses) CreateCredentialWithBodyWithResponse(ctx context.C
 // CreateCredentialWithResponse performs a POST /credentials (the `CreateCredential` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT and CUSTOM use a generated Heist email. SMS and CUSTOM use an available Heist phone. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
+// Create a credential using an existing sign-in method. Provide its matching payload; GOOGLE needs none. BASIC supports existing username/password accounts: basic.username may be a customer-owned email address and basic.password is the account password. Heist cannot read emails sent to addresses outside tester.heisthq.com. EMAIL is for email OTP or magic-link login and requires a Heist-controlled address on tester.heisthq.com. MICROSOFT uses a generated Heist email and SMS an available Heist phone, both from credential_creation_options. CUSTOM is signed in by Heist's custom authentication agent following your instructions: omit custom.email and custom.phone to have Heist assign a generated email and, while one is free, an SMS number, which the response returns in hint so the user can set up the account. In CUSTOM instructions refer to these as @EMAIL and @PHONE and to secrets as @NAME; put secret values only in custom.secrets, never in instructions. Omit applicationIds to link all in-scope roots, or send [] to create unassigned. isCrossWorkspace creates a separate tenant lane; entityId joins an existing lane. New credentials are appended at the least privileged position; use reorder_application_credentials to change the order.
 func (c *ClientWithResponses) CreateCredentialWithResponse(ctx context.Context, body CreateCredentialJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCredentialResponse, error) {
 	rsp, err := c.CreateCredential(ctx, body, reqEditors...)
 	if err != nil {
@@ -15383,7 +17092,7 @@ func (c *ClientWithResponses) GetCredentialWithResponse(ctx context.Context, id 
 // UpdateCustomCredentialWithBodyWithResponse performs a POST /credentials/{id}/custom (the `UpdateCustomCredential` operationId) request,
 // with any type of body and a specified content type.
 //
-// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
+// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them; omit secrets to keep all of them. Refer to the email, phone and secrets in instructions as @EMAIL, @PHONE and @NAME, and never put secret values in instructions. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) UpdateCustomCredentialWithBodyWithResponse(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCustomCredentialResponse, error) {
@@ -15397,7 +17106,7 @@ func (c *ClientWithResponses) UpdateCustomCredentialWithBodyWithResponse(ctx con
 // UpdateCustomCredentialWithResponse performs a POST /credentials/{id}/custom (the `UpdateCustomCredential` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
+// Edit custom authentication or convert another method to custom authentication, retaining its ID and links. Supply existing secret names without values to preserve them; omit secrets to keep all of them. Refer to the email, phone and secrets in instructions as @EMAIL, @PHONE and @NAME, and never put secret values in instructions. Conversion requires a generated Heist email; a Heist phone is optional. Existing CUSTOM contact channels stay unchanged.
 func (c *ClientWithResponses) UpdateCustomCredentialWithResponse(ctx context.Context, id openapi_types.UUID, body UpdateCustomCredentialJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCustomCredentialResponse, error) {
 	rsp, err := c.UpdateCustomCredential(ctx, id, body, reqEditors...)
 	if err != nil {
@@ -15913,6 +17622,45 @@ func (c *ClientWithResponses) ListPastProcessesWithResponse(ctx context.Context,
 	return ParseListPastProcessesResponse(rsp)
 }
 
+// GetProcessingStatusWithResponse performs a GET /processing (the `GetProcessingStatus` operationId) request.
+//
+// Whether workspace processing is paused. While paused, Heist starts no new testing work.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetProcessingStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetProcessingStatusResponse, error) {
+	rsp, err := c.GetProcessingStatus(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetProcessingStatusResponse(rsp)
+}
+
+// PauseProcessingWithResponse performs a POST /processing/pause (the `PauseProcessing` operationId) request.
+//
+// Pause workspace processing: stops the workspace's workers and cancels running agent pentests and validations. Other workflows wait and continue after resume_processing. Returns once processing has stopped, which can take about a minute; if stopping fails, processing stays paused and you can retry.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PauseProcessingWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PauseProcessingResponse, error) {
+	rsp, err := c.PauseProcessing(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePauseProcessingResponse(rsp)
+}
+
+// ResumeProcessingWithResponse performs a POST /processing/resume (the `ResumeProcessing` operationId) request.
+//
+// Resume workspace processing so paused workflows continue. Returns the resulting paused state.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ResumeProcessingWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ResumeProcessingResponse, error) {
+	rsp, err := c.ResumeProcessing(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseResumeProcessingResponse(rsp)
+}
+
 // GetReportExportWithResponse performs a GET /report-exports/{id} (the `GetReportExport` operationId) request.
 //
 // Observe an export using its exportId and list its reports. COMPLETED means the workflow finished writing all PDFs. NOT_FOUND means no retained workflow exists; persisted reports remain available after workflow history expires. Failed workflows can have partial reports and are never reported as successful. Canceled customers retain read access.
@@ -16067,6 +17815,84 @@ func (c *ClientWithResponses) DownloadReportWithResponse(ctx context.Context, id
 		return nil, err
 	}
 	return ParseDownloadReportResponse(rsp)
+}
+
+// ListRoutesWithResponse performs a GET /routes (the `ListRoutes` operationId) request.
+//
+// List routes Heist has discovered in the active workspace, with published finding aggregates. Returns active routes unless archived is true. Repeat routeTypes/severityFilter query parameters to filter on multiple values; severityFilter NONE matches routes without published findings.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListRoutesWithResponse(ctx context.Context, params *ListRoutesParams, reqEditors ...RequestEditorFn) (*ListRoutesResponse, error) {
+	rsp, err := c.ListRoutes(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListRoutesResponse(rsp)
+}
+
+// ArchiveRoutesWithBodyWithResponse performs a POST /routes/archive (the `ArchiveRoutes` operationId) request,
+// with any type of body and a specified content type.
+//
+// Archive routes so Heist stops testing them. Archives nothing when any route is not found.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ArchiveRoutesWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ArchiveRoutesResponse, error) {
+	rsp, err := c.ArchiveRoutesWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseArchiveRoutesResponse(rsp)
+}
+
+// ArchiveRoutesWithResponse performs a POST /routes/archive (the `ArchiveRoutes` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Archive routes so Heist stops testing them. Archives nothing when any route is not found.
+func (c *ClientWithResponses) ArchiveRoutesWithResponse(ctx context.Context, body ArchiveRoutesJSONRequestBody, reqEditors ...RequestEditorFn) (*ArchiveRoutesResponse, error) {
+	rsp, err := c.ArchiveRoutes(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseArchiveRoutesResponse(rsp)
+}
+
+// DeleteArchivedRoutesWithBodyWithResponse performs a POST /routes/delete-archived (the `DeleteArchivedRoutes` operationId) request,
+// with any type of body and a specified content type.
+//
+// Permanently delete archived routes and their findings. Routes that are not archived are skipped; deletedCount says how many were deleted.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteArchivedRoutesWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*DeleteArchivedRoutesResponse, error) {
+	rsp, err := c.DeleteArchivedRoutesWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteArchivedRoutesResponse(rsp)
+}
+
+// DeleteArchivedRoutesWithResponse performs a POST /routes/delete-archived (the `DeleteArchivedRoutes` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Permanently delete archived routes and their findings. Routes that are not archived are skipped; deletedCount says how many were deleted.
+func (c *ClientWithResponses) DeleteArchivedRoutesWithResponse(ctx context.Context, body DeleteArchivedRoutesJSONRequestBody, reqEditors ...RequestEditorFn) (*DeleteArchivedRoutesResponse, error) {
+	rsp, err := c.DeleteArchivedRoutes(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteArchivedRoutesResponse(rsp)
+}
+
+// GetRouteWithResponse performs a GET /routes/{id} (the `GetRoute` operationId) request.
+//
+// Get a discovered route in the active workspace.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetRouteWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetRouteResponse, error) {
+	rsp, err := c.GetRoute(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetRouteResponse(rsp)
 }
 
 // ListScopeRulesWithResponse performs a GET /scope/rules (the `ListScopeRules` operationId) request.
@@ -17495,6 +19321,67 @@ func ParseRemoveCodeReviewRepositoryResponse(rsp *http.Response) (*RemoveCodeRev
 	}
 
 	response := &RemoveCodeReviewRepositoryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CodeReviewRepository
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateCodeReviewRepositoryScopeResponse parses an HTTP response from a UpdateCodeReviewRepositoryScopeWithResponse call
+func ParseUpdateCodeReviewRepositoryScopeResponse(rsp *http.Response) (*UpdateCodeReviewRepositoryScopeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateCodeReviewRepositoryScopeResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -19802,6 +21689,195 @@ func ParseListPastProcessesResponse(rsp *http.Response) (*ListPastProcessesRespo
 	return response, nil
 }
 
+// ParseGetProcessingStatusResponse parses an HTTP response from a GetProcessingStatusWithResponse call
+func ParseGetProcessingStatusResponse(rsp *http.Response) (*GetProcessingStatusResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetProcessingStatusResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Paused bool `json:"paused"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePauseProcessingResponse parses an HTTP response from a PauseProcessingWithResponse call
+func ParsePauseProcessingResponse(rsp *http.Response) (*PauseProcessingResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PauseProcessingResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Paused bool `json:"paused"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseResumeProcessingResponse parses an HTTP response from a ResumeProcessingWithResponse call
+func ParseResumeProcessingResponse(rsp *http.Response) (*ResumeProcessingResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ResumeProcessingResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Paused bool `json:"paused"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetReportExportResponse parses an HTTP response from a GetReportExportWithResponse call
 func ParseGetReportExportResponse(rsp *http.Response) (*GetReportExportResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -20368,6 +22444,261 @@ func ParseDownloadReportResponse(rsp *http.Response) (*DownloadReportResponse, e
 			Url       string `json:"url"`
 			VersionId string `json:"versionId"`
 		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListRoutesResponse parses an HTTP response from a ListRoutesWithResponse call
+func ParseListRoutesResponse(rsp *http.Response) (*ListRoutesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListRoutesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Items []Route `json:"items"`
+			Page  int     `json:"page"`
+			Size  int     `json:"size"`
+			Total int     `json:"total"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseArchiveRoutesResponse parses an HTTP response from a ArchiveRoutesWithResponse call
+func ParseArchiveRoutesResponse(rsp *http.Response) (*ArchiveRoutesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ArchiveRoutesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			ArchivedCount int                                `json:"archivedCount"`
+			Ok            ArchiveRoutes200JSONResponseBodyOk `json:"ok"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteArchivedRoutesResponse parses an HTTP response from a DeleteArchivedRoutesWithResponse call
+func ParseDeleteArchivedRoutesResponse(rsp *http.Response) (*DeleteArchivedRoutesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteArchivedRoutesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			DeletedCount int                                       `json:"deletedCount"`
+			Ok           DeleteArchivedRoutes200JSONResponseBodyOk `json:"ok"`
+		}
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetRouteResponse parses an HTTP response from a GetRouteWithResponse call
+func ParseGetRouteResponse(rsp *http.Response) (*GetRouteResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetRouteResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Route
 		if err := runtime.JSONUnmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
