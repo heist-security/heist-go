@@ -122,9 +122,9 @@ heist domains verify <id>                 # exit 3 if the domain isn't verified
 
 `challenge` reads the existing TXT record and fails if none has been issued;
 `--create` issues one. Publish the record with your DNS provider, then run
-`verify`. Changing auto-include, issuing a challenge, and verifying require
-the Admin role. Pass `--json` to any domains command for the API's JSON
-response.
+`verify`. Changing auto-include, reading or issuing a challenge, and
+verifying require the Admin role. Pass `--json` to any domains command for the
+API's JSON response.
 
 `heist reports` lists, generates, and downloads PDF reports, and manages report
 scopes:

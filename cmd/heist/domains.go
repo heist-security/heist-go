@@ -27,8 +27,8 @@ DNS TXT record.
 To verify a domain, print its TXT record with heist domains challenge --create,
 publish the record with your DNS provider, then run heist domains verify.
 
-Changing auto-include, issuing a challenge and verifying require the Admin
-role.
+Changing auto-include, reading or issuing a challenge, and verifying require
+the Admin role.
 
 ` + envUsage,
 	})
@@ -250,7 +250,7 @@ func newDomainsChallengeCmd() *cobra.Command {
 
 By default this reads the domain's existing challenge, and fails if none has
 been issued. --create issues a challenge, or returns the existing one, which
-stays the same once issued; it requires the Admin role.
+stays the same once issued. Requires the Admin role.
 
 --value prints only the record value, for passing to a DNS tool.
 
