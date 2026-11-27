@@ -91,21 +91,37 @@ heist api '/findings?severity=high'
 heist api --input domain.json /domains   # POST unless -X is given
 ```
 
-`heist findings` lists, shows, and counts findings with the same credentials:
+`heist findings` lists, shows, counts, retests, and triages findings with the
+same credentials:
 
 ```sh
 heist findings list --severity high,critical --search login
 heist findings list --fail-on high   # exit 3 if an open finding is HIGH or above
 heist findings get <id>
 heist findings counts
+heist findings retest <id>
+heist findings retest-status <id>    # exit 3 if the retest failed
+heist findings accept-risk <id> --reason "Internal tool only"
+heist findings compensating-control <id> --reason "WAF rule 1234"
+heist findings false-positive <id> --comment "Input is never rendered"
+heist findings history <id>          # status changes, oldest first
 ```
 
 `list` follows pagination and prints every matching finding unless `--limit`
 is given. `--fail-on <severity>` exits with status 3 when any finding matching
 the filters is at or above that severity. It only counts open (`PUBLISHED`)
 findings unless `--status` is given. Errors exit with 1 and usage errors with 2.
-`counts` shows the API's status counts and open findings by severity. Pass
-`--json` to any findings command for JSON output.
+`counts` shows the API's status counts and open findings by severity.
+
+`retest` returns as soon as the retest starts, and fails if one is already
+running. `retest-status` shows the latest retest and the current finding. It
+exits with status 3 when the retest ended without completing (`FAILED`,
+`CANCELLED`, `TERMINATED`, or `TIMED_OUT`); `NOT_STARTED` means no retest is
+retained, not that one succeeded. `accept-risk`, `compensating-control` and
+`false-positive` print the updated finding; Heist reviews a false-positive
+report before closing the finding. Retesting and changing a finding's status
+require the Editor or Admin role. Pass `--json` to any findings command for
+JSON output.
 
 `heist reports` lists, generates, and downloads PDF reports, and manages report
 scopes:

@@ -35,10 +35,11 @@ var openStatuses = []heist.ListFindingsParamsStatus{heist.ListFindingsParamsStat
 func newFindingsCmd() *cobra.Command {
 	cmd := groupCmd(&cobra.Command{
 		Use:   "findings",
-		Short: "List, show and count findings, and gate CI on severity",
-		Long:  "List, show and count findings, and gate CI on severity.\n\n" + envUsage,
+		Short: "List, show, count, retest and triage findings, and gate CI on severity",
+		Long:  "List, show, count, retest and triage findings, and gate CI on severity.\n\n" + envUsage,
 	})
 	cmd.AddCommand(newFindingsListCmd(), newFindingsGetCmd(), newFindingsCountsCmd())
+	cmd.AddCommand(findingActionCmds()...)
 	return cmd
 }
 
