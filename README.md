@@ -107,6 +107,25 @@ findings unless `--status` is given. Errors exit with 1 and usage errors with 2.
 `counts` shows the API's status counts and open findings by severity. Pass
 `--json` to any findings command for JSON output.
 
+`heist domains` lists domains, sets automatic inclusion, and verifies domain
+ownership with a DNS TXT record:
+
+```sh
+heist domains list
+heist domains get <id>
+heist domains status                      # exit 3 if an in-scope domain is unverified
+heist domains auto-include <id> --on      # or --off
+heist domains challenge --create <id>     # issue or show the TXT record
+heist domains challenge --value <id>      # only the record value, for DNS tools
+heist domains verify <id>                 # exit 3 if the domain isn't verified
+```
+
+`challenge` reads the existing TXT record and fails if none has been issued;
+`--create` issues one. Publish the record with your DNS provider, then run
+`verify`. Changing auto-include, issuing a challenge, and verifying require
+the Admin role. Pass `--json` to any domains command for the API's JSON
+response.
+
 `heist reports` lists, generates, and downloads PDF reports, and manages report
 scopes:
 

@@ -58,7 +58,7 @@ func newRootCmd() *cobra.Command {
 	root.SetFlagErrorFunc(func(_ *cobra.Command, err error) error {
 		return usageError{err}
 	})
-	root.AddCommand(newAPICmd(), newFindingsCmd(), newReportsCmd(), &cobra.Command{
+	root.AddCommand(newAPICmd(), newDomainsCmd(), newFindingsCmd(), newReportsCmd(), &cobra.Command{
 		Use:   "version",
 		Short: "Print the CLI version and targeted API contract version",
 		Args:  noArgs,
