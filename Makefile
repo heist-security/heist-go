@@ -29,12 +29,11 @@ check-generated: generate
 	test -z "$$(git ls-files --others --exclude-standard -- heist)"
 
 # Report known vulnerabilities in reachable code. Queries vuln.go.dev, so it
-# needs network access and is not part of the offline check target. -modfile
-# can't be used in workspace mode, so the CLI is scanned with a built binary.
+# needs network access and is not part of the offline check target. The CLI is
+# scanned without the workspace, against the dependency versions it ships with.
 vulncheck:
 	go tool -modfile=tools/go.mod govulncheck ./...
-	go build -modfile=tools/go.mod -o dist/govulncheck golang.org/x/vuln/cmd/govulncheck
-	cd cmd/heist && ../../dist/govulncheck ./...
+	cd cmd/heist && GOWORK=off go tool -modfile=../../tools/go.mod govulncheck ./...
 
 generate:
 	go generate ./...
