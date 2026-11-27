@@ -58,9 +58,15 @@ func newTerminal(t *testing.T, background color.Color) *terminal {
 		ptmx.Close()
 		tty.Close()
 	})
-	// The pager and NO_COLOR must not depend on the developer's environment.
+	// Describe the emulator, a truecolor terminal, rather than inheriting the
+	// environment of whoever runs the tests: CI sets no TERM, which turns
+	// colors off.
+	t.Setenv("TERM", "xterm-256color")
+	t.Setenv("COLORTERM", "truecolor")
+	for _, v := range []string{"NO_COLOR", "CLICOLOR", "CLICOLOR_FORCE"} {
+		t.Setenv(v, "")
+	}
 	t.Setenv("PAGER", "cat")
-	t.Setenv("NO_COLOR", "")
 	return &terminal{t: t, ptmx: ptmx, tty: tty, screen: screen}
 }
 
