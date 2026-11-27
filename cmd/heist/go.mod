@@ -5,7 +5,7 @@ go 1.26.0
 toolchain go1.27.4
 
 require (
-	github.com/heist-security/heist-go v0.3.0
+	github.com/heist-security/heist-go v0.4.0
 	github.com/oapi-codegen/runtime v1.9.1
 	github.com/spf13/cobra v1.10.2
 )
