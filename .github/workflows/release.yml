@@ -1,16 +1,23 @@
 name: Release
 
-# Creates a vX.Y.Z tag and GitHub release for the SDK and CLI from main.
+# Creates a tag and GitHub release from main for one module: the SDK
+# (vX.Y.Z) or the CLI (cmd/heist/vX.Y.Z, with binaries).
 #
-# 1. build: runs every check and builds CLI binaries without caches.
+# 1. build: runs every check and, for the CLI, builds binaries without caches
+#    against the SDK version that cmd/heist/go.mod requires, as go install does.
 # 2. approve: waits for a reviewer in the protected "release" environment.
-#    Its success is the deployment that the v* tag ruleset requires before a
-#    tag can be created.
+#    Its success is the deployment that the release tag ruleset requires before
+#    a tag can be created.
 # 3. publish: attests the binaries' build provenance, then creates the tag and
 #    the release, which becomes immutable once published.
 on:
   workflow_dispatch:
     inputs:
+      module:
+        description: "Module to release"
+        required: true
+        type: choice
+        options: [sdk, cli]
       version:
         description: "Version to release, for example v0.1.0"
         required: true
@@ -53,7 +60,20 @@ jobs:
           make deps
           GOPROXY=off make check
 
+      - name: Check the CLI against its required SDK version
+        if: inputs.module == 'cli'
+        working-directory: cmd/heist
+        env:
+          GOWORK: "off"
+        run: |
+          go mod download
+          GOPROXY=off go test ./...
+
       - name: Build CLI binaries
+        if: inputs.module == 'cli'
+        working-directory: cmd/heist
+        env:
+          GOWORK: "off"
         run: |
           mkdir -p release
           for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64; do
@@ -63,14 +83,15 @@ jobs:
             [ "$goos" = windows ] && ext=".exe"
             GOOS="$goos" GOARCH="$goarch" CGO_ENABLED=0 GOPROXY=off \
               go build -trimpath -ldflags "-s -w -X main.version=$VERSION" \
-              -o "release/heist_${VERSION}_${goos}_${goarch}${ext}" ./cmd/heist
+              -o "release/heist_${VERSION}_${goos}_${goarch}${ext}" .
           done
           (cd release && sha256sum heist_* > SHA256SUMS)
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: inputs.module == 'cli'
         with:
           name: release
-          path: release/
+          path: cmd/heist/release/
           if-no-files-found: error
 
   approve:
@@ -79,9 +100,10 @@ jobs:
     environment: release
     permissions: {}
     env:
+      MODULE: ${{ inputs.module }}
       VERSION: ${{ inputs.version }}
     steps:
-      - run: echo "Release $VERSION approved"
+      - run: echo "Release $MODULE $VERSION approved"
 
   publish:
     needs: [build, approve]
@@ -91,24 +113,37 @@ jobs:
       id-token: write
       attestations: write
     env:
+      MODULE: ${{ inputs.module }}
       VERSION: ${{ inputs.version }}
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
     steps:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        if: inputs.module == 'cli'
         with:
           name: release
           path: release
 
       - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        if: inputs.module == 'cli'
         with:
           subject-path: release/heist_*
 
       - name: Create release
         # Upload assets to a draft, then publish it: published immutable
-        # releases reject further changes. Publishing creates the tag.
+        # releases reject further changes. Publishing creates the tag. Notes
+        # start from the module's previous tag, and only CLI releases, which
+        # have binaries, are marked latest.
         run: |
-          gh release create "$VERSION" --draft \
-            --target "$GITHUB_SHA" --title "$VERSION" --generate-notes \
-            release/*
-          gh release edit "$VERSION" --draft=false
+          tag_prefix=v latest=false assets=()
+          if [ "$MODULE" = cli ]; then
+            tag_prefix=cmd/heist/v latest=true assets=(release/*)
+          fi
+          tag="${tag_prefix}${VERSION#v}"
+          previous=$(gh api "repos/$GH_REPO/git/matching-refs/tags/$tag_prefix" \
+            --jq '.[].ref | ltrimstr("refs/tags/")' | sort -V | tail -n 1)
+          gh release create "$tag" --draft --latest="$latest" \
+            --target "$GITHUB_SHA" --title "$tag" --generate-notes \
+            ${previous:+--notes-start-tag "$previous"} \
+            "${assets[@]}"
+          gh release edit "$tag" --draft=false

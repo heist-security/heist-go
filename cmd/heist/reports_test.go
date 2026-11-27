@@ -318,7 +318,7 @@ func TestReportsUsageErrors(t *testing.T) {
 		{[]string{"reports", "scopes", "delete"}, "heist reports scopes delete: expected one scope ID"},
 	} {
 		code, stdout, stderr := runCLI(t, tt.args...)
-		if code != 2 || stdout != "" || !strings.Contains(stderr, tt.msg) || !strings.Contains(stderr, "Usage: heist reports") {
+		if code != 2 || stdout != "" || !strings.Contains(stderr, tt.msg) || !strings.Contains(stderr, "Usage:\n  heist reports") {
 			t.Errorf("%v: exit %d, stdout %q, stderr %q", tt.args, code, stdout, stderr)
 		}
 	}
@@ -332,7 +332,7 @@ func TestReportsHelp(t *testing.T) {
 		{"reports", "scopes", "update", "-h"},
 	} {
 		code, stdout, stderr := runCLI(t, args...)
-		if code != 0 || stderr != "" || !strings.HasPrefix(stdout, "Usage: heist reports") {
+		if code != 0 || stderr != "" || !strings.Contains(stdout, "Usage:\n  heist reports") {
 			t.Errorf("%v: exit %d, stdout %q, stderr %q", args, code, stdout, stderr)
 		}
 	}
