@@ -19,11 +19,18 @@ func TestVersion(t *testing.T) {
 }
 
 func TestUnknownCommand(t *testing.T) {
-	var stdout, stderr bytes.Buffer
-	if code := run([]string{"nope"}, nil, &stdout, &stderr); code != 2 {
-		t.Errorf("exit %d, want 2", code)
-	}
-	if !strings.Contains(stderr.String(), `unknown command "nope"`) {
-		t.Errorf("stderr = %q", stderr.String())
+	for _, tt := range []struct {
+		args []string
+		msg  string
+	}{
+		{[]string{"nope"}, `unknown command "nope"`},
+		{[]string{"completion", "zhs"}, `unknown command "zhs"; did you mean zsh?`},
+		{[]string{"completion"}, "expected a command"},
+	} {
+		var stdout, stderr bytes.Buffer
+		code := run(tt.args, nil, &stdout, &stderr)
+		if code != 2 || stdout.Len() != 0 || !strings.Contains(stderr.String(), tt.msg) {
+			t.Errorf("%v: exit %d, stdout %q, stderr %q", tt.args, code, stdout.String(), stderr.String())
+		}
 	}
 }

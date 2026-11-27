@@ -67,6 +67,12 @@ func newRootCmd() *cobra.Command {
 			return err
 		},
 	})
+	// Add Cobra's completion command now, rather than during Execute, so it
+	// rejects an unknown shell like the other command groups.
+	root.InitDefaultCompletionCmd()
+	if completion, _, err := root.Find([]string{"completion"}); err == nil {
+		groupCmd(completion)
+	}
 	return root
 }
 
