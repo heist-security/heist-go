@@ -20,6 +20,14 @@ servers and must not call the live Heist API. Add regression coverage for
 changes to authentication, error handling, pagination and response decoding.
 Never commit access tokens, `.env` files or real customer data.
 
+CLI tests that write to a buffer see only the plain output scripts get.
+Styled output, progress, the pager and `heist browse` appear only on a
+terminal, so test them in `cmd/heist/terminal_unix_test.go`. It runs the CLI
+on a pseudo-terminal drawn by a terminal emulator, which answers background
+color queries as a real terminal does. A harness that doesn't answer them
+makes each styled command wait for the query to time out, so its output looks
+missing.
+
 ## SDK and CLI boundaries
 
 The `heist` package owns the REST client, request and response types,

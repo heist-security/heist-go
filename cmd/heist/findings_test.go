@@ -11,6 +11,9 @@ import (
 	"strings"
 	"sync"
 	"testing"
+
+	"github.com/charmbracelet/x/ansi"
+	"github.com/heist-security/heist-go/heist"
 )
 
 const findingID = "0b8f5c4e-3c1a-4d2b-9e6f-1a2b3c4d5e6f"
@@ -322,5 +325,33 @@ INFORMATIONAL         0
 	}
 	if severityQueries[0] != "INFORMATIONAL FIXED,ACCEPTED" {
 		t.Errorf("severity query = %q", severityQueries[0])
+	}
+}
+
+func TestFindingsTableStyled(t *testing.T) {
+	findings := []heist.Finding{
+		{Id: "a", Severity: "CRITICAL", ValidationStatus: "PUBLISHED", Title: "SQL  injection"},
+		{Id: "b", Severity: "LOW", ValidationStatus: "COMPENSATING_CONTROL", Title: "Verbose errors"},
+	}
+	for _, tt := range []struct {
+		name    string
+		total   int
+		summary string
+	}{
+		{"all", 2, "2 findings · 1 open"},
+		{"limited", 40, "First 2 of 40 findings"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			var b strings.Builder
+			if err := writeFindingsTable(&b, styles{on: true, palette: newPalette(true)}, findings, tt.total); err != nil {
+				t.Fatal(err)
+			}
+			want := "CRITICAL  SQL injection   open                  a\n" +
+				"LOW       Verbose errors  compensating control  b\n" +
+				"\n" + tt.summary + "\n"
+			if got := ansi.Strip(b.String()); got != want {
+				t.Errorf("output =\n%s\nwant\n%s", got, want)
+			}
+		})
 	}
 }

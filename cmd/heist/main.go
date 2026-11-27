@@ -30,7 +30,7 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	root.SetIn(stdin)
 	root.SetOut(stdout)
 	root.SetErr(stderr)
-	cmd, err := root.ExecuteContextC(context.Background())
+	cmd, err := root.ExecuteContextC(withDarkBackground(context.Background(), stdin, stdout))
 	if err == nil {
 		return 0
 	}
@@ -58,7 +58,7 @@ func newRootCmd() *cobra.Command {
 	root.SetFlagErrorFunc(func(_ *cobra.Command, err error) error {
 		return usageError{err}
 	})
-	root.AddCommand(newAPICmd(), newFindingsCmd(), newReportsCmd(), &cobra.Command{
+	root.AddCommand(newAPICmd(), newBrowseCmd(), newFindingsCmd(), newReportsCmd(), &cobra.Command{
 		Use:   "version",
 		Short: "Print the CLI version and targeted API contract version",
 		Args:  noArgs,

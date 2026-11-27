@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
-	"text/tabwriter"
+	"time"
 
 	"github.com/heist-security/heist-go/heist"
 	openapi_types "github.com/oapi-codegen/runtime/types"
@@ -123,13 +123,24 @@ func newReportRow(id, reportType, status string, scopeName *string, created, tit
 	return reportRow{ID: id, Type: reportType, Status: status, Scope: scope, Created: created, Title: oneLine(title)}
 }
 
-func writeReportsTable(w io.Writer, reports []reportRow) error {
-	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, "ID\tTYPE\tSTATUS\tSCOPE\tCREATED\tTITLE")
-	for _, r := range reports {
-		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\t%s\t%s\n", r.ID, r.Type, r.Status, r.Scope, r.Created, r.Title)
+// writeReportsTable writes reports as a table. Styled output leads with the
+// title and dims the other fields.
+func writeReportsTable(w io.Writer, s styles, reports []reportRow) error {
+	rows := make([][]string, len(reports))
+	if !s.on {
+		for i, r := range reports {
+			rows[i] = []string{r.ID, r.Type, r.Status, r.Scope, r.Created, r.Title}
+		}
+		return writeTable(w, s, []string{"ID", "TYPE", "STATUS", "SCOPE", "CREATED", "TITLE"}, rows)
 	}
-	return tw.Flush()
+	for i, r := range reports {
+		scope := r.Scope
+		if scope == "-" {
+			scope = ""
+		}
+		rows[i] = []string{r.Title, s.dim(joinDot(r.Type, scope, s.date(r.Created))), s.dim(r.Status), s.dim(r.ID)}
+	}
+	return s.list(w, rows, 0)
 }
 
 func newReportsListCmd() *cobra.Command {
@@ -154,7 +165,11 @@ func newReportsListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			res, err := client.ListReportsWithResponse(cmd.Context(), &params)
+			var res *heist.ListReportsResponse
+			err = withProgress(cmd, asJSON, "Fetching reports", func(ctx context.Context, _ progressFunc) error {
+				res, err = client.ListReportsWithResponse(ctx, &params)
+				return err
+			})
 			if err != nil {
 				return err
 			}
@@ -168,7 +183,9 @@ func newReportsListCmd() *cobra.Command {
 			for i, r := range *res.JSON200 {
 				rows[i] = newReportRow(r.Id, string(r.ReportType), string(r.Status), r.ScopeName, r.CreatedAt, r.Title)
 			}
-			return writeReportsTable(cmd.OutOrStdout(), rows)
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				return writeReportsTable(w, s, rows)
+			})
 		},
 	}
 	cmd.Flags().StringVar(&exportID, "export-id", "", "only reports from this export `id`, as printed by\nheist reports generate")
@@ -193,7 +210,11 @@ func newReportsGetCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			res, err := client.GetReportWithResponse(cmd.Context(), id)
+			var res *heist.GetReportResponse
+			err = withProgress(cmd, asJSON, "Fetching report", func(ctx context.Context, _ progressFunc) error {
+				res, err = client.GetReportWithResponse(ctx, id)
+				return err
+			})
 			if err != nil {
 				return err
 			}
@@ -203,7 +224,9 @@ func newReportsGetCmd() *cobra.Command {
 			if asJSON {
 				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
 			}
-			return writeReportDetail(cmd.OutOrStdout(), res)
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				return writeReportDetail(w, s, res)
+			})
 		},
 	}
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
@@ -211,52 +234,74 @@ func newReportsGetCmd() *cobra.Command {
 }
 
 // writeReportDetail writes a report and its versions. res must have a 200
-// body.
-func writeReportDetail(w io.Writer, res *heist.GetReportResponse) error {
+// body. Styled output puts the title first, with the type, status, scope and
+// date on one dim line.
+func writeReportDetail(w io.Writer, s styles, res *heist.GetReportResponse) error {
 	r := res.JSON200
-	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	field := func(label, value string) {
-		if value != "" {
-			fmt.Fprintf(tw, "%s:\t%s\n", label, value)
-		}
-	}
-	field("Title", oneLine(r.Title))
-	field("ID", r.Id)
-	field("Type", string(r.ReportType))
-	field("Status", string(r.Status))
+	var scope string
 	if r.ScopeName != nil {
-		field("Scope", *r.ScopeName)
+		scope = *r.ScopeName
+	}
+	fields := fieldWriter{s: s}
+	field := fields.add
+	if s.on {
+		_, err := fmt.Fprintf(w, "%s\n%s\n%s\n", s.bold(oneLine(r.Title)),
+			s.dim(joinDot(string(r.ReportType), string(r.Status), scope, "created "+s.date(r.CreatedAt))),
+			s.dim(r.Id))
+		if err != nil {
+			return err
+		}
+	} else {
+		field("Title", oneLine(r.Title))
+		field("ID", r.Id)
+		field("Type", string(r.ReportType))
+		field("Status", string(r.Status))
+		field("Scope", scope)
 	}
 	if r.ScopeApplicationIds != nil {
 		field("Applications", strings.Join(*r.ScopeApplicationIds, ", "))
 	} else if r.ScopeApplicationId != nil {
 		field("Applications", *r.ScopeApplicationId)
 	}
-	field("Created", r.CreatedAt)
-	if err := tw.Flush(); err != nil {
+	if !s.on {
+		field("Created", r.CreatedAt)
+	}
+	if s.on && len(fields.fields) > 0 {
+		if _, err := fmt.Fprintln(w); err != nil {
+			return err
+		}
+	}
+	if err := fields.write(w); err != nil {
 		return err
 	}
 
 	if _, err := fmt.Fprintln(w); err != nil {
 		return err
 	}
-	tw = tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, "VERSION\tCREATED")
-	for _, v := range r.Versions {
-		fmt.Fprintf(tw, "%s\t%s\n", v.Id, v.CreatedAt)
+	rows := make([][]string, len(r.Versions))
+	for i, v := range r.Versions {
+		rows[i] = []string{v.Id, s.time(v.CreatedAt)}
 	}
-	return tw.Flush()
+	return writeTable(w, s, []string{"VERSION", "CREATED"}, rows)
 }
+
+// exportPollInterval is how often `heist reports generate --wait` checks the
+// export.
+var exportPollInterval = 3 * time.Second
 
 func newReportsGenerateCmd() *cobra.Command {
 	var applications uuidsFlag
-	var asJSON bool
+	var asJSON, wait bool
 	cmd := &cobra.Command{
 		Use:   "generate",
 		Short: "Start generating reports and print the export ID",
 		Long: `Start generating full, summary and attestation PDF reports, and print the
 export ID. Generation runs in the background; check it with
 heist reports export-status <export-id>. Previous reports are kept.
+
+--wait waits for the export to end, then prints its state and reports, and
+exits like heist reports export-status. With --json it prints the final
+export-status JSON.
 
 ` + envUsage,
 		Args: noArgs,
@@ -278,16 +323,62 @@ heist reports export-status <export-id>. Previous reports are kept.
 			if res.JSON202 == nil {
 				return fmt.Errorf("unexpected %s response", res.Status())
 			}
+			if wait {
+				export, err := waitForExport(cmd, client, res.JSON202.ExportId, asJSON)
+				if err != nil {
+					return err
+				}
+				return writeExportResult(cmd, export, asJSON)
+			}
 			if asJSON {
 				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
 			}
-			_, err = fmt.Fprintln(cmd.OutOrStdout(), res.JSON202.ExportId)
-			return err
+			id := res.JSON202.ExportId
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				if !s.on {
+					_, err := fmt.Fprintln(w, id)
+					return err
+				}
+				_, err := fmt.Fprintf(w, "%s\n%s\n", s.ok("Started generating reports "+s.dim("· export "+id.String())),
+					s.dim("  Check on it with heist reports export-status "+id.String()))
+				return err
+			})
 		},
 	}
 	cmd.Flags().Var(&applications, "application", "include this application, comma-separated or\nrepeated (default all in-scope applications)")
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for the export to end and print its state")
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
 	return cmd
+}
+
+// waitForExport polls an export until it ends, showing its progress unless
+// quiet is set. The returned response has a 200 body.
+func waitForExport(cmd *cobra.Command, client *heist.ClientWithResponses, id openapi_types.UUID, quiet bool) (*heist.GetReportExportResponse, error) {
+	var res *heist.GetReportExportResponse
+	status := "Generating reports · export " + id.String()
+	err := withProgress(cmd, quiet, status, func(ctx context.Context, progress progressFunc) error {
+		for {
+			var err error
+			res, err = client.GetReportExportWithResponse(ctx, id)
+			if err != nil {
+				return err
+			}
+			if res.JSON200 == nil {
+				return fmt.Errorf("unexpected %s response", res.Status())
+			}
+			switch s := res.JSON200.Status; {
+			case s == "COMPLETED", s == "NOT_FOUND", slices.Contains(failedExportStatuses, s):
+				return nil
+			}
+			progress(joinDot("Generating reports", plural(len(res.JSON200.Reports), "report")+" so far", "export "+id.String()), 0, 0)
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			case <-time.After(exportPollInterval):
+			}
+		}
+	})
+	return res, err
 }
 
 func newReportsExportStatusCmd() *cobra.Command {
@@ -325,45 +416,83 @@ Exit status:
 			if res.JSON200 == nil {
 				return fmt.Errorf("unexpected %s response", res.Status())
 			}
-			if asJSON {
-				err = writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
-			} else {
-				err = writeExportStatus(cmd.OutOrStdout(), res)
-			}
-			if err != nil {
-				return err
-			}
-			switch status := res.JSON200.Status; {
-			case status == "NOT_FOUND":
-				return errors.New("export not found, or its history has expired")
-			case slices.Contains(failedExportStatuses, status):
-				return &exitError{exitExportFailed, fmt.Sprintf("export %s", status)}
-			}
-			return nil
+			return writeExportResult(cmd, res, asJSON)
 		},
 	}
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
 	return cmd
 }
 
+// writeExportResult writes an export's state, and returns an error when the
+// export was not found or ended without completing. res must have a 200 body.
+func writeExportResult(cmd *cobra.Command, res *heist.GetReportExportResponse, asJSON bool) error {
+	var err error
+	if asJSON {
+		err = writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
+	} else {
+		err = printStyled(cmd, func(w io.Writer, s styles) error {
+			return writeExportStatus(w, s, res)
+		})
+	}
+	if err != nil {
+		return err
+	}
+	switch status := res.JSON200.Status; {
+	case status == "NOT_FOUND":
+		return errors.New("export not found, or its history has expired")
+	case slices.Contains(failedExportStatuses, status):
+		return &exitError{exitExportFailed, fmt.Sprintf("export %s", status)}
+	}
+	return nil
+}
+
 // writeExportStatus writes an export's state and its reports. res must have
 // a 200 body.
-func writeExportStatus(w io.Writer, res *heist.GetReportExportResponse) error {
+//
+// Styled output starts with a result line: a check mark when the export
+// completed, a cross when it failed, or how far it has got.
+func writeExportStatus(w io.Writer, s styles, res *heist.GetReportExportResponse) error {
 	e := res.JSON200
-	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	field := func(label string, value *string) {
-		if value != nil && *value != "" {
-			fmt.Fprintf(tw, "%s:\t%s\n", label, oneLine(*value))
+	value := func(v *string) string {
+		if v == nil {
+			return ""
 		}
+		return oneLine(*v)
 	}
-	status := string(e.Status)
-	field("Export", &e.ExportId)
-	field("Status", &status)
-	field("Started", e.StartedAt)
-	field("Closed", e.ClosedAt)
-	field("Failure", e.Failure)
-	if err := tw.Flush(); err != nil {
-		return err
+	if s.on {
+		status := strings.ToLower(strings.ReplaceAll(string(e.Status), "_", " "))
+		var result string
+		switch {
+		case e.Status == "COMPLETED":
+			result = s.ok(joinDot("Reports generated", plural(len(e.Reports), "report")))
+		case e.Status == "NOT_FOUND":
+			result = s.fail("Export not found, or its history has expired")
+		case slices.Contains(failedExportStatuses, e.Status):
+			result = s.fail(joinDot("Export "+status, value(e.Failure)))
+		default:
+			result = joinDot("Export "+status, plural(len(e.Reports), "report")+" so far")
+		}
+		var closed string
+		if e.ClosedAt != nil {
+			closed = "closed " + s.time(*e.ClosedAt)
+		}
+		var started string
+		if e.StartedAt != nil {
+			started = "started " + s.time(*e.StartedAt)
+		}
+		if _, err := fmt.Fprintf(w, "%s\n%s\n", result, s.dim(joinDot("export "+e.ExportId, started, closed))); err != nil {
+			return err
+		}
+	} else {
+		fields := fieldWriter{s: s}
+		fields.add("Export", e.ExportId)
+		fields.add("Status", string(e.Status))
+		fields.add("Started", value(e.StartedAt))
+		fields.add("Closed", value(e.ClosedAt))
+		fields.add("Failure", value(e.Failure))
+		if err := fields.write(w); err != nil {
+			return err
+		}
 	}
 	if len(e.Reports) == 0 {
 		return nil
@@ -375,7 +504,7 @@ func writeExportStatus(w io.Writer, res *heist.GetReportExportResponse) error {
 	if _, err := fmt.Fprintln(w); err != nil {
 		return err
 	}
-	return writeReportsTable(w, rows)
+	return writeReportsTable(w, s, rows)
 }
 
 func newReportsDownloadCmd() *cobra.Command {
@@ -406,16 +535,33 @@ func newReportsDownloadCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			pdf, err := openReportPDF(cmd.Context(), client, id, params)
-			if err != nil {
-				return err
-			}
-			defer pdf.Close()
 			if output == "-" {
+				pdf, err := openReportPDF(cmd.Context(), client, id, params)
+				if err != nil {
+					return err
+				}
+				defer pdf.Close()
 				_, err = io.Copy(cmd.OutOrStdout(), pdf)
 				return err
 			}
-			return writeFileAtomic(output, pdf)
+			err = withProgress(cmd, false, "Downloading report", func(ctx context.Context, _ progressFunc) error {
+				pdf, err := openReportPDF(ctx, client, id, params)
+				if err != nil {
+					return err
+				}
+				defer pdf.Close()
+				return writeFileAtomic(output, pdf)
+			})
+			if err != nil {
+				return err
+			}
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				if !s.on {
+					return nil // scripts see no output, as before
+				}
+				_, err := fmt.Fprintln(w, s.ok("Saved "+output))
+				return err
+			})
 		},
 	}
 	cmd.Flags().StringVar(&versionID, "version", "", "download this version `id` (default the latest)")
@@ -471,13 +617,12 @@ func writeFileAtomic(path string, r io.Reader) error {
 	return os.Rename(f.Name(), path)
 }
 
-func writeReportScopes(w io.Writer, scopes []heist.ReportScope) error {
-	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, "ID\tNAME\tCREATED\tAPPLICATIONS")
-	for _, s := range scopes {
-		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n", s.Id, oneLine(s.Name), s.CreatedAt, strings.Join(s.ApplicationIds, ","))
+func writeReportScopes(w io.Writer, s styles, scopes []heist.ReportScope) error {
+	rows := make([][]string, len(scopes))
+	for i, sc := range scopes {
+		rows[i] = []string{sc.Id, oneLine(sc.Name), s.date(sc.CreatedAt), strings.Join(sc.ApplicationIds, ",")}
 	}
-	return tw.Flush()
+	return writeTable(w, s, []string{"ID", "NAME", "CREATED", "APPLICATIONS"}, rows)
 }
 
 func newReportScopesListCmd() *cobra.Command {
@@ -502,7 +647,9 @@ func newReportScopesListCmd() *cobra.Command {
 			if asJSON {
 				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
 			}
-			return writeReportScopes(cmd.OutOrStdout(), *res.JSON200)
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				return writeReportScopes(w, s, *res.JSON200)
+			})
 		},
 	}
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
@@ -561,7 +708,9 @@ func newReportScopesCreateCmd() *cobra.Command {
 			if in.json {
 				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
 			}
-			return writeReportScopes(cmd.OutOrStdout(), []heist.ReportScope{*res.JSON201})
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				return writeReportScopes(w, s, []heist.ReportScope{*res.JSON201})
+			})
 		},
 	}
 	in.addFlags(cmd)
@@ -602,7 +751,9 @@ name they were generated with.
 			if in.json {
 				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
 			}
-			return writeReportScopes(cmd.OutOrStdout(), []heist.ReportScope{*res.JSON200})
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				return writeReportScopes(w, s, []heist.ReportScope{*res.JSON200})
+			})
 		},
 	}
 	in.addFlags(cmd)
