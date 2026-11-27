@@ -26,6 +26,7 @@ func TestUnknownCommand(t *testing.T) {
 		{[]string{"nope"}, `unknown command "nope"`},
 		{[]string{"completion", "zhs"}, `unknown command "zhs"; did you mean zsh?`},
 		{[]string{"completion"}, "expected a command"},
+		{[]string{"completion", "bash", "extra"}, "unexpected arguments"},
 	} {
 		var stdout, stderr bytes.Buffer
 		code := run(tt.args, nil, &stdout, &stderr)
