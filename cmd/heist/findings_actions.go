@@ -7,7 +7,6 @@ import (
 	"io"
 	"slices"
 	"strings"
-	"text/tabwriter"
 
 	"github.com/heist-security/heist-go/heist"
 	openapi_types "github.com/oapi-codegen/runtime/types"
@@ -127,7 +126,9 @@ Exit status:
 			if asJSON {
 				err = writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
 			} else {
-				err = writeRetestStatus(cmd.OutOrStdout(), res)
+				err = printStyled(cmd, func(w io.Writer, s styles) error {
+					return writeRetestStatus(w, s, res)
+				})
 			}
 			if err != nil {
 				return err
@@ -157,12 +158,12 @@ func getRetestStatus(ctx context.Context, client *heist.ClientWithResponses, id 
 
 // writeRetestStatus writes a retest's state and the finding. res must have a
 // 200 body.
-func writeRetestStatus(w io.Writer, res *heist.GetFindingRetestResponse) error {
+func writeRetestStatus(w io.Writer, s styles, res *heist.GetFindingRetestResponse) error {
 	r := res.JSON200
-	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
+	fields := fieldWriter{s: s}
 	field := func(label string, value *string) {
-		if value != nil && *value != "" {
-			fmt.Fprintf(tw, "%s:\t%s\n", label, oneLine(*value))
+		if value != nil {
+			fields.add(label, oneLine(*value))
 		}
 	}
 	status := string(r.Status)
@@ -170,13 +171,13 @@ func writeRetestStatus(w io.Writer, res *heist.GetFindingRetestResponse) error {
 	field("Started", r.StartedAt)
 	field("Closed", r.ClosedAt)
 	field("Failure", r.Failure)
-	if err := tw.Flush(); err != nil {
+	if err := fields.write(w); err != nil {
 		return err
 	}
 	if _, err := fmt.Fprintln(w); err != nil {
 		return err
 	}
-	return writeFindingDetail(w, &r.Finding)
+	return writeFindingDetail(w, s, &r.Finding)
 }
 
 // findingUpdate changes a finding's status with a justification and returns
@@ -213,7 +214,9 @@ func newFindingUpdateCmd(name, flag string, update findingUpdate, short, long st
 			if asJSON {
 				return writeJSON(cmd.OutOrStdout(), body)
 			}
-			return writeFindingDetail(cmd.OutOrStdout(), finding)
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				return writeFindingDetail(w, s, finding)
+			})
 		},
 	}
 	cmd.Flags().StringVar(&text, flag, "", "the justification `text` (required)")
@@ -278,7 +281,9 @@ func newFindingsHistoryCmd() *cobra.Command {
 			if asJSON {
 				return writeJSON(cmd.OutOrStdout(), json.RawMessage(res.Body))
 			}
-			return writeStatusHistory(cmd.OutOrStdout(), res)
+			return printStyled(cmd, func(w io.Writer, s styles) error {
+				return writeStatusHistory(w, s, res)
+			})
 		},
 	}
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the API's JSON response")
@@ -300,7 +305,7 @@ func getStatusHistory(ctx context.Context, client *heist.ClientWithResponses, id
 
 // writeStatusHistory writes a finding's status changes as a table. res must
 // have a 200 body.
-func writeStatusHistory(w io.Writer, res *heist.GetFindingStatusHistoryResponse) error {
+func writeStatusHistory(w io.Writer, s styles, res *heist.GetFindingStatusHistoryResponse) error {
 	headers := []string{"CHANGED", "FROM", "TO", "CHANGED BY"}
 	var rows [][]string
 	for _, c := range *res.JSON200 {
@@ -308,12 +313,7 @@ func writeStatusHistory(w io.Writer, res *heist.GetFindingStatusHistoryResponse)
 		if c.ChangedByUserId != nil && *c.ChangedByUserId != "" {
 			by = *c.ChangedByUserId
 		}
-		rows = append(rows, []string{c.ChangedAt, string(c.FromStatus), string(c.ToStatus), by})
+		rows = append(rows, []string{s.time(c.ChangedAt), s.status(string(c.FromStatus)), s.status(string(c.ToStatus)), by})
 	}
-	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, strings.Join(headers, "\t"))
-	for _, row := range rows {
-		fmt.Fprintln(tw, strings.Join(row, "\t"))
-	}
-	return tw.Flush()
+	return writeTable(w, s, headers, rows)
 }
