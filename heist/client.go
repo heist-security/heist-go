@@ -8,7 +8,7 @@ import (
 
 // APIVersion is the published Heist REST contract version this SDK targets.
 // It must match api/openapi.lock.json; a test enforces this.
-const APIVersion = "2.17.1"
+const APIVersion = "2.21.0"
 
 // DefaultServerURL is the production Heist external REST API.
 const DefaultServerURL = "https://api.heisthq.com/external"
